@@ -7,7 +7,7 @@ public class Location {
 	private Address address;
 	
 	
-	public Location(String id, double longitude, float latitude, Address address) {
+	public Location(String id, double longitude, double latitude, Address address) {
 		super();
 		this.id = id;
 		this.longitude = longitude;
@@ -17,13 +17,13 @@ public class Location {
 	public double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 	public double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 	public Address getAddress() {

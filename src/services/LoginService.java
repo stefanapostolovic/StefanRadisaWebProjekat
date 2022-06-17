@@ -64,4 +64,14 @@ public class LoginService {
 	public User login(@Context HttpServletRequest request) {
 		return (User) request.getSession().getAttribute("user");
 	}
+	
+	@POST
+	@Path("/register")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public User register(User user) {
+		UserDAO dao = new UserDAO();
+		//return dao.register(user);
+		return null;
+	}
 }

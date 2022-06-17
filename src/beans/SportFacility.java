@@ -14,7 +14,7 @@ public class SportFacility {
 	private LocalTime endTime;
 	
 	public SportFacility(String id, String name, String objectType, boolean status, Location location, String image,
-			float averageRating, LocalTime startTime, LocalTime endTime) {
+			double averageRating, LocalTime startTime, LocalTime endTime) {
 		super();
 		this.id = id;		//dodao
 		this.name = name;
@@ -66,7 +66,7 @@ public class SportFacility {
 	public double getAverageRating() {
 		return averageRating;
 	}
-	public void setAverageRating(float averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 	public LocalTime getStartTime() {
