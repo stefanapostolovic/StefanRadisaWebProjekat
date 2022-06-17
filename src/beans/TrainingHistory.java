@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 import java.time.LocalDateTime;
 
@@ -40,5 +40,4 @@ public class TrainingHistory {
 	public void setCoach(User coach) {
 		this.coach = coach;
 	}
-	
 }

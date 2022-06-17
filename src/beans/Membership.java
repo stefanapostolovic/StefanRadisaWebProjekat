@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,6 +73,4 @@ public class Membership {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
 }

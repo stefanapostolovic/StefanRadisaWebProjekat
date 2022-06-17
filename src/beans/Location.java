@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 public class Location {
 	private float longitude;
@@ -30,6 +30,4 @@ public class Location {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
-	
-}
+}	

@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 public class Comment {
 	private SportFacility sportFacility;
@@ -37,6 +37,4 @@ public class Comment {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
 }

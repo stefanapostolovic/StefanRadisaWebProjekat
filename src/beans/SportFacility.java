@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 import java.time.LocalTime;
 
@@ -72,6 +72,4 @@ public class SportFacility {
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
-	
-	
 }

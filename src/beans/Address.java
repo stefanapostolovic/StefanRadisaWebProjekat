@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 public class Address {
 	private String street;
@@ -38,6 +38,4 @@ public class Address {
 	public void setZipCode(int zipCode) {
 		this.zipCode = zipCode;
 	}
-	
-	
 }

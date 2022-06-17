@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 public class CustomerType {
 	private String name;
@@ -29,5 +29,4 @@ public class CustomerType {
 	public void setPoints(float points) {
 		this.points = points;
 	}
-	
 }

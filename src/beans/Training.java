@@ -1,4 +1,4 @@
-package model;
+package beans;
 
 public class Training {
 	private String name;
@@ -63,6 +63,4 @@ public class Training {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-	
 }
