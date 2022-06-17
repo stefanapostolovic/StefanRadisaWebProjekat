@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import beans.Product;
 import beans.User;
 
 /***
@@ -59,7 +60,22 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
-	private void loadUsers(String contextPath) {
+	
+	public User register(User user) {		//DODATI SERIJALIZACIJU
+		Integer maxId = -1;
+		for (String id : users.keySet()) {
+			int idNum =Integer.parseInt(id);
+			if (idNum > maxId) {
+				maxId = idNum;
+			}
+		}
+		maxId++;
+		user.setId(maxId.toString());
+		users.put(user.getId(), user);
+		return user;
+	}
+	
+	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
 		BufferedReader in = null;
 		try {
 			File file = new File(contextPath + "/users.txt");

@@ -1,24 +1,22 @@
 package services;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Product;
+import beans.Address;
+import beans.Location;
 import beans.SportFacility;
 import dao.FacilityDAO;
-import dao.ProductDAO;
 
 @Path("/facilities")
 public class FacilityService {
@@ -44,6 +42,34 @@ public class FacilityService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<SportFacility> getProducts() {
 		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
-		return dao.findAll();
+		List<SportFacility> facilityList = new ArrayList<SportFacility>();
+		
+		SportFacility sf1 = new SportFacility("1", "ImeJedan", "TipJedan", true, new Location(
+				"1", 1.0, 1.0, new Address(
+						"UlicaJedan", "1", "GradJedan", 1)), "slikaJedan",
+		1.0,  LocalTime.now(),  LocalTime.now());
+		
+		SportFacility sf2 = new SportFacility("2", "ImeDva", "TipDva", false, new Location(
+				"2", 2.0, 2.0, new Address(
+						"UlicaDva", "2", "GradDva", 2)), "slikaDva",
+		2.0,  LocalTime.now(),  LocalTime.now());
+		
+		SportFacility sf3 = new SportFacility("3", "ImeTei", "TipTrio=", true, new Location(
+				"3", 3.0, 3.0, new Address(
+						"UlicaTri", "3", "GradTri", 3)), "slikaTri",
+		3.0,  LocalTime.now(),  LocalTime.now());
+		
+		SportFacility sf4 = new SportFacility("4", "ImeCetiri", "TipCetiri", false, new Location(
+				"4", 4.0, 4.0, new Address(
+						"UlicaCetiri", "4", "GradCetiri", 4)), "slikaCetiri",
+		4.0,  LocalTime.now(),  LocalTime.now());
+		
+		facilityList.add(sf1);
+		facilityList.add(sf2);
+		facilityList.add(sf3);
+		facilityList.add(sf4);
+		
+		//return dao.findAll();
+		return facilityList;
 	}
 }
