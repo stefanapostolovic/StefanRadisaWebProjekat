@@ -63,7 +63,7 @@ public class SportFacility {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public float getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 	public void setAverageRating(float averageRating) {
