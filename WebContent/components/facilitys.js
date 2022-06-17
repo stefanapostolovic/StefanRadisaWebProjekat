@@ -28,8 +28,6 @@ Vue.component("facilities", {
 								{{p.location.address.city+"  "+p.location.address.zipCode}}<br>
 								{{p.location.longitude+",    "+ p.location.latitude}}
 								</td>
-								<td>Radno vreme:{{p.startTime}}-{{p.endTime}}
-								</td>
 						</tr>
 					</table>
 				</div>

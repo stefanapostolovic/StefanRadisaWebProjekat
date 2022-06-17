@@ -1,11 +1,13 @@
 const Facilitys = { template: '<facilities></facilities>' }
-const Product = { template: '<edit-product></edit-product>' }
-const Products = { template: '<products></products>' }
+const Header = { template: '<zaglavlje></zaglavlje>' }
+const Login = { template: '<login></login>' }
+
 
 const router = new VueRouter({
 	mode: 'hash',
-	  routes: [//{ path: '/', name: 'home', component: Product},
-		{ path: '/', name: 'home', component: Facilitys}
+	  routes: [{ path: '/zaglavlje', component: Header},
+		{ path: '/', name: 'home', component: Facilitys},
+		{ path: '/login', component: Login},
 ]
 });
 

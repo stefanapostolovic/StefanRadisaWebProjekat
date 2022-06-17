@@ -5,6 +5,8 @@ tr {
 	cursor: pointer;
 }
 
+.background1{background: gray;}
+
 #error {
 	color: red;
 }
@@ -12,6 +14,12 @@ tr {
 #success {
 	color: green;	
 }
+
+.buton{width: 30px;height: 30px;align-content: center;}
+
+
+
+.right{text-align: right;}
 
 .center {
   margin-left: 20%;
