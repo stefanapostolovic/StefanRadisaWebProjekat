@@ -19,7 +19,7 @@ Vue.component("zaglavlje", {
 			router.push(`/login`);	    
 		},
 		registracija : function() {
-			router.push(`/`);	    
+			router.push(`/registracija`);	    
 		}
    }
 });

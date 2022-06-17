@@ -5,7 +5,7 @@ Vue.component("login", {
 	    }
 	},
 	    template: ` 
-    	<div>
+    	<div class="centar">
 	<form id="forma">
 		<table>
 			<tr><td>Username</td><td><input type="text" name="username"></td></tr>
