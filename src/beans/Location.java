@@ -1,24 +1,26 @@
 package beans;
 
 public class Location {
-	private float longitude;
-	private float latitude;
+	private String id;		//dodao
+	private double longitude;
+	private double latitude;
 	private Address address;
 	
 	
-	public Location(float longitude, float latitude, Address address) {
+	public Location(String id, double longitude, float latitude, Address address) {
 		super();
+		this.id = id;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.address = address;
 	}
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 	public void setLatitude(float latitude) {

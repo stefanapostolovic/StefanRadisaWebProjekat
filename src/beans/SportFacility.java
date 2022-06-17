@@ -3,18 +3,20 @@ package beans;
 import java.time.LocalTime;
 
 public class SportFacility {
+	private String id;	//dodao
 	private String name;
 	private String objectType;
 	private boolean status;
 	private Location location;
 	private String image;
-	private float averageRating;
+	private double averageRating;
 	private LocalTime startTime;
 	private LocalTime endTime;
 	
-	public SportFacility(String name, String objectType, boolean status, Location location, String image,
+	public SportFacility(String id, String name, String objectType, boolean status, Location location, String image,
 			float averageRating, LocalTime startTime, LocalTime endTime) {
 		super();
+		this.id = id;		//dodao
 		this.name = name;
 		this.objectType = objectType;
 		this.status = status;
@@ -24,6 +26,13 @@ public class SportFacility {
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
+	public String getId() {			//dodao
+		return id;
+	}
+	public void setId(String id) {		//dodao
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
