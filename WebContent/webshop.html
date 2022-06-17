@@ -2,56 +2,24 @@
 <html>
 
 <head>
-	<title>Web shop</title>
-	<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Products</title>
 	<link rel="stylesheet" type="text/css" href="styles.css">
-	<script src="jquery-3.3.1.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/toast.js"></script>
 </head>
-
 <body>
-	<div id ="products">
-		<h3>{{title}}</h3>
 
-		<table border="1" id="tabela">
-			<thead>
-				<tr bgcolor="lightgrey">
-					<th>Naziv</th>
-					<th>Cena</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
+<div id="products" >
+		<router-view></router-view>	
+</div>
 
-			<tr v-for="p in products">
-				<td>{{p.name }}</td>
-				<td>{{p.price }}</td>
-				<td><button @click="openFormEdit(p)">Izmeni</button></td>
-				<td><button @click="deleteProduct(p)">Obrisi</button></td>
-			</tr>
-		</table>
-
-		<p><button @click="openFormAdd()">Dodaj</button></p>
-
-		<form id="forma" :hidden="isFormHidden" @submit.prevent="createOrEditProduct">
-			<table>
-				<tr>
-					<td>Naziv</td>
-					<td><input type="text" name="name" v-model="selectedProduct.name"></td>
-				</tr>
-				<tr>
-					<td>Cena</td>
-					<td><input type="number" name="price" v-model="selectedProduct.price"></td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="Pošalji"></td>
-				</tr>
-			</table>
-		</form>
-		<p style="color:green;">{{feedBackMessage}}</p>
-	</div>
 	<script src="js/vue.js"></script>
+	<script src="js/vue-router.js"></script>
 	<script src="js/axios.js"></script>
+	<script src="components/facilitys.js"></script>
 	<script src="app/app.js"></script>
+
 </body>
 
 </html>
