@@ -10,6 +10,10 @@ public class Training {
 	private String image;
 	
 	
+	public Training() {
+		
+	}
+	
 	public Training(String name, String trainingType, SportFacility sportFacility, float duration, User user,
 			String description, String image) {
 		super();

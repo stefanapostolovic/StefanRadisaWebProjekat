@@ -13,6 +13,10 @@ public class SportFacility {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	
+	public SportFacility() {
+		
+	}
+	
 	public SportFacility(String id, String name, String objectType, boolean status, Location location, String image,
 			double averageRating, LocalTime startTime, LocalTime endTime) {
 		super();

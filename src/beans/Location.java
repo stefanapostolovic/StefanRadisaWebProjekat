@@ -6,6 +6,9 @@ public class Location {
 	private double latitude;
 	private Address address;
 	
+	public Location() {
+		
+	}
 	
 	public Location(String id, double longitude, double latitude, Address address) {
 		super();
@@ -14,6 +17,13 @@ public class Location {
 		this.latitude = latitude;
 		this.address = address;
 	}
+	public String getId() {
+		return id;
+	}
+	public void SetId(String id) {
+		this.id = id;
+	}
+	
 	public double getLongitude() {
 		return longitude;
 	}

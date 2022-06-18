@@ -13,9 +13,13 @@ public class Trainer extends User{
 	
 	private List<TrainingHistory> trainingHistory;
 	
+	public Trainer() {
+		
+	}
+	
 	public Trainer(String id, String username, String password, String name, String surename, 
 			Gender gender,
-			LocalDate dateOfBirth, List<TrainingHistory> trainingHistory) {
+			String dateOfBirth, List<TrainingHistory> trainingHistory) {
 		super(id, username, password, name, surename, gender, dateOfBirth);
 		// TODO Auto-generated constructor stub
 		

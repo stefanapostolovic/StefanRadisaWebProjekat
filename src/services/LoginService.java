@@ -40,13 +40,15 @@ public class LoginService {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	//public Response login(User user, @Context HttpServletRequest request)
 	public Response login(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+
 		User loggedUser = userDao.find(user.getUsername(), user.getPassword());
 		if (loggedUser == null) {
 			return Response.status(400).entity("Invalid username and/or password").build();
 		}
-		request.getSession().setAttribute("user", loggedUser);
+		//request.getSession().setAttribute("user", loggedUser);
 		return Response.status(200).build();
 	}
 	
@@ -70,8 +72,10 @@ public class LoginService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User register(User user) {
-		UserDAO dao = new UserDAO();
-		//return dao.register(user);
-		return null;
+		System.out.println("***********************************************************************");
+		//UserDAO dao = new UserDAO();
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		return userDao.register(user);
+		//return null;
 	}
 }

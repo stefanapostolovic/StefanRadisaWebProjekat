@@ -30,7 +30,7 @@ public class User implements Serializable {
 	private String name;
 	private String surename;
 	public Gender gender;
-	private LocalDate dateOfBirth;
+	private String dateOfBirth;
 	//private Role role;
 	//private List<TrainingHistory> trainingHistory;
 	//private Membership membership;
@@ -39,9 +39,12 @@ public class User implements Serializable {
 	//private double points;
 	//private CustomerType customerType;
 	
+	public User() {
+		
+	}
 	
 	public User(String id, String username, String password, String name, 
-			String surename, Gender gender, LocalDate dateOfBirth) {
+			String surename, Gender gender, String dateOfBirth) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -95,10 +98,10 @@ public class User implements Serializable {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
-	public LocalDate getDateOfBirth() {
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public void setDateOfBirth(LocalDate dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 }
