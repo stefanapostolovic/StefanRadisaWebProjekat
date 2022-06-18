@@ -8,6 +8,9 @@ public class TrainingHistory {
 	private User user;
 	private User coach;
 	
+	public TrainingHistory() {
+		
+	}
 	
 	public TrainingHistory(LocalDateTime applicationDateTime, Training training, User user, User coach) {
 		super();

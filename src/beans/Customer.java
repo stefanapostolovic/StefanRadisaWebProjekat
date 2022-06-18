@@ -16,9 +16,13 @@ public class Customer extends User{
 	private double points;
 	private CustomerType customerType;
 	
+	public Customer() {
+		
+	}
+	
 	public Customer(String id, String username, String password, String name, String surename, 
 			Gender gender,
-			LocalDate dateOfBirth, 
+			String dateOfBirth, 
 			Membership membership, List<SportFacility> visitedObjects, 
 			double points, CustomerType customerType) {
 		super(id, username, password, name, surename, gender, dateOfBirth);

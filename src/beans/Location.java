@@ -6,6 +6,9 @@ public class Location {
 	private double latitude;
 	private Address address;
 	
+	public Location() {
+		
+	}
 	
 	public Location(String id, double longitude, double latitude, Address address) {
 		super();

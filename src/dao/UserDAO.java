@@ -50,6 +50,7 @@ public class UserDAO {
 			return null;
 		}
 		User user = users.get(username);
+		String temp = user.getPassword();
 		if (!user.getPassword().equals(password)) {
 			return null;
 		}
@@ -80,9 +81,9 @@ public class UserDAO {
 		
 		//serijalizacija
 		BufferedWriter out = null;
-		
-		try {
-			File file = new File(contextPath + "/users.txt");
+									
+		try {					//contextPath + "/users.txt"
+			File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt");
 			if (!(file.exists()))
 				file.createNewFile();
 			
@@ -102,7 +103,7 @@ public class UserDAO {
 			st += "; ";
 			st += user.getGender().toString();
 			st += "; ";
-			st += user.getDateOfBirth().toString();		
+			st += user.getDateOfBirth();		
 			
 			out.write(st);
 			out.flush();
@@ -125,7 +126,7 @@ public class UserDAO {
 	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
 		BufferedReader in = null;
 		try {
-			File file = new File(contextPath + "/users.txt");
+			File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt");
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			StringTokenizer st;
@@ -140,9 +141,9 @@ public class UserDAO {
 					String password = st.nextToken().trim();
 					String name = st.nextToken().trim();
 					String surname = st.nextToken().trim();
-					Gender gender = Gender.valueOf(st.nextToken().trim().toUpperCase());
-					LocalDate dateOfBirth = LocalDate.parse(st.nextToken().trim());
-					users.put(userId, new User(userId, userName, password, name, surname, gender, dateOfBirth));
+					Gender gender = Gender.valueOf(st.nextToken().trim());
+					String dateOfBirth = st.nextToken();
+					users.put(userName, new User(userName, userName, password, name, surname, gender, dateOfBirth));
 				}	
 			}
 		} catch (Exception ex) {

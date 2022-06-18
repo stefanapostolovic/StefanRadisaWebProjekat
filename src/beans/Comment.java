@@ -6,6 +6,10 @@ public class Comment {
 	private int grade;
 	private User user;	
 	
+	public Comment() {
+		
+	}
+	
 	public Comment(SportFacility sportFacility, String text, int grade, User user) {
 		super();
 		this.sportFacility = sportFacility;

@@ -67,7 +67,7 @@ Vue.component("registracija", {
 																	
 					//}
 					//axios.post('rest/users', this.user).then(response => (router.push(`/users`)));
-				this.user.id = "";
+				this.user.id = -1;
 				this.user.username = this.username;
 				this.user.password = this.password;
 				this.user.name = this.name;

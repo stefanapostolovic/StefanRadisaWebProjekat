@@ -13,6 +13,10 @@ public class Membership {
 	private int numberAppointments;
 	private User user;
 	
+	public Membership() {
+		
+	}
+	
 	public Membership(String identifier, String membershipType, LocalDate paymentDate, LocalDateTime expirationDate,
 			double price, boolean status, int numberAppointments, User user) {
 		super();

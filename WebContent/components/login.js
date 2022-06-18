@@ -1,7 +1,7 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     //user:null
+	     //user:{},
 	     username : "",
 	     password : ""
 	    }
@@ -23,9 +23,17 @@ Vue.component("login", {
     },
     methods: {
     	aProduct : function() {
-			//axios
-				//.post('rest/login' + this.username, this.password)
-			//router.push(`/`);	    
+			//this.user.username = this.username
+			//this.user.password = this.password
+			axios
+				.post('rest/login', {username:this.username, password:this.password})
+				.then(response => {
+					router.push(`/`)
+				})
+				.catch(response => {
+					toast('Wrong username and/or password!')
+					//router.push(`/`)
+				})	    
 		}
    }
 });

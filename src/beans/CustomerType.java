@@ -5,6 +5,10 @@ public class CustomerType {
 	private float discount;
 	private float points;
 	
+	public CustomerType() {
+		
+	}
+	
 	public CustomerType(String name, float discount, float points) {
 		super();
 		this.name = name;
