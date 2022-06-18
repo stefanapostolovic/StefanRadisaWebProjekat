@@ -71,7 +71,7 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User register(User user) {
 		UserDAO dao = new UserDAO();
-		//return dao.register(user);
-		return null;
+		return dao.register(user);
+		//return null;
 	}
 }

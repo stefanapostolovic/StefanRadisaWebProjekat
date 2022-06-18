@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -69,7 +70,17 @@ public class FacilityService {
 		facilityList.add(sf3);
 		facilityList.add(sf4);
 		
+		//filtriranje
+		
+		List<SportFacility> filteredList = facilityList.stream().filter
+				(facility -> facility.isStatus() == true).collect(Collectors.toList());
+		
+		for (SportFacility a : facilityList) {
+			if (a.isStatus() == false) {
+				filteredList.add(a);
+			}
+		}
 		//return dao.findAll();
-		return facilityList;
+		return filteredList;
 	}
 }
