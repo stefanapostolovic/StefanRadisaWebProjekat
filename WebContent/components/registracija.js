@@ -75,7 +75,8 @@ Vue.component("registracija", {
 				this.user.gender = this.gender
 				this.user.dateOfBirth = this.dateOfBirth
 				console.log(this.user);
-				axios.post('rest/register/', this.user).then(response => (router.push(`/`)));
+				axios.post('rest/register/', this.user)
+				.then(response => (router.push(`/`)));
 				
 		}
 	},

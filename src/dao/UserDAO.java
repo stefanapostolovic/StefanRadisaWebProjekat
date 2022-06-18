@@ -46,6 +46,7 @@ public class UserDAO {
 	 * @return
 	 */
 	public User find(String username, String password) {
+		loadUsers(contextPath);
 		if (!users.containsKey(username)) {
 			return null;
 		}
@@ -69,12 +70,12 @@ public class UserDAO {
 	
 	public User register(User user) {		//DODATI SERIJALIZACIJU
 		Integer maxId = -1;
-		for (String id : users.keySet()) {
+		/*for (String id : users.keySet()) {
 			int idNum =Integer.parseInt(id);
 			if (idNum > maxId) {
 				maxId = idNum;
 			}
-		}
+		}*/
 		maxId++;
 		user.setId(maxId.toString());
 		users.put(user.getId(), user);

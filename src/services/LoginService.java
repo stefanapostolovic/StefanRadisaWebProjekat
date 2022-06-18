@@ -43,11 +43,12 @@ public class LoginService {
 	//public Response login(User user, @Context HttpServletRequest request)
 	public Response login(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+
 		User loggedUser = userDao.find(user.getUsername(), user.getPassword());
 		if (loggedUser == null) {
 			return Response.status(400).entity("Invalid username and/or password").build();
 		}
-		request.getSession().setAttribute("user", loggedUser);
+		//request.getSession().setAttribute("user", loggedUser);
 		return Response.status(200).build();
 	}
 	
