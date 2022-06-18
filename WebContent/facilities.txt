@@ -1,0 +1,4 @@
+0; ImeJedan; TipJedan; true; 1; 1.0; 1.0; UlicaJedan; 1; GradJedan; 1; https://www.slikomania.rs/fotky6509/fotos/hd-slike-na-platnu_ST013O1.jpg; 1.0; 13:59:00.379023300; 13:59:00.379023300
+1; ImeDva; TipDva; false; 2; 2.0; 2.0; UlicaDva; 2; GradDva; 2; slikaDva; 2.0; 13:59:00.379023300; 13:59:00.379023300
+2; ImeTei; TipTrio=; true; 3; 3.0; 3.0; UlicaTri; 3; GradTri; 3; slikaTri; 3.0; 13:59:00.379023300; 13:59:00.379023300
+3; ImeCetiri; TipCetiri; false; 4; 4.0; 4.0; UlicaCetiri; 4; GradCetiri; 4; slikaCetiri; 4.0; 13:59:00.379023300; 13:59:00.379023300

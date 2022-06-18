@@ -2,7 +2,13 @@ Vue.component("registracija", {
 	data: function () {
 		    return {
 		      id : -1,
-		      product: {id: '', name:'pedro', username:null, password:null, surename:null, gender:null, dateofbirth:null }
+		      user: {id: -1, username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null },
+		      username:'',
+		      password:'',
+		      name:'',
+		      surename:'',
+		      gender:'',
+		      dateOfBirth:''
 		    }
 	},
 	template: ` 
@@ -13,37 +19,37 @@ Vue.component("registracija", {
 		
 	<tr>
 		<td>Korisnicko ime:</td>
-		<td><input id="username" v-model = "product.username"  type = "text" name = "username">
+		<td><input id="username" v-model = "username"  type = "text" name = "username">
 		</td>
 	</tr>
 	<tr>
 		<td>Lozinka:</td>
-			<td><input type="password" v-model = "product.password"  name="password"></td>
+			<td><input type="password" v-model = "password"  name="password"></td>
 
 	</tr>
 	<tr>
 		<td>Ime:</td>
-		<td><input id="ime" v-model = "product.name"  type = "text" name = "name">	
+		<td><input id="ime" v-model = "name"  type = "text" name = "name"></td>	
 	</tr>
 	<tr>
 		<td>Prezime:</td>
-		<td><input type="text" v-model = "product.surename"  name="surename"></td>
+		<td><input type="text" v-model = "surename"  name="surename"></td>
 	</tr>
 	<tr>
 		<td>Pol:</td>
-		<td><select name="pol" id="pol" v-model = "product.gender" >
+		<td><select name="pol" id="pol" v-model = "gender" >
  				  <option value="Male">Musko</option>
 				  <option value="Female">Zensko</option>
 			</select></td>
 	</tr>
 	<tr>
 		<td>Datum rodjenja:</td>
-		<td><input type="date" id="rodjenje" name="rodjenje" v-model = "product.dateofbirth"/></td>
+		<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/></td>
 	</tr>
 	
 	<tr>
 		<td >
-		<input type="submit"  v-on:click = "editProduct" value="Poslaji">
+		<input type="submit"  v-on:click = "edituser" value="Poslaji">
 		<input type="reset" value="Ponisti">
 		</td>
 		<td></td>
@@ -55,12 +61,21 @@ Vue.component("registracija", {
 `
 	, 
 	methods : {
-		editProduct : function () {
+		edituser : function () {
 			event.preventDefault();
-					if(products.name==""){
+					//if(user.name==""){
 																	
-					}
-					//axios.post('rest/products', this.product).then(response => (router.push(`/products`)));
+					//}
+					//axios.post('rest/users', this.user).then(response => (router.push(`/users`)));
+				this.user.id = "";
+				this.user.username = this.username;
+				this.user.password = this.password;
+				this.user.name = this.name;
+				this.user.surename = this.surename
+				this.user.gender = this.gender
+				this.user.dateOfBirth = this.dateOfBirth
+				console.log(this.user);
+				axios.post('rest/register/', this.user).then(response => (router.push(`/`)));
 				
 		}
 	},

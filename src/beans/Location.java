@@ -14,6 +14,13 @@ public class Location {
 		this.latitude = latitude;
 		this.address = address;
 	}
+	public String getId() {
+		return id;
+	}
+	public void SetId(String id) {
+		this.id = id;
+	}
+	
 	public double getLongitude() {
 		return longitude;
 	}
