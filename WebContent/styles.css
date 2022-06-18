@@ -5,6 +5,8 @@ tr {
 	cursor: pointer;
 }
 
+.background1{background: gray;}
+
 #error {
 	color: red;
 }
@@ -12,3 +14,26 @@ tr {
 #success {
 	color: green;	
 }
+
+.centar{align-content: right;}
+
+.buton{width: 30px;height: 30px;align-content: center;}
+
+
+
+.right{text-align: right;}
+
+.center {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+td {
+	font-size: 140%; color: blue;width:auto;
+}
+
+.okvir{border:solid;color:black;}
+
+h1{
+	color:blue;
+}
+	

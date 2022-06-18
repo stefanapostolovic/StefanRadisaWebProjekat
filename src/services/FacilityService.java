@@ -46,7 +46,7 @@ public class FacilityService {
 		
 		SportFacility sf1 = new SportFacility("1", "ImeJedan", "TipJedan", true, new Location(
 				"1", 1.0, 1.0, new Address(
-						"UlicaJedan", "1", "GradJedan", 1)), "slikaJedan",
+						"UlicaJedan", "1", "GradJedan", 1)), "https://www.slikomania.rs/fotky6509/fotos/hd-slike-na-platnu_ST013O1.jpg",
 		1.0,  LocalTime.now(),  LocalTime.now());
 		
 		SportFacility sf2 = new SportFacility("2", "ImeDva", "TipDva", false, new Location(
