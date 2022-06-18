@@ -51,7 +51,6 @@ public class UserDAO {
 			return null;
 		}
 		User user = users.get(username);
-		String temp = user.getPassword();
 		if (!user.getPassword().equals(password)) {
 			return null;
 		}
@@ -82,9 +81,9 @@ public class UserDAO {
 		
 		//serijalizacija
 		BufferedWriter out = null;
-									
-		try {					//contextPath + "/users.txt"
-			File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt");
+//									
+		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
+			File file = new File(contextPath + "/users.txt");
 			if (!(file.exists()))
 				file.createNewFile();
 			
@@ -126,8 +125,9 @@ public class UserDAO {
 	
 	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
 		BufferedReader in = null;
-		try {
-			File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt");
+		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
+			System.out.println("AAAAAAAAA" + contextPath + "****************");
+			File file = new File(contextPath + "/users.txt");
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			StringTokenizer st;
