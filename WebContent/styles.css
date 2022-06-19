@@ -27,8 +27,14 @@ tr {
   margin-left: 20%;
   margin-right: 20%;
 }
+
+table, th, td {
+	border: 1px solid black; font-size: 100%; color:black; width:auto;
+	text-align: center; vertical-align: middle;
+}
+
 td {
-	font-size: 140%; color: blue;width:auto;
+	color:blue;
 }
 
 .okvir{border:solid;color:black;}
