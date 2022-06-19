@@ -15,10 +15,10 @@ public class Manager extends User{
 		
 	}
 	
-	public Manager(String id, String username, String password, String name, String surename, 
+	public Manager(String username, String password, String name, String surename, 
 			Gender gender,
 			String dateOfBirth, SportFacility sportFacility) {
-		super(id, username, password, name, surename, gender, dateOfBirth);
+		super(username, password, name, surename, gender, dateOfBirth);
 		// TODO Auto-generated constructor stub
 		
 		this.sportFacility = sportFacility;

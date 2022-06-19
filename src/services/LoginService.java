@@ -25,13 +25,15 @@ public class LoginService {
 		
 	}
 	
+	private String contextPath;
+	
 	@PostConstruct
 	// ctx polje je null u konstruktoru, mora se pozvati nakon konstruktora (@PostConstruct anotacija)
 	public void init() {
 		// Ovaj objekat se instancira vi�e puta u toku rada aplikacije
 		// Inicijalizacija treba da se obavi samo jednom
 		if (ctx.getAttribute("userDAO") == null) {
-	    	String contextPath = ctx.getRealPath("");
+	    	contextPath = ctx.getRealPath("");
 			ctx.setAttribute("userDAO", new UserDAO(contextPath));
 		}
 	}
@@ -42,6 +44,7 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	//public Response login(User user, @Context HttpServletRequest request)
 	public Response login(User user, @Context HttpServletRequest request) {
+		//System.out.println("******************" + contextPath + "******************");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
 
 		User loggedUser = userDao.find(user.getUsername(), user.getPassword());
@@ -71,11 +74,15 @@ public class LoginService {
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User register(User user) {
-		System.out.println("***********************************************************************");
+	public Response register(User user) {
+		//System.out.println("***********************************************************************");
 		//UserDAO dao = new UserDAO();
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		return userDao.register(user);
-		//return null;
+		User registeredUser = userDao.register(user);
+		
+		if (registeredUser == null) {
+			return Response.status(400).entity("Username already taken!").build();
+		}
+		return Response.status(200).build();
 	}
 }

@@ -31,10 +31,14 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		
 	}
 	
+	String contextPath;
+	
 	/***
 	 * @param contextPath Putanja do aplikacije u Tomcatu. Mo�e se pristupiti samo iz servleta.
 	 */
 	public FacilityDAO(String contextPath) {
+		//System.out.println("FASILITY" + contextPath);
+		this.contextPath = contextPath;
 		loadFacilities(contextPath);
 	}
 	
@@ -73,8 +77,8 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		//serijalizacija
 		BufferedWriter out = null;
 		
-		try {
-		File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt");
+		try {				//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt
+		File file = new File(contextPath + "/facilities.txt");
 		if (!(file.exists()))
 			file.createNewFile();
 		
@@ -139,10 +143,10 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
 	private void loadFacilities(String contextPath) {
-		BufferedReader in = null;
+		BufferedReader in = null;	//"E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt"
 		try {						//contextPath + "/facilities.txt"
-			File file = new File("E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt");
-			System.out.println(file.getCanonicalPath());
+			File file = new File(contextPath + "/facilities.txt");
+			//System.out.println("AAAAAAAAAAAA" + file.getCanonicalPath());
 			in = new BufferedReader(new FileReader(file));
 			String line, idFacility = "", name = "", objectType = "",
 					status = "", locationId = "", longitude = "",

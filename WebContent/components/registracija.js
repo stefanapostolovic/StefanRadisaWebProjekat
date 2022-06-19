@@ -1,8 +1,7 @@
 Vue.component("registracija", {
 	data: function () {
 		    return {
-		      id : -1,
-		      user: {id: -1, username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null },
+		      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null },
 		      username:'',
 		      password:'',
 		      name:'',
@@ -67,7 +66,6 @@ Vue.component("registracija", {
 																	
 					//}
 					//axios.post('rest/users', this.user).then(response => (router.push(`/users`)));
-				this.user.id = -1;
 				this.user.username = this.username;
 				this.user.password = this.password;
 				this.user.name = this.name;
@@ -76,7 +74,13 @@ Vue.component("registracija", {
 				this.user.dateOfBirth = this.dateOfBirth
 				console.log(this.user);
 				axios.post('rest/register/', this.user)
-				.then(response => (router.push(`/`)));
+				.then(response => {
+					router.push(`/`)
+				})
+				.catch(response => {
+					toast('Username already taken!')
+					//router.push(`/`)
+				})
 				
 		}
 	},
