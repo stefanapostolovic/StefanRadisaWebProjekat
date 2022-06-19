@@ -71,6 +71,61 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
+	public User update(String id, User user) {
+		User productToUpdate = this.find(id,user.getPassword());
+		if(productToUpdate == null) {
+			return this.register(user);
+		}
+		productToUpdate.setName(user.getName());
+		productToUpdate.setSurename(user.getSurename());
+		productToUpdate.setPassword(user.getName());
+		productToUpdate.setUsername(user.getUsername());
+		productToUpdate.setDateOfBirth(user.getDateOfBirth());
+
+		productToUpdate.setGender(user.getGender());
+		
+		BufferedWriter out = null;									
+		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
+			File file = new File(contextPath + "/users.txt");
+			if (!(file.exists()))
+				file.createNewFile();
+			
+			out = new BufferedWriter(new FileWriter(file, true));
+			
+			String st ="";
+			st="";
+			//st += user.getId();
+			//st += "; ";
+			st += user.getUsername();
+			st += "; ";
+			st += user.getPassword();
+			st += "; ";
+			st += user.getName();
+			st += "; ";
+			st += user.getSurename();
+			st += "; ";
+			st += user.getGender().toString();
+			st += "; ";
+			st += user.getDateOfBirth();		
+			
+			out.write(st);
+			out.flush();
+			out.newLine();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( out != null ) {
+				try {
+					out.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		
+		return user;
+	}
+	
 	
 	public User register(User user) {
 		if (find(user.getUsername(), user.getPassword()) != null)
