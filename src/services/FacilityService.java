@@ -13,8 +13,11 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -66,5 +69,31 @@ public class FacilityService {
 			}
 		}
 		return filteredList;
+	}
+	
+	@GET
+	@Path("/search/{input}/{mode}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<SportFacility> getSearchedProducts(@PathParam("input") String input,
+			@PathParam("mode") String mode) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		Collection<SportFacility> returnCollection = new ArrayList<SportFacility>();
+		if (mode.equals("NAME")) {
+			returnCollection = dao.GetBySearchName(input);
+		}
+		else if (mode.equals("TYPE")) {
+			returnCollection = dao.GetBySearchType(input);
+		}
+		else if (mode.equals("LOCATION")) {
+			returnCollection = dao.GetBySearchLocation(input);
+		}
+		else if (mode.equals("RATING")) {
+			returnCollection = dao.GetBySearchRating(input);
+		}
+		else returnCollection = null;
+		System.out.println("********PRETRAGA*********");
+		
+		return returnCollection;
 	}
 }

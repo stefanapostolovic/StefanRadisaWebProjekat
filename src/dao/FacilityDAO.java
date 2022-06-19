@@ -1,12 +1,14 @@
 package dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -197,5 +199,49 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			}
 		}
 		
+	}
+	
+	//NAME
+	public Collection<SportFacility> GetBySearchName(String input) {
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if (facility.getName().contains(input)) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
+	}
+	
+	//TYPE
+	public Collection<SportFacility> GetBySearchType(String input) {
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if (facility.getObjectType().contains(input)) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
+	}
+	
+	//LOCATION
+	public Collection<SportFacility> GetBySearchLocation(String input) {
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if (facility.getLocation().getAddress().getCity().contains(input)) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
+	}
+	
+	//RATING
+	public Collection<SportFacility> GetBySearchRating(String input) {
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if (Double.toString(facility.getAverageRating()).contains(input)) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
 	}
 }

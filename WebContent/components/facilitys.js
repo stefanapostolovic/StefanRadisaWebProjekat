@@ -5,12 +5,32 @@ Vue.component("facilities", {
 	      searchname: '',
 	      searchtype: '',
 	      searchlocation: '',
-	      searchrating: ''
+	      searchrating: '',
+	      
+	      srchname: '',
+	      srchtype: '',
+	      srchloc: '',
+	      srchrat: '',
+		  mode: ''	      
 	    }
 	},
 	    template: ` 
     	<div class="center">
     		<h1>Sportski objekti</h1>
+    		<span>
+    			<input type="text" v-model="srchname" placeholder="search by name"/>
+    			<input type="button" value="search" @click="searchName"/>
+    			<input type="text" v-model="srchtype" placeholder="search by type"/>
+    			<input type="button" value="search" @click="searchType"/>
+    		</span>
+    		<p></p>
+    		<span>
+    			<input type="text" v-model="srchloc" placeholder="search by location"/>
+    			<input type="button" value="search" @click="searchLocation"/>
+    			<input type="text" v-model="srchrat" placeholder="search by rating"/>
+    			<input type="button" value="search" @click="searchRating"/>
+    		</span>
+    		<p></p>
     		<table style="border:solid">
     			<tr>
     				<th rowspan="2">Icon</th>
@@ -20,10 +40,10 @@ Vue.component("facilities", {
     				<th>Rating</th>
     			</tr>
     			<tr>
-    				<td><input type="text" v-model="searchname" placeholder="search name"/></td>
-    				<td><input type="text" v-model="searchtype" placeholder="search type"/></td>
-    				<td><input type="text" v-model="searchlocation" placeholder="search location"/></td>
-    				<td><input type="text" v-model="searchrating" placeholder="search rating"/></td>
+    				<td><input type="text" v-model="searchname" placeholder="filter name"/></td>
+    				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
+    				<td><input type="text" v-model="searchlocation" placeholder="filter location"/></td>
+    				<td><input type="text" v-model="searchrating" placeholder="filter rating"/></td>
     			</tr>
 				<tr v-for="(p, index) in filteredFacilities">
 					<td width="100%" height="100%"><img v-bind:src="p.image" width="100px" height="100px" alt=""></td>
@@ -62,6 +82,30 @@ Vue.component("facilities", {
     	vreme: function(p) {
 			var d =p.toString();   
 			return d.toString();	
+		},
+		searchName() {
+			this.mode = 'NAME'
+			axios
+				.get('rest/facilities/search/' + this.srchname + '/' + this.mode)
+				.then(response => (this.facilities = response.data))
+		},
+		searchType(){
+			this.mode = 'TYPE'
+			axios
+				.get('rest/facilities/search/' + this.srchtype + '/' + this.mode)
+				.then(response => (this.facilities = response.data))
+		},
+		searchLocation(){
+			this.mode = 'LOCATION'
+			axios
+				.get('rest/facilities/search/' + this.srchloc + '/' + this.mode)
+				.then(response => (this.facilities = response.data))
+		},
+		searchRating(){
+			this.mode = 'RATING'
+			axios
+				.get('rest/facilities/search/' + this.srchrat + '/' + this.mode)
+				.then(response => (this.facilities = response.data))
 		}
 	},
 	computed:{
