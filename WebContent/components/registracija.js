@@ -1,6 +1,7 @@
 Vue.component("registracija", {
 	data: function () {
 		    return {
+			  users:{},
 		      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null },
 		      username:'',
 		      password:'',
@@ -62,10 +63,59 @@ Vue.component("registracija", {
 	methods : {
 		edituser : function () {
 			event.preventDefault();
-					//if(user.name==""){
-																	
-					//}
-					//axios.post('rest/users', this.user).then(response => (router.push(`/users`)));
+				let username = document.getElementsByName("username")[0]
+				let sifra = document.getElementsByName("password")[0]
+				let ime = document.getElementsByName("name")[0]
+				let prezime = document.getElementsByName("surename")[0]
+				let pol = document.getElementsByName("pol")[0]
+				let rod = document.getElementsByName("rodjenje")[0]
+				let l = document.getElementsByName("lab")[0]
+				username.style.background = "white"
+				sifra.style.background ="white"
+				ime.style.background ="white"
+				prezime.style.background ="white"
+				pol.style.background="white"
+				rod.style.background ="white"
+			
+				if(this.username ==="")
+				{
+					username.style.background = "red"
+					sifra.style.background ="white"
+					ime.style.background ="white"
+					prezime.style.background ="white"
+					pol.style.background="white"
+					rod.style.background ="white"	
+					return;
+				}else if(this.password ===""){	
+					sifra.style.background = "red"
+					ime.style.background ="white"
+					prezime.style.background ="white"
+					pol.style.background="white"
+					rod.style.background ="white"
+					return;
+				}else if(this.name===""){
+					ime.style.background = "red"
+					prezime.style.background ="white"
+					pol.style.background="white"
+					rod.style.background ="white"
+					return;
+				}else if(this.surename===""){
+					prezime.style.background = "red"
+					pol.style.background="white"
+					rod.style.background ="white"
+		
+					return;
+				}else if(this.gender===""){
+					pol.style.background = "red"
+					rod.style.background ="white"
+					return;
+				}else if(this.dateOfBirth===""){
+					rod.style.background = "red"
+					return;
+				}
+			
+				rod.style.background ="white"
+
 				this.user.username = this.username;
 				this.user.password = this.password;
 				this.user.name = this.name;

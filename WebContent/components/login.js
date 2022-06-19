@@ -23,8 +23,23 @@ Vue.component("login", {
     },
     methods: {
     	aProduct : function() {
-			//this.user.username = this.username
-			//this.user.password = this.password
+			let ime = document.getElementsByName("username")[0]
+			let sifra = document.getElementsByName("password")[0]
+			ime.style.background = "white"
+			sifra.style.background ="white"
+			
+			if(this.username ==="")
+			{
+				ime.style.background = "red"
+				return;
+			}else if(this.password ===""){
+				ime.style.background = "white"
+				sifra.style.background = "red"
+				return;
+			}
+			ime.style.background = "white"
+			sifra.style.background ="white"
+			
 			axios
 				.post('rest/login', {username:this.username, password:this.password})
 				.then(response => {
