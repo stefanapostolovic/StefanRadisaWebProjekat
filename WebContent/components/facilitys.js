@@ -40,6 +40,7 @@ Vue.component("facilities", {
     				<th>Type</th>
     				<th>Location</th>
     				<th>Rating</th>
+    				<th rowspan="2">Work hours</th>
     				<th>Status</th>
     			</tr>
     			<tr>
@@ -47,6 +48,7 @@ Vue.component("facilities", {
     				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
     				<td><input type="text" v-model="searchlocation" placeholder="filter location"/></td>
     				<td><input type="text" v-model="searchrating" placeholder="filter rating"/></td>
+    				
     				<td><input type="text" v-model="searchstatus" placeholder="filter status"/></td>
     			</tr>
 				<tr v-for="(p, index) in filteredFacilities">
@@ -60,6 +62,10 @@ Vue.component("facilities", {
 					</td>
 					<td>
 						{{p.averageRating}}
+					</td>
+					<td>
+						<p style="width:100px;height=100px">From: {{p.startTime | dateFormat('HH.mm')}}</p>
+						<p style="width:100px;height=100px">Until: {{p.endTime | dateFormat('HH.mm')}}</p>
 					</td>
 					<td v-if="p.status">Open</td>
 					<td v-else="p.status">Closed</td>
@@ -152,6 +158,12 @@ Vue.component("facilities", {
 				}
 				return false;
 			})
+		}
+	},
+	filters: {
+		dateFormat: function(value, format) {
+			var parsed = moment(value);
+    		return parsed.format(format);
 		}
 	}
 });
