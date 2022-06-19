@@ -2,21 +2,23 @@ Vue.component("facilities", {
 	data: function () {
 	    return {
 	      facilities: [],
+	      openstatus: '',
 	      searchname: '',
 	      searchtype: '',
 	      searchlocation: '',
 	      searchrating: '',
+	      searchstatus: '',
 	      
 	      srchname: '',
 	      srchtype: '',
 	      srchloc: '',
 	      srchrat: '',
-		  mode: ''	      
+		  mode: ''    
 	    }
 	},
 	    template: ` 
     	<div class="center">
-    		<h1>Sportski objekti</h1>
+    		<h1>Sport facilities</h1>
     		<span>
     			<input type="text" v-model="srchname" placeholder="search by name"/>
     			<input type="button" value="search" @click="searchName"/>
@@ -38,12 +40,16 @@ Vue.component("facilities", {
     				<th>Type</th>
     				<th>Location</th>
     				<th>Rating</th>
+    				<th rowspan="2">Work hours</th>
+    				<th>Status</th>
     			</tr>
     			<tr>
     				<td><input type="text" v-model="searchname" placeholder="filter name"/></td>
     				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
     				<td><input type="text" v-model="searchlocation" placeholder="filter location"/></td>
     				<td><input type="text" v-model="searchrating" placeholder="filter rating"/></td>
+    				
+    				<td><input type="text" v-model="searchstatus" placeholder="filter status"/></td>
     			</tr>
 				<tr v-for="(p, index) in filteredFacilities">
 					<td width="100%" height="100%"><img v-bind:src="p.image" width="100px" height="100px" alt=""></td>
@@ -57,6 +63,12 @@ Vue.component("facilities", {
 					<td>
 						{{p.averageRating}}
 					</td>
+					<td>
+						<p style="width:100px;height=100px">From: {{p.startTime | dateFormat('HH.mm')}}</p>
+						<p style="width:100px;height=100px">Until: {{p.endTime | dateFormat('HH.mm')}}</p>
+					</td>
+					<td v-if="p.status">Open</td>
+					<td v-else="p.status">Closed</td>
 				</tr>
 	    	</table>
    		</div>		  
@@ -111,11 +123,10 @@ Vue.component("facilities", {
 	computed:{
 		filteredFacilities: function(){
 			return this.facilities.filter((p) => {
-				//return (p.name.match(this.searchname)
-				//);
 				if (this.searchname === '' && (this.searchtype === '')
 				&& (this.searchrating === '') 
-				&& (this.searchlocation === '')) {
+				&& (this.searchlocation === '')
+				&& (this.searchstatus === '')) {
 					return true
 				}
 				else if (p.name.match(this.searchname) && (this.searchname !== '')) {
@@ -125,15 +136,34 @@ Vue.component("facilities", {
 				else if (p.objectType.match(this.searchtype) && (this.searchtype !== '')){
 					return true;
 				}
-				else if (p.averageRating.toString().match(this.searchrating) && (this.searchrating !== '')) {
+				else if (p.averageRating.toString().match(this.searchrating) && 
+				(this.searchrating !== '')) {
 					return true;
 				}
 				else if (p.location.address.city.match(this.searchlocation)
 				&& (this.searchlocation !== '')) {
 					return true;
 				}
+				else if (this.searchstatus !== '') {
+					if (p.status == true) {
+						this.openstatus = 'Open'
+					}
+					else this.openstatus = 'Closed'
+					
+					if (this.openstatus.match(this.searchstatus)){
+						return true
+					}
+					
+					else return false;
+				}
 				return false;
 			})
+		}
+	},
+	filters: {
+		dateFormat: function(value, format) {
+			var parsed = moment(value);
+    		return parsed.format(format);
 		}
 	}
 });
