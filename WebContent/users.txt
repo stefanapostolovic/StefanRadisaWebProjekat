@@ -1,13 +1,1 @@
-0; 1; 1; 1; 1; Male; 2022-06-28
-1; salamahd; salama9000; Stefan; Apostolovic; Male; 2000-07-18
-2; 1; 1; 1; 1; Male; 2022-06-21
-3; test; test; test; test; Male; 2022-06-21
-4; 2; 2; 22; 2; Male; 2022-06-29
-5; dsads; dsad; dsadas; dsadas; Female; 2022-06-28
-6; korisnickoime; lozinka; ime; prezime; Male; 2022-06-27
-7; 3; 3; 3; 3; Female; 2022-06-28
-0; 4; 4; 4; 4; Male; 2022-06-21
-0; 5; 5; 5; 5; Male; 2022-06-28
-0; 6; 6; 6; 6; Female; 2022-06-22
-0; b; b; b; b; Male; 2022-06-28
-0; c; c; c; c; Male; 2022-06-22
+

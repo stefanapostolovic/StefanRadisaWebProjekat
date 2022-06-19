@@ -24,7 +24,7 @@ public class User implements Serializable {
 	
 	
 	
-	private String id;		//dodao
+	//private String id;		//dodao
 	private String username;
 	private String password;
 	private String name;
@@ -43,10 +43,10 @@ public class User implements Serializable {
 		
 	}
 	
-	public User(String id, String username, String password, String name, 
+	public User(String username, String password, String name, 
 			String surename, Gender gender, String dateOfBirth) {
 		super();
-		this.id = id;
+		//this.id = id;
 		this.username = username;
 		this.password = password;
 		this.name = name;
@@ -61,12 +61,12 @@ public class User implements Serializable {
 		//this.points = points;
 		//this.customerType = customerType;
 	}
-	public String getId() {
+	/*public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
+	}*/
 	
 	public String getUsername() {
 		return username;

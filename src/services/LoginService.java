@@ -74,10 +74,15 @@ public class LoginService {
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User register(User user) {
-		System.out.println("***********************************************************************");
+	public Response register(User user) {
+		//System.out.println("***********************************************************************");
 		//UserDAO dao = new UserDAO();
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		return userDao.register(user);
+		User registeredUser = userDao.register(user);
+		
+		if (registeredUser == null) {
+			return Response.status(400).entity("Username already taken!").build();
+		}
+		return Response.status(200).build();
 	}
 }

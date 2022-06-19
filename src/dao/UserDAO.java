@@ -8,10 +8,15 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import beans.Customer;
+import beans.CustomerType;
+import beans.Membership;
 import beans.Product;
+import beans.SportFacility;
 import beans.User;
 import enums.Gender;
 
@@ -67,21 +72,30 @@ public class UserDAO {
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
 	
-	public User register(User user) {		//DODATI SERIJALIZACIJU
-		Integer maxId = -1;
+	public User register(User user) {
+		if (find(user.getUsername(), user.getPassword()) != null)
+				return null;
+		
+		//Integer maxId = -1;
 		/*for (String id : users.keySet()) {
 			int idNum =Integer.parseInt(id);
 			if (idNum > maxId) {
 				maxId = idNum;
 			}
 		}*/
-		maxId++;
-		user.setId(maxId.toString());
-		users.put(user.getId(), user);
+		//maxId++;
+		//user.setId(maxId.toString());
+		Customer custTest = new Customer(
+				user.getUsername(), user.getPassword(), 
+				user.getName(), user.getSurename(), 
+				user.getGender(), user.getDateOfBirth(), 
+				null, null, 
+				0.0, new CustomerType()); 
+		users.put(user.getUsername(), custTest);
+		custTest = (Customer) users.get(user.getUsername());
 		
 		//serijalizacija
-		BufferedWriter out = null;
-//									
+		BufferedWriter out = null;									
 		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
 			File file = new File(contextPath + "/users.txt");
 			if (!(file.exists()))
@@ -91,8 +105,8 @@ public class UserDAO {
 			
 			String st ="";
 			st="";
-			st += user.getId();
-			st += "; ";
+			//st += user.getId();
+			//st += "; ";
 			st += user.getUsername();
 			st += "; ";
 			st += user.getPassword();
@@ -126,8 +140,9 @@ public class UserDAO {
 	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
 		BufferedReader in = null;
 		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			System.out.println("AAAAAAAAA" + contextPath + "****************");
+			//System.out.println("AAAAAAAAA" + contextPath + "****************");
 			File file = new File(contextPath + "/users.txt");
+			System.out.println(file.getAbsolutePath());
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			StringTokenizer st;
@@ -137,14 +152,14 @@ public class UserDAO {
 					continue;
 				st = new StringTokenizer(line, ";");
 				while (st.hasMoreTokens()) {
-					String userId = st.nextToken().trim();
+					//String userId = st.nextToken().trim();
 					String userName = st.nextToken().trim();
 					String password = st.nextToken().trim();
 					String name = st.nextToken().trim();
 					String surname = st.nextToken().trim();
 					Gender gender = Gender.valueOf(st.nextToken().trim());
 					String dateOfBirth = st.nextToken();
-					users.put(userName, new User(userName, userName, password, name, surname, gender, dateOfBirth));
+					users.put(userName, new User(userName, password, name, surname, gender, dateOfBirth));
 				}	
 			}
 		} catch (Exception ex) {
@@ -158,5 +173,4 @@ public class UserDAO {
 			}
 		}
 	}
-	
 }

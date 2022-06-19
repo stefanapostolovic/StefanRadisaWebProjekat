@@ -20,12 +20,12 @@ public class Customer extends User{
 		
 	}
 	
-	public Customer(String id, String username, String password, String name, String surename, 
+	public Customer(String username, String password, String name, String surename, 
 			Gender gender,
 			String dateOfBirth, 
 			Membership membership, List<SportFacility> visitedObjects, 
 			double points, CustomerType customerType) {
-		super(id, username, password, name, surename, gender, dateOfBirth);
+		super(username, password, name, surename, gender, dateOfBirth);
 		// TODO Auto-generated constructor stub
 	}
 
