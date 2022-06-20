@@ -84,46 +84,8 @@ public class UserDAO {
 
 		productToUpdate.setGender(user.getGender());
 		
-		BufferedWriter out = null;									
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			File file = new File(contextPath + "/users.txt");
-			if (!(file.exists()))
-				file.createNewFile();
-			
-			out = new BufferedWriter(new FileWriter(file, true));
-			
-			String st ="";
-			st="";
-			//st += user.getId();
-			//st += "; ";
-			st += user.getUsername();
-			st += "; ";
-			st += user.getPassword();
-			st += "; ";
-			st += user.getName();
-			st += "; ";
-			st += user.getSurename();
-			st += "; ";
-			st += user.getGender().toString();
-			st += "; ";
-			st += user.getDateOfBirth();		
-			
-			out.write(st);
-			out.flush();
-			out.newLine();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if ( out != null ) {
-				try {
-					out.close();
-				}
-				catch (Exception e) { }
-			}
-		}
 		
-		return user;
+		return productToUpdate;
 	}
 	
 	

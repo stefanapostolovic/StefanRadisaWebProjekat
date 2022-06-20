@@ -3,7 +3,7 @@ const Header = { template: '<zaglavlje></zaglavlje>' }
 const Login = { template: '<login></login>' }
 const Registracija = { template: '<registracija></registracija>' }
 const Profil = { template: '<profil></profil>' }
-
+const Korisnici = { template: '<users></users>' }
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -12,6 +12,7 @@ const router = new VueRouter({
 		{ path: '/login', component: Login},
 		{ path: '/registracija', component: Registracija},
 		{ path: '/profil', component: Profil},
+		{ path: '/users', component: Korisnici},
 ]
 });
 

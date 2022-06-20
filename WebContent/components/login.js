@@ -1,7 +1,7 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     //user:{},
+	     ed:null,
 	     username : "",
 	     password : ""
 	    }
@@ -20,6 +20,7 @@ Vue.component("login", {
     	</div>		  
     	`,
     mounted () {
+	axios.get('rest/svi').then(response =>(this.ed=response.data))
     },
     methods: {
     	aProduct : function() {
@@ -46,14 +47,18 @@ Vue.component("login", {
 				.post('rest/login', {username:this.username, password:this.password})
 				.then(response => {
 					let profil = document.getElementsByName("pom")[0];
-					let p  =profil.firstChild;
+					let p  =profil.getElementsByTagName("button")[0];
+					let p1  =profil.getElementsByTagName("button")[1];
+		
+					if(this.username==="2"){
+						p.hidden=false;
+					}
 					console.log(p)
-					p.hidden=false;
-					router.push(`/`)
+					p1.hidden =false;
 				})
 				.catch(response => {
 					toast('Wrong username and/or password!')
-				})	    
+						})	    
 		}
    }
 });

@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -42,11 +44,20 @@ public class LoginService {
 		}
 	}
 	
+	@GET
+	@Path("/svi")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getProducts() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.findAll();
+	}
+	
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getProducts(@PathParam("id") String id, User product) {
+	public User getProducts(@PathParam("id") String id, User product,@Context HttpServletRequest request) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		request.getSession().setAttribute("user", dao.update(id, product));
 		return dao.update(id, product);
 	}
 	
