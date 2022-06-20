@@ -1,18 +1,24 @@
 package services;
 
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Product;
 import beans.User;
+import dao.ProductDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -38,6 +44,23 @@ public class LoginService {
 		}
 	}
 	
+	@GET
+	@Path("/svi")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getProducts() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.findAll();
+	}
+	
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getProducts(@PathParam("id") String id, User product,@Context HttpServletRequest request) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		request.getSession().setAttribute("user", dao.update(id, product));
+		return dao.update(id, product);
+	}
+	
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -51,7 +74,7 @@ public class LoginService {
 		if (loggedUser == null) {
 			return Response.status(400).entity("Invalid username and/or password").build();
 		}
-		//request.getSession().setAttribute("user", loggedUser);
+		request.getSession().setAttribute("user", loggedUser);
 		return Response.status(200).build();
 	}
 	

@@ -71,6 +71,23 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
+	public User update(String id, User user) {
+		User productToUpdate = this.find(id,user.getPassword());
+		if(productToUpdate == null) {
+			return this.register(user);
+		}
+		productToUpdate.setName(user.getName());
+		productToUpdate.setSurename(user.getSurename());
+		productToUpdate.setPassword(user.getName());
+		productToUpdate.setUsername(user.getUsername());
+		productToUpdate.setDateOfBirth(user.getDateOfBirth());
+
+		productToUpdate.setGender(user.getGender());
+		
+		
+		return productToUpdate;
+	}
+	
 	
 	public User register(User user) {
 		if (find(user.getUsername(), user.getPassword()) != null)
