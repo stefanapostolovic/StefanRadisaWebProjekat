@@ -52,7 +52,7 @@ Vue.component("facilities", {
     				<td><input type="text" v-model="searchstatus" placeholder="filter status"/></td>
     			</tr>
 				<tr v-for="(p, index) in filteredFacilities">
-					<td width="100%" height="100%"><img v-bind:src="p.image" width="100px" height="100px" alt=""></td>
+					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">{{p.name}}</td>
 					<td class="kolona">{{p.objectType}}</td>
 					<td>

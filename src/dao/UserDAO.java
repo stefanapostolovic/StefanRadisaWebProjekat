@@ -115,6 +115,7 @@ public class UserDAO {
 		BufferedWriter out = null;									
 		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
 			File file = new File(contextPath + "/users.txt");
+			
 			if (!(file.exists()))
 				file.createNewFile();
 			

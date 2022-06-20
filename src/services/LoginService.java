@@ -41,8 +41,7 @@ public class LoginService {
 		if (ctx.getAttribute("userDAO") == null) {
 	    	contextPath = ctx.getRealPath("");
 			ctx.setAttribute("userDAO", new UserDAO(contextPath));
-		}
-	}
+		}	}
 	
 	@GET
 	@Path("/svi")

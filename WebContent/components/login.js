@@ -3,7 +3,8 @@ Vue.component("login", {
 	    return {
 	     ed:null,
 	     username : "",
-	     password : ""
+	     password : "",
+		image:""
 	    }
 	},
 	    template: ` 
@@ -11,7 +12,7 @@ Vue.component("login", {
 	<form id="forma" >
 		<table>
 			<tr><td>Username</td><td><input type="text" name="username" v-model="username"></td></tr>
-			<tr><td>Password</td><td><input type="password" name="password" v-model="password"></td></tr>
+			<tr><td>Password</td><td><input type="password" name="password" v-model="password"></td></tr>							
 			<tr><td><input type="submit" v-on:click="aProduct" value="Login"></td></tr>
 		</table>
 	</form>
@@ -55,6 +56,7 @@ Vue.component("login", {
 					}
 					console.log(p)
 					p1.hidden =false;
+					router.push(`/`)
 				})
 				.catch(response => {
 					toast('Wrong username and/or password!')
