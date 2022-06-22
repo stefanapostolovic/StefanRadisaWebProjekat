@@ -89,19 +89,12 @@ public class UserDAO {
 	}
 	
 	
-	public User register(User user) {
-		if (find(user.getUsername(), user.getPassword()) != null)
-				return null;
+	public User register(User user) {		
+		loadUsers(contextPath);		
+		if (users.containsKey(user.getUsername())) {
+			return null;
+		}
 		
-		//Integer maxId = -1;
-		/*for (String id : users.keySet()) {
-			int idNum =Integer.parseInt(id);
-			if (idNum > maxId) {
-				maxId = idNum;
-			}
-		}*/
-		//maxId++;
-		//user.setId(maxId.toString());
 		Customer custTest = new Customer(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
@@ -113,7 +106,7 @@ public class UserDAO {
 		
 		//serijalizacija
 		BufferedWriter out = null;									
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
+		try {					
 			File file = new File(contextPath + "/users.txt");
 			
 			if (!(file.exists()))
@@ -123,8 +116,6 @@ public class UserDAO {
 			
 			String st ="";
 			st="";
-			//st += user.getId();
-			//st += "; ";
 			st += user.getUsername();
 			st += "; ";
 			st += user.getPassword();
@@ -155,10 +146,9 @@ public class UserDAO {
 		return user;
 	}
 	
-	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
+	private void loadUsers(String contextPath) {	
 		BufferedReader in = null;
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			//System.out.println("AAAAAAAAA" + contextPath + "****************");
+		try {					
 			File file = new File(contextPath + "/users.txt");
 			System.out.println(file.getAbsolutePath());
 			in = new BufferedReader(new FileReader(file));

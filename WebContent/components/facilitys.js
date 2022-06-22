@@ -64,8 +64,8 @@ Vue.component("facilities", {
 						{{p.averageRating}}
 					</td>
 					<td>
-						<p style="width:100px;height=100px">From: {{p.startTime | dateFormat('HH.mm')}}</p>
-						<p style="width:100px;height=100px">Until: {{p.endTime | dateFormat('HH.mm')}}</p>
+						<p style="width:100px;height=100px">From: {{p.startTime}}</p>
+						<p style="width:100px;height=100px">Until: {{p.endTime}}</p>
 					</td>
 					<td v-if="p.status">Open</td>
 					<td v-else="p.status">Closed</td>
