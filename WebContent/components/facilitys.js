@@ -13,12 +13,18 @@ Vue.component("facilities", {
 	      srchtype: '',
 	      srchloc: '',
 	      srchrat: '',
-		  mode: ''    
+		  mode: '', 
+		  
+		  columnToBeSorted: [],
+		  sortDirectionName: 'ASC',
+		  sortDirectionLocation: 'ASC',
+		  sortDirectionRating: 'ASC'
 	    }
 	},
 	    template: ` 
     	<div class="center">
     		<h1>Sport facilities</h1>
+    										<!--SEARCH-->
     		<span>
     			<input type="text" v-model="srchname" placeholder="search by name"/>
     			<input type="button" value="search" @click="searchName"/>
@@ -33,7 +39,16 @@ Vue.component("facilities", {
     			<input type="button" value="search" @click="searchRating"/>
     		</span>
     		<p></p>
-    		<table style="border:solid">
+    		<table 
+    			<tr>							<!--SORT-->
+    				<td></td>
+    				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
+    				<td></td>
+    				<td><input type="button" @click="changeSort('Location')" value="sort"/></td>
+    				<td><input type="button" @click="changeSort('Rating')" value="sort"/></td>
+    				<td></td>
+    				<td></td>
+    			</tr>
     			<tr>
     				<th rowspan="2">Icon</th>
     				<th>Name</th>
@@ -43,14 +58,25 @@ Vue.component("facilities", {
     				<th rowspan="2">Work hours</th>
     				<th>Status</th>
     			</tr>
-    			<tr>
-    				<td><input type="text" v-model="searchname" placeholder="filter name"/></td>
-    				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
-    				<td><input type="text" v-model="searchlocation" placeholder="filter location"/></td>
-    				<td><input type="text" v-model="searchrating" placeholder="filter rating"/></td>
+    			<tr>							<!--FILTER-->
+    				<td>
+						<input type="text" v-model="searchname" placeholder="filter name"/>
+    				</td>
+    				<td>
+    					<input type="text" v-model="searchtype" placeholder="filter type"/>
+    				</td>
+    				<td>
+    					<input type="text" v-model="searchlocation" placeholder="filter location"/>
+    				</td>
+    				<td>
+    					<input type="text" v-model="searchrating" placeholder="filter rating"/>
+    				</td>
     				
     				<td><input type="text" v-model="searchstatus" placeholder="filter status"/></td>
     			</tr>
+    			
+    											<!--TABLE-->
+    			
 				<tr v-for="(p, index) in filteredFacilities">
 					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">{{p.name}}</td>
@@ -118,6 +144,69 @@ Vue.component("facilities", {
 			axios
 				.get('rest/facilities/search/' + this.srchrat + '/' + this.mode)
 				.then(response => (this.facilities = response.data))
+		},
+		changeSort(columnName){
+			switch(columnName) {
+				case ('Name'):
+					{
+						axios
+							.get('rest/facilities/getColumn/' + 'Name')
+							.then(response => {
+								this.columnToBeSorted = response.data;
+								this.colimnToBeSorted.sort((a, b) => {
+									if (this.sortDirectionName === 'ASC') return a - b;
+									
+									return b - a;
+								})
+								
+								this.sortDirectionName = 'DESC';
+								this.facilities.forEach((facility, index) => {
+									facility.name = this.columnToBeSorted[index];
+								})
+							})
+					}
+				break;
+				case 'Location':
+					{
+						axios
+							.get('rest/facilities/getColumn/' + 'Location')
+							.then(response => {
+								this.columnToBeSorted = response.data;
+								this.colimnToBeSorted.sort((a, b) => {
+									if (this.sortDirectionLocation === 'ASC') return a - b;
+									
+									return b - a;
+								})
+								
+								this.sortDirectionLocation = 'DESC'
+								this.facilities.forEach((facility, index) => {
+									facility.location = this.columnToBeSorted[index];
+								})
+							})
+					}
+				break;
+				case 'Rating':
+					{
+						axios
+							.get('rest/facilities/getColumn/' + 'Rating')
+							.then(response => {
+								this.columnToBeSorted = response.data;
+								this.colimnToBeSorted.sort((a, b) => {
+									if (this.sortDirectionRating === 'ASC') return a - b;
+									
+									return b - a;
+								})
+								
+								this.sortDirectionRating = 'DESC'
+								this.facilities.forEach((facility, index) => {
+									facility.averageRating = this.columnToBeSorted[index];
+								})
+							})
+					}
+				break;
+				
+				
+			}
 		}
 	},
 	computed:{
