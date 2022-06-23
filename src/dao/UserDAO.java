@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Customer;
@@ -103,21 +104,22 @@ public class UserDAO {
 			}
 		}
 		
-		/*Customer custTest = new Customer(
+		Customer custTest = new Customer(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
 				user.getGender(), user.getDateOfBirth(), 
 				null, null, 
-				0.0, new CustomerType()); 
+				1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
-		custTest = (Customer) users.get(user.getUsername());*/
-		users.put(user.getUsername(), user);
+		custTest = (Customer) users.get(user.getUsername());
+		//users.put(user.getUsername(), user);
 		
 		//serijalizacija								
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
 			
-			String json = new Gson().toJson(users.values());
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(users.values());
 			System.out.println(json);
 			writer.write(json);
 		
@@ -145,4 +147,30 @@ public class UserDAO {
 			ex.printStackTrace();
 		} 
 	}
+	
+	//SEARCH VISEKRITERIJUMSKO
+	public Collection<User> GetByMultiSearch(
+			String name, String surname, String username) {
+		
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if ((user.getName().toLowerCase().contains(name.toLowerCase())) &&
+				user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
+				user.getUsername().toLowerCase().contains(username.toLowerCase())) {
+				returnList.add(user);
+			}
+		}
+		
+		return returnList;
+	}
 }
+
+
+
+
+
+
+
+
+
+

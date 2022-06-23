@@ -1,13 +1,10 @@
 package beans;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 public class Membership {
 	private String identifier;
 	private String membershipType;
-	private LocalDate paymentDate;
-	private LocalDateTime expirationDate;
+	private String paymentDate;
+	private String expirationDate;
 	private double price;
 	private boolean status;
 	private int numberAppointments;
@@ -17,7 +14,7 @@ public class Membership {
 		
 	}
 	
-	public Membership(String identifier, String membershipType, LocalDate paymentDate, LocalDateTime expirationDate,
+	public Membership(String identifier, String membershipType, String paymentDate, String expirationDate,
 			double price, boolean status, int numberAppointments, User user) {
 		super();
 		this.identifier = identifier;
@@ -41,16 +38,16 @@ public class Membership {
 	public void setMembershipType(String membershipType) {
 		this.membershipType = membershipType;
 	}
-	public LocalDate getPaymentDate() {
+	public String getPaymentDate() {
 		return paymentDate;
 	}
-	public void setPaymentDate(LocalDate paymentDate) {
+	public void setPaymentDate(String paymentDate) {
 		this.paymentDate = paymentDate;
 	}
-	public LocalDateTime getExpirationDate() {
+	public String getExpirationDate() {
 		return expirationDate;
 	}
-	public void setExpirationDate(LocalDateTime expirationDate) {
+	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 	public double getPrice() {

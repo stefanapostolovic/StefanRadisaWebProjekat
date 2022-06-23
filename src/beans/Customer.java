@@ -1,6 +1,5 @@
 package beans;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import enums.Gender;

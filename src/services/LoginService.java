@@ -17,7 +17,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Product;
+import beans.SportFacility;
 import beans.User;
+import dao.FacilityDAO;
 import dao.ProductDAO;
 import dao.UserDAO;
 
@@ -46,7 +48,7 @@ public class LoginService {
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getProducts() {
+	public Collection<User> getAllRegisteredUsers() {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.findAll();
 	}
@@ -106,5 +108,17 @@ public class LoginService {
 			return Response.status(400).entity("Username already taken!").build();
 		}
 		return Response.status(200).build();
+	}
+	
+	@GET
+	@Path("/search/{name: .*}/{surname: .*}/{username: .*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<User> getMultiSearchedUsers(@PathParam("name") String name,
+			@PathParam("surname") String surname, @PathParam("username") String username) {
+		
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.GetByMultiSearch(name, surname, username);
 	}
 }

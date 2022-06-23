@@ -17,7 +17,7 @@ Vue.component("facilities", {
 	      srchrat: '',
 		  //mode: '', 
 		  
-		  columnToBeSorted: [],
+		  //columnToBeSorted: [],
 		  sortDirectionName: 'ASC',
 		  sortDirectionLocation: 'ASC',
 		  sortDirectionRating: 'ASC'
