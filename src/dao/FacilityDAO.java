@@ -7,15 +7,21 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.StringTokenizer;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import beans.Address;
 import beans.Location;
-import beans.Product;
 import beans.SportFacility;
 
 /***
@@ -64,79 +70,39 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	 * Dodaje proizvod u mapu proizvoda. Id novog proizvoda �e biti postavljen na maxPostojeciId + 1.
 	 * @param product
 	 */
-	public SportFacility save(SportFacility facility) {
-		Integer maxId = -1;
-		for (String id : facilities.keySet()) {
-			int idNum =Integer.parseInt(id);
-			if (idNum > maxId) {
-				maxId = idNum;
+	public List<SportFacility> save(List<SportFacility> facilityList) {
+		for (SportFacility facility : facilityList) {
+			Integer maxId = -1;
+			for (String id : facilities.keySet()) {
+				int idNum =Integer.parseInt(id);
+				if (idNum > maxId) {
+					maxId = idNum;
+				}
 			}
+			maxId++;
+			facility.setId(maxId.toString());
+			facilities.put(facility.getId(), facility);
 		}
-		maxId++;
-		facility.setId(maxId.toString());
-		facilities.put(facility.getId(), facility);
+		
 		
 		//serijalizacija
-		BufferedWriter out = null;
+		try {				
 		
-		try {				//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt
-		File file = new File(contextPath + "/facilities.txt");
-		if (!(file.exists()))
-			file.createNewFile();
+		//Gson gson = new Gson();
 		
-		out = new BufferedWriter(new FileWriter(file, true));
+		Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
+		//Writer writer = new FileWriter(contextPath + "/facilities.json", true);
+		//gson.toJson(facilityList, writer);
+		String json = new Gson().toJson(facilityList);
+		System.out.println(json);
+		writer.write(json);
 		
-		Location location = facility.getLocation();
-		Address address = location.getAddress();
-		
-		String st ="";
-		st="";
-		st += facility.getId();
-		st +="; ";
-		st += facility.getName();
-		st +="; ";
-		st += facility.getObjectType();
-		st += "; ";
-		st += String.valueOf(facility.isStatus());
-		st += "; ";
-		st += location.getId();
-		st += "; ";
-		st += Double.toString(location.getLongitude());
-		st += "; ";
-		st += Double.toString(location.getLatitude());
-		st += "; ";
-		st += address.getStreet();
-		st += "; ";
-		st += address.getNumber();
-		st += "; ";
-		st+= address.getCity();
-		st += "; ";
-		st += Integer.toString(address.getZipCode());
-		st += "; ";
-		st += facility.getImage();
-		st += "; ";
-		st += Double.toString(facility.getAverageRating());
-		st += "; ";
-		st += facility.getStartTime().toString();
-		st += "; ";
-		st += facility.getEndTime().toString();
-		//st += "; ";
-		
-		out.write(st);
-		out.flush();
-		out.newLine();
+		writer.close();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if ( out != null ) {
-				try {
-					out.close();
-				}
-				catch (Exception e) { }
-			}
 		}
-		return facility;
+		return facilityList;
 	}
 	
 	/**
@@ -144,61 +110,22 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	 * Klju� je id proizovda.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
-	private void loadFacilities(String contextPath) {
-		BufferedReader in = null;	//"E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\facilities.txt"
-		try {						//contextPath + "/facilities.txt"
-			File file = new File(contextPath + "/facilities.txt");
-			//System.out.println("AAAAAAAAAAAA" + file.getCanonicalPath());
-			in = new BufferedReader(new FileReader(file));
-			String line, idFacility = "", name = "", objectType = "",
-					status = "", locationId = "", longitude = "",
-					latitude= "", street = "", number = "", city = "",
-					zipCode = "", imageUrl = "", averageRating = "", startTime = "",
-					endTime = "";		//menjaj
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					idFacility = st.nextToken().trim();
-					name = st.nextToken().trim();
-					objectType = st.nextToken().trim();
-					status = st.nextToken().trim();
-					locationId = st.nextToken().trim();
-					longitude = st.nextToken().trim();
-					latitude = st.nextToken().trim();
-					street = st.nextToken().trim();
-					number = st.nextToken().trim();
-					city = st.nextToken().trim();
-					zipCode = st.nextToken().trim();
-					imageUrl = st.nextToken().trim();
-					averageRating = st.nextToken().trim();
-					startTime = st.nextToken().trim();
-					endTime = st.nextToken().trim();
-				}
-				Address address = new Address(
-						street, number, city, Integer.parseInt(zipCode));
-				Location location = new Location(
-						locationId, Double.parseDouble(longitude),
-						Double.parseDouble(latitude), address);
-				facilities.put(idFacility, new SportFacility(idFacility, name, objectType, 
-						Boolean.parseBoolean(status), 
-						location, imageUrl, Double.parseDouble(averageRating)
-						, LocalTime.parse(startTime), LocalTime.parse(endTime)));
+	private void loadFacilities(String contextPath) {	
+		try {
+			
+			Reader reader = new BufferedReader(new FileReader(contextPath + "/facilities.json"));
+			
+			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<SportFacility>>() {}.getType();
+			List<SportFacility> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
+			reader.close();
+				
+			for (SportFacility facility : facilityList) {
+				facilities.put(facility.getId(), facility);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if ( in != null ) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
 		}
-		
 	}
 	
 	//NAME
@@ -244,4 +171,34 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		}
 		return returnList;
 	}
+	
+	//SEARCH VISEKRITERIJUMSKO
+	public Collection<SportFacility> GetByMultiSearch(
+			String name, String type, String location, String rating) {
+		
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if ((facility.getName().toLowerCase().contains(name)
+				&& (facility.getObjectType().toLowerCase().contains(type)))
+				&& (facility.getLocation().getAddress().getCity().toLowerCase().contains(location))
+				&& (Double.toString(facility.getAverageRating()).toLowerCase().contains(rating))) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

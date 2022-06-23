@@ -5,12 +5,18 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import beans.Customer;
 import beans.CustomerType;
@@ -89,106 +95,54 @@ public class UserDAO {
 	}
 	
 	
-	public User register(User user) {
-		if (find(user.getUsername(), user.getPassword()) != null)
+	public User register(User user) {		
+		loadUsers(contextPath);		
+		if (users != null) {
+			if (users.containsKey(user.getUsername())) {
 				return null;
-		
-		//Integer maxId = -1;
-		/*for (String id : users.keySet()) {
-			int idNum =Integer.parseInt(id);
-			if (idNum > maxId) {
-				maxId = idNum;
 			}
-		}*/
-		//maxId++;
-		//user.setId(maxId.toString());
-		Customer custTest = new Customer(
+		}
+		
+		/*Customer custTest = new Customer(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
 				user.getGender(), user.getDateOfBirth(), 
 				null, null, 
 				0.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
-		custTest = (Customer) users.get(user.getUsername());
+		custTest = (Customer) users.get(user.getUsername());*/
+		users.put(user.getUsername(), user);
 		
-		//serijalizacija
-		BufferedWriter out = null;									
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			File file = new File(contextPath + "/users.txt");
+		//serijalizacija								
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
 			
-			if (!(file.exists()))
-				file.createNewFile();
-			
-			out = new BufferedWriter(new FileWriter(file, true));
-			
-			String st ="";
-			st="";
-			//st += user.getId();
-			//st += "; ";
-			st += user.getUsername();
-			st += "; ";
-			st += user.getPassword();
-			st += "; ";
-			st += user.getName();
-			st += "; ";
-			st += user.getSurename();
-			st += "; ";
-			st += user.getGender().toString();
-			st += "; ";
-			st += user.getDateOfBirth();		
-			
-			out.write(st);
-			out.flush();
-			out.newLine();
-			
+			String json = new Gson().toJson(users.values());
+			System.out.println(json);
+			writer.write(json);
+		
+			writer.close();
+		
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if ( out != null ) {
-				try {
-					out.close();
-				}
-				catch (Exception e) { }
-			}
 		}
 		
 		return user;
 	}
 	
-	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
-		BufferedReader in = null;
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			//System.out.println("AAAAAAAAA" + contextPath + "****************");
-			File file = new File(contextPath + "/users.txt");
-			System.out.println(file.getAbsolutePath());
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					//String userId = st.nextToken().trim();
-					String userName = st.nextToken().trim();
-					String password = st.nextToken().trim();
-					String name = st.nextToken().trim();
-					String surname = st.nextToken().trim();
-					Gender gender = Gender.valueOf(st.nextToken().trim());
-					String dateOfBirth = st.nextToken();
-					users.put(userName, new User(userName, password, name, surname, gender, dateOfBirth));
-				}	
+	private void loadUsers(String contextPath) {	
+		try {					
+			Reader reader = new BufferedReader(new FileReader(contextPath + "/users.json"));
+			
+			java.lang.reflect.Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
+			List<User> userList = new Gson().fromJson(reader, (java.lang.reflect.Type) userListType);
+			
+			for (User tempUser : userList) {
+				users.put(tempUser.getUsername(), tempUser);
 			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
-		}
+		} 
 	}
 }

@@ -2,70 +2,85 @@ Vue.component("facilities", {
 	data: function () {
 	    return {
 	      facilities: [],
-	      openstatus: '',
-	      searchname: '',
+	      facilitiesCopy: [],
 	      searchtype: '',
-	      searchlocation: '',
-	      searchrating: '',
-	      searchstatus: '',
+	      //searchname: '',
+	      //searchlocation: '',
+	      //searchrating: '',
+	      //openstatus: '',
+	      //searchstatus: '',
+	      showOnlyOpened: false,
 	      
 	      srchname: '',
 	      srchtype: '',
 	      srchloc: '',
 	      srchrat: '',
-		  mode: ''    
+		  //mode: '', 
+		  
+		  columnToBeSorted: [],
+		  sortDirectionName: 'ASC',
+		  sortDirectionLocation: 'ASC',
+		  sortDirectionRating: 'ASC'
 	    }
 	},
 	    template: ` 
     	<div class="center">
     		<h1>Sport facilities</h1>
-    		<span>
+    										<!--SEARCH-->
+    		<p style="margin-bottom:1cm; margin-top:1cm">
     			<input type="text" v-model="srchname" placeholder="search by name"/>
-    			<input type="button" value="search" @click="searchName"/>
     			<input type="text" v-model="srchtype" placeholder="search by type"/>
-    			<input type="button" value="search" @click="searchType"/>
-    		</span>
-    		<p></p>
-    		<span>
-    			<input type="text" v-model="srchloc" placeholder="search by location"/>
-    			<input type="button" value="search" @click="searchLocation"/>
+    		
+    			<input type="text" v-model="srchloc" placeholder="search by location"/>    		
     			<input type="text" v-model="srchrat" placeholder="search by rating"/>
-    			<input type="button" value="search" @click="searchRating"/>
-    		</span>
-    		<p></p>
-    		<table style="border:solid">
-    			<tr>
+    			<input type="button" @click="multiSearch" value="search"/>
+    		</p>	
+    		<table 
+    			<tr>							<!--SORT && FILTER-->
     				<th rowspan="2">Icon</th>
+    				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
+    				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
+    				<td><input type="button" @click="changeSort('Location')" value="sort"/></td>
+    				<td><input type="button" @click="changeSort('Rating')" value="sort"/></td>
+    				<th rowspan="2">Work hours</th>
+    				<td><input type="button" @click="filterOpenFacilities" value="Show opened"/></td>
+    			</tr>
+    			<tr>
     				<th>Name</th>
     				<th>Type</th>
     				<th>Location</th>
     				<th>Rating</th>
-    				<th rowspan="2">Work hours</th>
     				<th>Status</th>
     			</tr>
-    			<tr>
-    				<td><input type="text" v-model="searchname" placeholder="filter name"/></td>
-    				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
-    				<td><input type="text" v-model="searchlocation" placeholder="filter location"/></td>
-    				<td><input type="text" v-model="searchrating" placeholder="filter rating"/></td>
-    				
-    				<td><input type="text" v-model="searchstatus" placeholder="filter status"/></td>
-    			</tr>
+    											<!--TABLE-->
+    			
 				<tr v-for="(p, index) in filteredFacilities">
 					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
-					<td class="kolona">{{p.name}}</td>
-					<td class="kolona">{{p.objectType}}</td>
-					<td>
-						{{p.location.address.street+" "+p.location.address.number}}<br>
-						{{p.location.address.city+"  "+p.location.address.zipCode}}<br>
-						{{p.location.longitude+",    "+ p.location.latitude}}
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.name}}
+						</p>
+					</td>
+					<td class="kolona">
+						{{p.objectType}}
 					</td>
 					<td>
-						{{p.averageRating}}
+						<p style="width:150px;height=150px">
+							{{p.location.address.street+" "+p.location.address.number}}
+						</p>
+						<p style="width:150px;height=150px">
+							{{p.location.address.city+"  "+p.location.address.zipCode}}
+						</p>
+						<p style="width:150px;height=150px">
+							{{p.location.longitude+",    "+ p.location.latitude}}
+						</p>
 					</td>
 					<td>
-						<p style="width:100px;height=100px">From: {{p.startTime | dateFormat('HH.mm')}}</p>
-						<p style="width:100px;height=100px">Until: {{p.endTime | dateFormat('HH.mm')}}</p>
+						<p style="width:150px;height=150px">{{p.averageRating}}</p>
+					</td>
+					<td>
+						<p style="width:150px;height=150px">From: {{p.startTime}}</p>
+						<p style="width:150px;height=100px">Until: {{p.endTime}}</p>
 					</td>
 					<td v-if="p.status">Open</td>
 					<td v-else="p.status">Closed</td>
@@ -76,7 +91,10 @@ Vue.component("facilities", {
     mounted () {
         axios
           .get('rest/facilities/')
-          .then(response => (this.facilities = response.data))
+          .then(response => {
+				this.facilities = response.data;
+				this.facilitiesCopy = response.data;
+			})
     },
     methods: {
 	
@@ -95,66 +113,148 @@ Vue.component("facilities", {
 			var d =p.toString();   
 			return d.toString();	
 		},
-		searchName() {
-			this.mode = 'NAME'
+		multiSearch() {
+					
 			axios
-				.get('rest/facilities/search/' + this.srchname + '/' + this.mode)
-				.then(response => (this.facilities = response.data))
+				.get('rest/facilities/search/' + this.srchname + '/' + this.srchtype
+				+ '/' + this.srchloc + '/' + this.srchrat)
+				.then(response => {
+					this.facilities = response.data;				
+				})
 		},
-		searchType(){
-			this.mode = 'TYPE'
-			axios
-				.get('rest/facilities/search/' + this.srchtype + '/' + this.mode)
-				.then(response => (this.facilities = response.data))
+		
+		changeSort(columnName){
+			switch(columnName) {
+				case ('Name'):
+					{
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.name.toLowerCase();
+								let fb = b.name.toLowerCase();
+								
+								if (this.sortDirectionName === 'ASC') {
+									if (fa < fb) {
+        								return -1;
+    								}
+								    if (fa > fb) {
+								        return 1;
+								    }
+								    return 0;
+								}
+								else {
+									if (fa < fb) {
+    									return 1;
+									}
+							    	if (fa > fb) {
+							        	return -1;
+							    	}
+							    	return 0;
+								}
+							})
+							if (this.sortDirectionName === 'ASC') {
+								this.sortDirectionName = 'DESC';
+								this.sortDirectionLocation = 'DESC';
+								this.sortDirectionRating = 'DESC';
+							}else {
+								this.sortDirectionName = 'ASC';
+								this.sortDirectionLocation = 'ASC';
+								this.sortDirectionRating = 'ASC';
+							}
+							this.facilities = copiedFacilities;
+					}
+				break;
+				case 'Location':
+					{
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.location.address.city.toLowerCase();
+								let fb = b.location.address.city.toLowerCase();
+								
+								if (this.sortDirectionLocation === 'ASC') {
+									if (fa < fb) {
+        								return -1;
+    								}
+								    if (fa > fb) {
+								        return 1;
+								    }
+								    return 0;
+								}
+								else {
+									if (fa < fb) {
+    									return 1;
+									}
+							    	if (fa > fb) {
+							        	return -1;
+							    	}
+							    	return 0;
+								}
+							})
+							if (this.sortDirectionLocation === 'ASC') {
+								this.sortDirectionName = 'DESC';
+								this.sortDirectionLocation = 'DESC';
+								this.sortDirectionRating = 'DESC';
+							}else {
+								this.sortDirectionName = 'ASC';
+								this.sortDirectionLocation = 'ASC';
+								this.sortDirectionRating = 'ASC';
+							}
+							this.facilities = copiedFacilities;
+					}
+				break;
+				case 'Rating':
+					{
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.averageRating
+								let fb = b.averageRating;
+								
+								if (this.sortDirectionRating === 'ASC') return fa - fb;
+	
+								else return fb - fa;
+							})
+							if (this.sortDirectionRating === 'ASC') {
+								this.sortDirectionName = 'DESC';
+								this.sortDirectionLocation = 'DESC';
+								this.sortDirectionRating = 'DESC';
+							}else {
+								this.sortDirectionName = 'ASC';
+								this.sortDirectionLocation = 'ASC';
+								this.sortDirectionRating = 'ASC';
+							}
+							this.facilities = copiedFacilities;
+					}
+				break;
+			}
 		},
-		searchLocation(){
-			this.mode = 'LOCATION'
-			axios
-				.get('rest/facilities/search/' + this.srchloc + '/' + this.mode)
-				.then(response => (this.facilities = response.data))
-		},
-		searchRating(){
-			this.mode = 'RATING'
-			axios
-				.get('rest/facilities/search/' + this.srchrat + '/' + this.mode)
-				.then(response => (this.facilities = response.data))
+		
+		filterOpenFacilities () {
+			
+			if (this.showOnlyOppened == true) {
+				this.facilities = this.facilitiesCopy;
+				this.showOnlyOppened = !this.showOnlyOppened;
+			}
+			else {
+				var openFacilites = []
+			
+				this.facilities.forEach((facility, index) => {
+					if (facility.status == true) {
+						openFacilites[index] = facility
+					}
+				})
+				
+				this.showOnlyOppened = !this.showOnlyOppened;
+				this.facilities = openFacilites;
+			}
 		}
 	},
 	computed:{
 		filteredFacilities: function(){
 			return this.facilities.filter((p) => {
-				if (this.searchname === '' && (this.searchtype === '')
-				&& (this.searchrating === '') 
-				&& (this.searchlocation === '')
-				&& (this.searchstatus === '')) {
+				if (this.searchtype === '') {
 					return true
 				}
-				else if (p.name.match(this.searchname) && (this.searchname !== '')) {
+				else if (p.objectType.match(this.searchtype) && (this.searchtype !== '')) {
 					return true;
-				}
-				
-				else if (p.objectType.match(this.searchtype) && (this.searchtype !== '')){
-					return true;
-				}
-				else if (p.averageRating.toString().match(this.searchrating) && 
-				(this.searchrating !== '')) {
-					return true;
-				}
-				else if (p.location.address.city.match(this.searchlocation)
-				&& (this.searchlocation !== '')) {
-					return true;
-				}
-				else if (this.searchstatus !== '') {
-					if (p.status == true) {
-						this.openstatus = 'Open'
-					}
-					else this.openstatus = 'Closed'
-					
-					if (this.openstatus.match(this.searchstatus)){
-						return true
-					}
-					
-					else return false;
 				}
 				return false;
 			})

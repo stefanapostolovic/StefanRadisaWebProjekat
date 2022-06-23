@@ -1,7 +1,5 @@
 package beans;
 
-import java.time.LocalTime;
-
 public class SportFacility {
 	private String id;	//dodao
 	private String name;
@@ -10,15 +8,15 @@ public class SportFacility {
 	private Location location;
 	private String image;
 	private double averageRating;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private String startTime;
+	private String endTime;
 	
 	public SportFacility() {
 		
 	}
 	
 	public SportFacility(String id, String name, String objectType, boolean status, Location location, String image,
-			double averageRating, LocalTime startTime, LocalTime endTime) {
+			double averageRating, String startTime, String endTime) {
 		super();
 		this.id = id;		//dodao
 		this.name = name;
@@ -73,16 +71,16 @@ public class SportFacility {
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
-	public LocalTime getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public LocalTime getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(LocalTime endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 }
