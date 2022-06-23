@@ -172,6 +172,22 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		return returnList;
 	}
 	
+	//SEARCH VISEKRITERIJUMSKO
+	public Collection<SportFacility> GetByMultiSearch(
+			String name, String type, String location, String rating) {
+		
+		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		for (SportFacility facility : facilities.values()) {
+			if ((facility.getName().contains(name)
+				&& (facility.getObjectType().contains(type)))
+				&& (facility.getLocation().getAddress().getCity().contains(location))
+				&& (Double.toString(facility.getAverageRating()).contains(rating))) {
+				returnList.add(facility);
+			}
+		}
+		return returnList;
+	}
+	
 	/*//COLUMN NAME
 	public List<String> getNameColumn() {
 		List<String> returnList = new ArrayList<String>();

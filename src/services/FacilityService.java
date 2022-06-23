@@ -86,6 +86,18 @@ public class FacilityService {
 		return returnCollection;
 	}
 	
+	@GET
+	@Path("/search/{name: .*}/{type: .*}/{location: .*}/{rating: .*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<SportFacility> getMultiSearchedProducts(@PathParam("name") String name,
+			@PathParam("type") String type, @PathParam("location") String location,
+			@PathParam("rating") String rating) {
+		
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		
+		return dao.GetByMultiSearch(name, type, location, rating);
+	}
 	/*@GET
 	@Path("/getNameColumn")
 	@Produces(MediaType.APPLICATION_JSON)

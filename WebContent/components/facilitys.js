@@ -25,20 +25,14 @@ Vue.component("facilities", {
     	<div class="center">
     		<h1>Sport facilities</h1>
     										<!--SEARCH-->
-    		<span>
+    		<p style="margin-bottom:1cm; margin-top:1cm">
     			<input type="text" v-model="srchname" placeholder="search by name"/>
-    			<input type="button" value="search" @click="searchName"/>
     			<input type="text" v-model="srchtype" placeholder="search by type"/>
-    			<input type="button" value="search" @click="searchType"/>
-    		</span>
-    		<p></p>
-    		<span>
-    			<input type="text" v-model="srchloc" placeholder="search by location"/>
-    			<input type="button" value="search" @click="searchLocation"/>
+    		
+    			<input type="text" v-model="srchloc" placeholder="search by location"/>    		
     			<input type="text" v-model="srchrat" placeholder="search by rating"/>
-    			<input type="button" value="search" @click="searchRating"/>
-    		</span>
-    		<p></p>
+    			<input type="button" @click="multiSearch" value="search"/>
+    		</p>	
     		<table 
     			<tr>							<!--SORT-->
     				<td></td>
@@ -120,6 +114,15 @@ Vue.component("facilities", {
     	vreme: function(p) {
 			var d =p.toString();   
 			return d.toString();	
+		},
+		multiSearch() {
+					
+			axios
+				.get('rest/facilities/search/' + this.srchname + '/' + this.srchtype
+				+ '/' + this.srchloc + '/' + this.srchrat)
+				.then(response => {
+					this.facilities = response.data;				
+				})
 		},
 		searchName() {
 			this.mode = 'NAME'
