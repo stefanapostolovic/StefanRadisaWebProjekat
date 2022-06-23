@@ -178,42 +178,15 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		
 		List<SportFacility> returnList = new ArrayList<SportFacility>();
 		for (SportFacility facility : facilities.values()) {
-			if ((facility.getName().contains(name)
-				&& (facility.getObjectType().contains(type)))
-				&& (facility.getLocation().getAddress().getCity().contains(location))
-				&& (Double.toString(facility.getAverageRating()).contains(rating))) {
+			if ((facility.getName().toLowerCase().contains(name)
+				&& (facility.getObjectType().toLowerCase().contains(type)))
+				&& (facility.getLocation().getAddress().getCity().toLowerCase().contains(location))
+				&& (Double.toString(facility.getAverageRating()).toLowerCase().contains(rating))) {
 				returnList.add(facility);
 			}
 		}
 		return returnList;
 	}
-	
-	/*//COLUMN NAME
-	public List<String> getNameColumn() {
-		List<String> returnList = new ArrayList<String>();
-		for (SportFacility facility : facilities.values()) {
-			returnList.add(facility.getName());
-		}
-		return returnList;
-	}
-	
-	//COLUMN LOCATION
-	public List<Location> getLocationColumn() {
-		List<Location> returnList = new ArrayList<Location>();
-		for (SportFacility facility : facilities.values()) {
-			returnList.add(facility.getLocation());
-		}
-		return returnList;
-	}
-	
-	//COLUMN RATING
-	public List<Double> getRatingColumn() {
-		List<Double> returnList = new ArrayList<Double>();
-		for (SportFacility facility : facilities.values()) {
-			returnList.add(facility.getAverageRating());
-		}
-		return returnList;
-	}*/
 }
 
 

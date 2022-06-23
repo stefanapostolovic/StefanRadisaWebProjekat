@@ -98,30 +98,4 @@ public class FacilityService {
 		
 		return dao.GetByMultiSearch(name, type, location, rating);
 	}
-	/*@GET
-	@Path("/getNameColumn")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<String> getNameColumn() {
-		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
-		return dao.getNameColumn();
-	}
-	
-	@GET
-	@Path("/getLocationColumn")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<Location> getLocationColumn() {
-		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
-		return dao.getLocationColumn();
-	}
-	
-	@GET
-	@Path("/getRatingColumn")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<Double> getRatingColumn() {
-		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
-		return dao.getRatingColumn();
-	}*/
 }
