@@ -172,22 +172,44 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		return returnList;
 	}
 	
-	//COLUMN
-	public List<String> getColumn(String columnName) {
-		switch (columnName){
-			case "Name":
-			{
-				List<String> returnList = new ArrayList<String>();
-				for (SportFacility facility : facilities.values()) {
-					returnList.add(facility.getName());
-				}
-				return returnList;
-			}
-
-			case "Location": {
-				
-			}
-			break;
+	/*//COLUMN NAME
+	public List<String> getNameColumn() {
+		List<String> returnList = new ArrayList<String>();
+		for (SportFacility facility : facilities.values()) {
+			returnList.add(facility.getName());
 		}
+		return returnList;
 	}
+	
+	//COLUMN LOCATION
+	public List<Location> getLocationColumn() {
+		List<Location> returnList = new ArrayList<Location>();
+		for (SportFacility facility : facilities.values()) {
+			returnList.add(facility.getLocation());
+		}
+		return returnList;
+	}
+	
+	//COLUMN RATING
+	public List<Double> getRatingColumn() {
+		List<Double> returnList = new ArrayList<Double>();
+		for (SportFacility facility : facilities.values()) {
+			returnList.add(facility.getAverageRating());
+		}
+		return returnList;
+	}*/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

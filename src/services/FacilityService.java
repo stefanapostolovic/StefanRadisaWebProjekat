@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Location;
 import beans.SportFacility;
 import dao.FacilityDAO;
 
@@ -81,16 +82,34 @@ public class FacilityService {
 			returnCollection = dao.GetBySearchRating(input);
 		}
 		else returnCollection = null;
-		System.out.println("********PRETRAGA*********");
 		
 		return returnCollection;
 	}
 	
-	@GET
-	@Path("/search/{column}")
+	/*@GET
+	@Path("/getNameColumn")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<SportFacility> getColumn(@PathParam("column") String column) {
-		return null;
+	public Collection<String> getNameColumn() {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		return dao.getNameColumn();
 	}
+	
+	@GET
+	@Path("/getLocationColumn")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Location> getLocationColumn() {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		return dao.getLocationColumn();
+	}
+	
+	@GET
+	@Path("/getRatingColumn")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Double> getRatingColumn() {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		return dao.getRatingColumn();
+	}*/
 }

@@ -149,59 +149,163 @@ Vue.component("facilities", {
 			switch(columnName) {
 				case ('Name'):
 					{
-						axios
-							.get('rest/facilities/getColumn/' + 'Name')
+						/* axios
+							.get('rest/facilities/getNameColumn')
 							.then(response => {
 								this.columnToBeSorted = response.data;
-								this.colimnToBeSorted.sort((a, b) => {
-									if (this.sortDirectionName === 'ASC') return a - b;
-									
-									return b - a;
-								})
 								
-								this.sortDirectionName = 'DESC';
+								if (this.sortDirectionName === 'ASC') {
+									this.columnToBeSorted.sort();
+									this.sortDirectionName = 'DESC';
+								}else {
+									this.sortDirectionName = 'ASC';
+									this.columnToBeSorted.sort();
+									this.columnToBeSorted.reverse();
+								}
+								
 								this.facilities.forEach((facility, index) => {
 									facility.name = this.columnToBeSorted[index];
 								})
+							})*/
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.name.toLowerCase();
+								let fb = b.name.toLowerCase();
+								
+								if (this.sortDirectionName === 'ASC') {
+									if (fa < fb) {
+        								return -1;
+    								}
+								    if (fa > fb) {
+								        return 1;
+								    }
+								    return 0;
+								}
+								else {
+									if (fa < fb) {
+    									return 1;
+									}
+							    	if (fa > fb) {
+							        	return -1;
+							    	}
+							    	return 0;
+								}
 							})
+							if (this.sortDirectionName === 'ASC') {
+									this.sortDirectionName = 'DESC';
+							}else {
+								this.sortDirectionName = 'ASC';
+							}
+							this.facilities = copiedFacilities;
 					}
 				break;
 				case 'Location':
 					{
-						axios
-							.get('rest/facilities/getColumn/' + 'Location')
+						/*axios
+							.get('rest/facilities/getLocationColumn')
 							.then(response => {
 								this.columnToBeSorted = response.data;
-								this.colimnToBeSorted.sort((a, b) => {
-									if (this.sortDirectionLocation === 'ASC') return a - b;
-									
-									return b - a;
+								  
+								this.columnToBeSorted.sort((a, b) => {
+									let fa = a.address.city.toLowerCase(),
+										fb = b.address.city.toLowerCase();
+									if (this.sortDirectionLocation === 'ASC') {
+										if (fa < fb) {
+        									return -1;
+    									}
+								    	if (fa > fb) {
+								        	return 1;
+								    	}
+								    	return 0;
+									}
+									else {
+										if (fa < fb) {
+        									return 1;
+    									}
+								    	if (fa > fb) {
+								        	return -1;
+								    	}
+								    	return 0;
+									}
 								})
 								
-								this.sortDirectionLocation = 'DESC'
+								if (this.sortDirectionLocation === 'ASC') {
+									this.sortDirectionLocation = 'DESC';
+								}else {
+									this.sortDirectionLocation = 'ASC';
+								}
 								this.facilities.forEach((facility, index) => {
 									facility.location = this.columnToBeSorted[index];
 								})
+							})*/
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.location.address.city.toLowerCase();
+								let fb = b.location.address.city.toLowerCase();
+								
+								if (this.sortDirectionLocation === 'ASC') {
+									if (fa < fb) {
+        								return -1;
+    								}
+								    if (fa > fb) {
+								        return 1;
+								    }
+								    return 0;
+								}
+								else {
+									if (fa < fb) {
+    									return 1;
+									}
+							    	if (fa > fb) {
+							        	return -1;
+							    	}
+							    	return 0;
+								}
 							})
+							if (this.sortDirectionLocation === 'ASC') {
+									this.sortDirectionLocation = 'DESC';
+							}else {
+								this.sortDirectionLocation = 'ASC';
+							}
+							this.facilities = copiedFacilities;
 					}
 				break;
 				case 'Rating':
 					{
-						axios
-							.get('rest/facilities/getColumn/' + 'Rating')
+						/*axios
+							.get('rest/facilities/getRatingColumn')
 							.then(response => {
 								this.columnToBeSorted = response.data;
-								this.colimnToBeSorted.sort((a, b) => {
-									if (this.sortDirectionRating === 'ASC') return a - b;
-									
-									return b - a;
-								})
 								
-								this.sortDirectionRating = 'DESC'
+								if (this.sortDirectionRating === 'ASC') {
+									this.sortDirectionRating = 'DESC';
+									this.columnToBeSorted.sort();
+								}
+								else {
+									this.sortDirectionRating = 'ASC';
+									this.columnToBeSorted.sort();
+									this.columnToBeSorted.reverse();
+								}
+								
 								this.facilities.forEach((facility, index) => {
 									facility.averageRating = this.columnToBeSorted[index];
 								})
+							})*/
+							let copiedFacilities = Object.assign([], this.facilities);
+							copiedFacilities.sort((a, b) => {
+								let fa = a.averageRating
+								let fb = b.averageRating;
+								
+								if (this.sortDirectionRating === 'ASC') return fa - fb;
+	
+								else return fb - fa;
 							})
+							if (this.sortDirectionRating === 'ASC') {
+									this.sortDirectionRating = 'DESC';
+							}else {
+								this.sortDirectionRating = 'ASC';
+							}
+							this.facilities = copiedFacilities;
 					}
 				break;
 				
