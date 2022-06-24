@@ -6,9 +6,13 @@ Vue.component("users", {
 	      srchsurname: '',
 	      srchusername: '',
 	      
+	      filterrole: '',
+	      filtercustomertype: '',
+	      
 	      sortDirectionName: 'ASC',
 	      sortDirectionSurname: 'ASC',
 	      sortDirectionUsername: 'ASC',
+	      sortDirectionPoints: 'ASC',
 	    }
 	},
 	    template: ` 
@@ -28,15 +32,27 @@ Vue.component("users", {
     				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
     				<td><input type="button" @click="changeSort('Surname')" value="sort"/></td>
     				<td><input type="button" @click="changeSort('Username')" value="sort"/></td>
-    				<th rowspan="2">Pol</th>
+    				<th rowspan="2" bgcolor="lightgrey">Pol</th>
+    				<td><input type="button" @click="changeSort('Points')" value="sort"/></td>
+    				<td>
+    					<input type="text" v-model="filterrole" placeholder=
+    					"filter role"/>
+    				</td>
+    				<td>
+    					<input type="text" v-model="filtercustomertype" placeholder=
+    					"filter customer type"/>
+    				</td>
     			</tr>
 	    		<tr bgcolor="lightgrey">
 	    			<th>Ime</th>
 	    			<th>Prezime</th>
 					<th>Korisnicko ime</th>	
+					<th>Poeni</th>
+					<th>Uloga</th>
+					<th>Tip kupca</th>
 				</tr>
 	    			
-	    		<tr v-for="(p, index) in users">
+	    		<tr v-for="(p, index) in filteredUsers">
 	    			<td>
 	    				<p style="width:150px;height=150px">
 	    					{{p.name}}
@@ -55,6 +71,21 @@ Vue.component("users", {
 					<td>
 						<p style="width:150px;height=150px">
 							{{p.gender}}
+						</p>
+					</td>
+					<td>
+						<p style="width:150px;height=150px">
+							{{p.points}}
+						</p>
+					</td>
+					<td>
+						<p style="width:150px;height=150px">
+							{{p.role}}
+						</p>
+					</td>
+					<td>
+						<p style="width:150px;height=150px">
+							{{p.customerType.name}}
 						</p>
 					</td>
 				</tr>
@@ -106,11 +137,13 @@ Vue.component("users", {
 						this.sortDirectionName = 'DESC';
 						this.sortDirectionSurname = 'DESC';
 						this.sortDirectionUsername = 'DESC';
+						this.sortDirectionPoints = 'DESC';
 					}
 					else {
 						this.sortDirectionName = 'ASC';
 						this.sortDirectionSurname = 'ASC';
 						this.sortDirectionUsername = 'ASC';
+						this.sortDirectionPoints = 'ASC';
 					}
 					this.users = copiedUsers;
 				}
@@ -145,11 +178,13 @@ Vue.component("users", {
 						this.sortDirectionName = 'DESC';
 						this.sortDirectionSurname = 'DESC';
 						this.sortDirectionUsername = 'DESC';
+						this.sortDirectionPoints = 'DESC';
 					}
 					else {
 						this.sortDirectionName = 'ASC';
 						this.sortDirectionSurname = 'ASC';
 						this.sortDirectionUsername = 'ASC';
+						this.sortDirectionPoints = 'ASC';
 					}
 					this.users = copiedUsers;
 				}
@@ -184,16 +219,73 @@ Vue.component("users", {
 						this.sortDirectionName = 'DESC';
 						this.sortDirectionSurname = 'DESC';
 						this.sortDirectionUsername = 'DESC';
+						this.sortDirectionPoints = 'DESC';
 					}
 					else {
 						this.sortDirectionName = 'ASC';
 						this.sortDirectionSurname = 'ASC';
 						this.sortDirectionUsername = 'ASC';
+						this.sortDirectionPoints = 'ASC';
+					}
+					this.users = copiedUsers;
+				}
+				break;
+				case 'Points': {
+					let copiedUsers = Object.assign([], this.users);
+					copiedUsers.sort((a, b) => {
+						let fa = a.points;
+						let fb = b.points;
+						
+						if (this.sortDirectionPoints === 'ASC') return fa - fb
+						
+						else return fb - fa
+					})
+					
+					if (this.sortDirectionPoints === 'ASC') {
+						this.sortDirectionName = 'DESC';
+						this.sortDirectionSurname = 'DESC';
+						this.sortDirectionUsername = 'DESC';
+						this.sortDirectionPoints = 'DESC';
+					}
+					else {
+						this.sortDirectionName = 'ASC';
+						this.sortDirectionSurname = 'ASC';
+						this.sortDirectionUsername = 'ASC';
+						this.sortDirectionPoints = 'ASC';
 					}
 					this.users = copiedUsers;
 				}
 				break;
 			}
 		}
-    }
+    },
+    computed: {
+		filteredUsers: function() {
+			return this.users.filter((p) => {
+				if ((this.filterrole === '') && (this.filtercustomertype === '')) {
+					return true;
+				}
+				else if ((p.role.toString().match(this.filterrole))
+				&& (this.filterrole !== '') 
+				&& ((this.filtercustomertype === '') || (p.customerType.name.match(this.filtercustomertype)))) {
+					return true;
+				}
+				else if (((this.filterrole === '') || p.role.toString().match(this.filterrole)) 
+				&& (p.customerType.name.match(this.filtercustomertype))
+				&& (this.filtercustomertype !== '')) {
+					return true;
+				}
+				return false;
+			})
+		}	
+	}
 });
+
+
+
+
+
+
+
+
+

@@ -16,11 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Product;
-import beans.SportFacility;
 import beans.User;
-import dao.FacilityDAO;
-import dao.ProductDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -56,10 +52,10 @@ public class LoginService {
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getProducts(@PathParam("id") String id, User product,@Context HttpServletRequest request) {
+	public User getProducts(@PathParam("id") String id, User user,@Context HttpServletRequest request) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		request.getSession().setAttribute("user", dao.update(id, product));
-		return dao.update(id, product);
+		request.getSession().setAttribute("user", dao.update(id, user));
+		return dao.update(id, user);
 	}
 	
 	@POST

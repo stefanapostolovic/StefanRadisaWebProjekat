@@ -2,30 +2,23 @@ package dao;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import beans.Customer;
 import beans.CustomerType;
-import beans.Membership;
-import beans.Product;
-import beans.SportFacility;
 import beans.User;
-import enums.Gender;
+import enums.Role;
 
 /***
  * <p>Klasa namenjena da u�ita korisnike iz fajla i pru�a operacije nad njima (poput pretrage).
@@ -104,14 +97,14 @@ public class UserDAO {
 			}
 		}
 		
-		Customer custTest = new Customer(
+		User custTest = new User(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
-				user.getGender(), user.getDateOfBirth(), 
-				null, null, 
+				user.getGender(), user.getDateOfBirth(), Role.Customer,
+				null, null, null, null,
 				1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
-		custTest = (Customer) users.get(user.getUsername());
+		custTest = (User) users.get(user.getUsername());
 		//users.put(user.getUsername(), user);
 		
 		//serijalizacija								
@@ -155,8 +148,8 @@ public class UserDAO {
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
 			if ((user.getName().toLowerCase().contains(name.toLowerCase())) &&
-				user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
-				user.getUsername().toLowerCase().contains(username.toLowerCase())) {
+					user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
+					user.getUsername().toLowerCase().contains(username.toLowerCase())) {
 				returnList.add(user);
 			}
 		}
