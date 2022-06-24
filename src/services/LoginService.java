@@ -16,9 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Product;
 import beans.User;
-import dao.ProductDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -46,7 +44,7 @@ public class LoginService {
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getProducts() {
+	public Collection<User> getAllRegisteredUsers() {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.findAll();
 	}
@@ -54,10 +52,10 @@ public class LoginService {
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getProducts(@PathParam("id") String id, User product,@Context HttpServletRequest request) {
+	public User getProducts(@PathParam("id") String id, User user,@Context HttpServletRequest request) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		request.getSession().setAttribute("user", dao.update(id, product));
-		return dao.update(id, product);
+		request.getSession().setAttribute("user", dao.update(id, user));
+		return dao.update(id, user);
 	}
 	
 	@POST
@@ -106,5 +104,17 @@ public class LoginService {
 			return Response.status(400).entity("Username already taken!").build();
 		}
 		return Response.status(200).build();
+	}
+	
+	@GET
+	@Path("/search/{name: .*}/{surname: .*}/{username: .*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<User> getMultiSearchedUsers(@PathParam("name") String name,
+			@PathParam("surname") String surname, @PathParam("username") String username) {
+		
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.GetByMultiSearch(name, surname, username);
 	}
 }
