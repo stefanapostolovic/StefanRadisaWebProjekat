@@ -71,21 +71,34 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
-	public User update(String id, User user) {
-		User productToUpdate = this.find(id,user.getPassword());
-		if(productToUpdate == null) {
-			return this.register(user);
+	public User update(String username, User updatedUser) {
+		//User userToUpdate = this.find(username,updatedUser.getPassword());
+		User userToUpdate = this.users.get(username);
+		/*if(userToUpdate == null) {
+			return this.register(updatedUser);
+		}*/
+		userToUpdate.setName(updatedUser.getName());
+		userToUpdate.setSurename(updatedUser.getSurename());
+		userToUpdate.setPassword(updatedUser.getPassword());
+		//userToUpdate.setUsername(updatedUser.getUsername());
+		userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
+		userToUpdate.setGender(updatedUser.getGender());
+		
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
+			
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(users.values());
+			System.out.println(json);
+			writer.write(json);
+		
+			writer.close();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		productToUpdate.setName(user.getName());
-		productToUpdate.setSurename(user.getSurename());
-		productToUpdate.setPassword(user.getName());
-		productToUpdate.setUsername(user.getUsername());
-		productToUpdate.setDateOfBirth(user.getDateOfBirth());
-
-		productToUpdate.setGender(user.getGender());
-		
-		
-		return productToUpdate;
+			
+		return userToUpdate;
 	}
 	
 	

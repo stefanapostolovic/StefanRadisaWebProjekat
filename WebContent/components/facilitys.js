@@ -54,8 +54,10 @@ Vue.component("facilities", {
     			</tr>
     											<!--TABLE-->
     			
-				<tr v-for="(p, index) in filteredFacilities">
-					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
+				<tr v-for="(p, index) in filteredFacilities" @click="showDetails">
+					<td width="100%" height="100%">
+						<img alt="fato" v-bind:src="p.image" width="100px" height="100px">
+					</td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
 							{{p.name}}
@@ -245,6 +247,10 @@ Vue.component("facilities", {
 				this.showOnlyOppened = !this.showOnlyOppened;
 				this.facilities = openFacilites;
 			}
+		},
+		
+		showDetails() {
+			router.push(`/facility`);
 		}
 	},
 	computed:{
