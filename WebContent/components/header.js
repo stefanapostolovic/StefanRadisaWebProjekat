@@ -5,6 +5,7 @@ Vue.component("zaglavlje", {
 	},
 	    template: ` 
     	<div class="right">
+<button v-on:click="dodavanjeOsoblja" name="treneri" hidden>Dodavanje osoblja</button>
 <button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
 <button v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
 <button v-on:click="aProduct">Prijava</button>  <button v-on:click="registracija">Registracija</button> &nbsp;&nbsp; &nbsp;                                      
@@ -20,6 +21,9 @@ Vue.component("zaglavlje", {
 		},
     	aProduct : function() {
 			router.push(`/login`);	    
+		},
+		dodavanjeOsoblja : function() {
+			router.push(`/radnici`);	    
 		},
 		registracija : function() {
 			router.push(`/registracija`);	    
