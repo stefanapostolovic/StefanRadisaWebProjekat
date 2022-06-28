@@ -1,5 +1,5 @@
 Vue.component("facility", {
-	data() {
+	data: function() {
 		return {
 			selectedFacility: {},
 			comments: [],
