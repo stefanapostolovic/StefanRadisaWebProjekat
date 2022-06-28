@@ -5,23 +5,18 @@ Vue.component("facilities", {
 	      facilitiesCopy: [],
 		  fac:null,
 	      searchtype: '',
-	      //searchname: '',
-	      //searchlocation: '',
-	      //searchrating: '',
-	      //openstatus: '',
-	      //searchstatus: '',
 	      showOnlyOpened: false,
 	      
 	      srchname: '',
 	      srchtype: '',
 	      srchloc: '',
 	      srchrat: '',
-		  //mode: '', 
-		  
-		  //columnToBeSorted: [],
+
 		  sortDirectionName: 'ASC',
 		  sortDirectionLocation: 'ASC',
-		  sortDirectionRating: 'ASC'
+		  sortDirectionRating: 'ASC',
+		  
+		  loggedUser: {}
 	    }
 	},
 	    template: ` 
@@ -87,17 +82,43 @@ Vue.component("facilities", {
 					<td v-else="p.status">Closed</td>
 				</tr>
 	    	</table>
+	    	<p style="margin-bottom:1cm; margin-top:1cm">
+	    		<input type="button" value="Create new facility" 
+	    		style="margin-right: 0; margin-left:auto; display:block;"
+	    		@click="createFacility"
+	    		v-if="isAdmin()"/>
+	    	</p>
    		</div>		  
     	`,
     mounted () {
-        axios
-          .get('rest/facilities/')
-          .then(response => {
-				this.facilities = response.data;
-				this.facilitiesCopy = response.data;
-			})
+		axios.all([
+			this.getAllFacilities(),
+			this.getLoggedUser()
+		])
+		.then(axios.spread((first_response, second_response) => {
+			this.facilities = first_response.data;
+			this.facilitiesCopy = first_response.data;
+			
+			this.loggedUser = second_response.data;
+		}))
     },
     methods: {
+		isAdmin() {
+			return this.loggedUser.role === 'Administrator'
+		},
+		
+		getAllFacilities() {
+			return axios.get('rest/facilities/')
+		},
+		
+		getLoggedUser() {
+			return axios.get('rest/currentUser')
+		},
+		
+		createFacility() {
+			router.push(`/createFacility`);
+		},
+		
 		sentToChild:function(p){
 		//	this.$root.$emit('messageFromParent', "Valjda ovo radi");
 			pom=p

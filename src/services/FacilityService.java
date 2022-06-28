@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -97,5 +98,16 @@ public class FacilityService {
 		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
 		
 		return dao.GetByMultiSearch(name, type, location, rating);
+	}
+	
+	@POST
+	@Path("/createFacility")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility createFacility(SportFacility facility) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		
+		SportFacility newlyCreatedFacility = dao.CreateFacility(facility);
+		return newlyCreatedFacility;
 	}
 }

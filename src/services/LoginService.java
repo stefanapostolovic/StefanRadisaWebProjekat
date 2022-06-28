@@ -87,6 +87,7 @@ public class LoginService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User login(@Context HttpServletRequest request) {
+		User temp = (User) request.getSession().getAttribute("user");
 		return (User) request.getSession().getAttribute("user");
 	}
 	
@@ -116,5 +117,13 @@ public class LoginService {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		
 		return dao.GetByMultiSearch(name, surname, username);
+	}
+	
+	@GET
+	@Path("/getValidManagers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> GetValidManagers() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.GetValidManagers();
 	}
 }

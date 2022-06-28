@@ -74,15 +74,15 @@ public class UserDAO {
 	public User update(String username, User updatedUser) {
 		//User userToUpdate = this.find(username,updatedUser.getPassword());
 		User userToUpdate = this.users.get(username);
-		/*if(userToUpdate == null) {
-			return this.register(updatedUser);
-		}*/
 		userToUpdate.setName(updatedUser.getName());
 		userToUpdate.setSurename(updatedUser.getSurename());
 		userToUpdate.setPassword(updatedUser.getPassword());
-		//userToUpdate.setUsername(updatedUser.getUsername());
 		userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
 		userToUpdate.setGender(updatedUser.getGender());
+		
+		if (updatedUser.getSportFacility() != null) {
+			userToUpdate.setSportFacility(updatedUser.getSportFacility());
+		}
 		
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
@@ -114,8 +114,8 @@ public class UserDAO {
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
 				user.getGender(), user.getDateOfBirth(), user.getRole(),
-				null, null, null, null,
-				1.0, new CustomerType()); 
+				user.getTrainingHistory(), user.getMembership(), user.getSportFacility(), 
+				user.getVisitedFacilities(), 1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
 		custTest = (User) users.get(user.getUsername());
 		//users.put(user.getUsername(), user);
@@ -167,6 +167,16 @@ public class UserDAO {
 			}
 		}
 		
+		return returnList;
+	}
+	
+	public Collection<User> GetValidManagers() {
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null) {
+				returnList.add(user);
+			}
+		}
 		return returnList;
 	}
 }

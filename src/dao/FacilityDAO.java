@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
@@ -69,9 +70,10 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	/***
 	 * Dodaje proizvod u mapu proizvoda. Id novog proizvoda �e biti postavljen na maxPostojeciId + 1.
 	 * @param product
-	 */
-	public List<SportFacility> save(List<SportFacility> facilityList) {
-		for (SportFacility facility : facilityList) {
+	 * 
+	 */								//List<SportFacility> facilityList
+	public List<SportFacility> save(SportFacility facility) {
+		/*for (SportFacility facility : facilityList) {
 			Integer maxId = -1;
 			for (String id : facilities.keySet()) {
 				int idNum =Integer.parseInt(id);
@@ -82,22 +84,37 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			maxId++;
 			facility.setId(maxId.toString());
 			facilities.put(facility.getId(), facility);
-		}
+		}*/
 		
+		Integer maxId = -1;
+		for (String id : facilities.keySet()) {
+			int idNum =Integer.parseInt(id);
+			if (idNum > maxId) {
+				maxId = idNum;
+			}
+		}
+		maxId++;
+		
+		facility.setId(maxId.toString());
+		facilities.put(facility.getId(), facility);
+		
+		List<SportFacility> facilityList = new ArrayList<SportFacility>();
+		
+		for (SportFacility temp : facilities.values()) {
+			facilityList.add(temp);
+		}
 		
 		//serijalizacija
 		try {				
 		
-		//Gson gson = new Gson();
-		
-		Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
-		//Writer writer = new FileWriter(contextPath + "/facilities.json", true);
-		//gson.toJson(facilityList, writer);
-		String json = new Gson().toJson(facilityList);
-		System.out.println(json);
-		writer.write(json);
-		
-		writer.close();
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
+			//Writer writer = new FileWriter(contextPath + "/facilities.json", true);
+			//gson.toJson(facilityList, writer);
+			String json = new Gson().toJson(facilityList);
+			System.out.println(json);
+			writer.write(json);
+			
+			writer.close();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,6 +203,17 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			}
 		}
 		return returnList;
+	}
+	
+	public SportFacility CreateFacility(SportFacility facility) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		SportFacility newlyCreatedFacility = new SportFacility(
+				"-1", facility.getName(), facility.getObjectType(), 
+				false, facility.getLocation(), null, 0, 
+				formatter.format(LocalTime.now()), formatter.format(LocalTime.now()));
+		
+		save(newlyCreatedFacility);
+		return newlyCreatedFacility;
 	}
 }
 

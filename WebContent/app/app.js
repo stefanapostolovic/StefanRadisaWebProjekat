@@ -6,10 +6,12 @@ const Profil = { template: '<profil></profil>' }
 const Korisnici = { template: '<users></users>' }
 const Radnici = { template: '<addMenager></addMenager>' }
 const Facility={template:'<facility></facility>'}
+const CreateFacility={ template: '<createFacility></createFacility>'}
 
 const router = new VueRouter({
 	mode: 'hash',
-	  routes: [{ path: '/zaglavlje', component: Header},
+	  routes: [
+		{ path: '/zaglavlje', component: Header},
 		{ path: '/', name: 'home', component: Facilitys},
 		{ path: '/login', component: Login},
 		{ path: '/registracija', component: Registracija},
@@ -17,7 +19,8 @@ const router = new VueRouter({
 		{ path: '/users', component: Korisnici},
 		{ path: '/radnici', component: Radnici},
 		{ path: '/facility', component: Facility},
-]
+		{ path: '/createFacility', component: CreateFacility},
+	]
 });
 
 var pom ={"id":null, "name":null, "objectType":null, "status":null,"location":null, "image":null, "averageRating":null, "startTime":null, "endTime":null};

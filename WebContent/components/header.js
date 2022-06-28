@@ -4,17 +4,21 @@ Vue.component("zaglavlje", {
 			showLogReg: true,
 			showProfile: false,
 			showLogOut: false,
-			showBackBtn: false
+			showBackBtn: false,
+			
+			showAdminButtons: false
 	    }
 	},
 	    template: ` 
     	<div class="right">
-<button v-on:click="dodavanjeOsoblja" name="treneri" hidden>Dodavanje osoblja</button>
-<button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
-<button v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
-<button v-on:click="aProduct">Prijava</button>  <button v-on:click="registracija">Registracija</button> &nbsp;&nbsp; &nbsp;                                      
-
-	
+			<button v-on:click="dodavanjeOsoblja" name="treneri" hidden>Dodavanje osoblja</button>
+			<button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
+			<button v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
+			<button v-if="showLogReg" v-on:click="aProduct">Prijava</button>  
+			<button v-if="showLogReg" v-on:click="registracija">Registracija</button>
+			<button v-if="showLogOut" @click="logout">Logout</button>
+			<button v-if="showBackBtn" @click="back">Back</button> 
+			&nbsp;&nbsp; &nbsp;                                      
     	</div>		  
     	`,
     mounted () {
@@ -58,6 +62,15 @@ Vue.component("zaglavlje", {
 					this.showLogReg = true;
 					this.showProfile = false;
 					this.showLogOut = false;
+					showAdminButtons = false;
+					
+					let profil = document.getElementsByName("pom")[0];
+					let p  =profil.getElementsByTagName("button")[0];
+					let p1  =profil.getElementsByTagName("button")[1];
+					
+					p.hidden=true;
+					p1.hidden=true;
+					
 					router.push(`/`);
 				})
 		},
