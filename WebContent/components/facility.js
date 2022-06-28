@@ -50,8 +50,13 @@ Vue.component("facility", {
 		<table >
 				<tr v-for="(p, index) in trainings">
 				</tr>
-	    	</table>    
-		<table >
+	    	</table>   
+		<h3>Komentari:</h3> 
+		<table>
+				<tr>
+					<th>Komentar</th>
+					<th>Ocena</th>
+				</tr>
 				<tr v-for="(p, index) in comments">
 					<td class="kolona">
 							{{p.text}}
@@ -66,6 +71,11 @@ Vue.component("facility", {
     mounted () {
 //        this.$root.$on('messageFromParent',(text)=>{this.facility = text});
 this.facility=pom
+	 axios
+          .get('rest/comment/odobreni/'+this.facility.id)
+          .then(response => {
+				this.comments= response.data
+			})
     },
     methods: {
 	

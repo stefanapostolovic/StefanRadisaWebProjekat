@@ -1,7 +1,14 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     user:null,
+	     	  	      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null,role:"" ,trainingHistory:null,
+	membership:null,
+	sportFacility:null,
+	visitedFacilities:null,
+	points:null,
+	customerType:{}
+},
+
 	     username : "",
 	     password : "",
 		image:""
@@ -43,7 +50,7 @@ Vue.component("login", {
 			}
 			ime.style.background = "white"
 			sifra.style.background ="white"
-			
+			let poo
 			axios
 				.post('rest/login', {username:this.username, password:this.password})
 				.then(response => {
@@ -52,13 +59,14 @@ Vue.component("login", {
 					let p1  =profil.getElementsByTagName("button")[1];
 					let p2  =profil.getElementsByTagName("button")[2];
 		
-					axios.get('rest/currentUser').then(response=>(this.user = response.data))
-					if(this.user.role ==="Administrator"){
+					axios.get('rest/currentUser').then(response=>(this.user=response.data))
+					if(poo ==="Administrator"){
 						p.hidden=false;
 						p1.hidden=false;
 						console.log(p2)
 					}
-					console.log(p)
+					console.log(poo
+					)
 					p2.hidden =false;
 					router.push(`/`)
 				})

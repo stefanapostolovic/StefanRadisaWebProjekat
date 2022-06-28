@@ -1,6 +1,9 @@
 package beans;
 
 public class Comment {
+	private String id;				//dodato
+	private boolean isActive;   //dodato
+	
 	private SportFacility sportFacility;
 	private String text;
 	private int grade;
@@ -10,12 +13,14 @@ public class Comment {
 		
 	}
 	
-	public Comment(SportFacility sportFacility, String text, int grade, User user) {
+	public Comment(SportFacility sportFacility, String text, int grade, User user,boolean isActive,String id) {
 		super();
 		this.sportFacility = sportFacility;
 		this.text = text;
 		this.grade = grade;
 		this.user = user;
+		this.id = id;
+		this.isActive = isActive;
 	}
 	public SportFacility getSportFacility() {
 		return sportFacility;
@@ -40,5 +45,21 @@ public class Comment {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 }
