@@ -41,9 +41,11 @@ Vue.component("zaglavlje", {
 			router.push(`/login`);	    
 		},
 		dodavanjeOsoblja : function() {
+			this.showBackBtn = true;
 			router.push(`/radnici`);	    
 		},
 		registracija : function() {
+			this.showBackBtn = true;
 			this.showLogReg = false;
 			this.showProfile = true;
 			this.showLogOut = true;
@@ -52,6 +54,7 @@ Vue.component("zaglavlje", {
 		},
 		
 		prikazKorisnika:function(){
+			this.showBackBtn = true;
 			router.push(`/users`);
 		},
 		
