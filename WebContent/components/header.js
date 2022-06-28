@@ -9,13 +9,12 @@ Vue.component("zaglavlje", {
 	},
 	    template: ` 
     	<div class="right">
-			<button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
-			<button v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
-			<button v-if="showLogReg" v-on:click="aProduct">Prijava</button>  
-			<button v-if="showLogReg" v-on:click="registracija">Registracija</button>
-			<button v-if="showLogOut" @click="logout">Logout</button>
-			<button v-if="showBackBtn" @click="back">Back</button>
-			&nbsp;&nbsp; &nbsp;
+<button v-on:click="dodavanjeOsoblja" name="treneri" hidden>Dodavanje osoblja</button>
+<button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
+<button v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
+<button v-on:click="aProduct">Prijava</button>  <button v-on:click="registracija">Registracija</button> &nbsp;&nbsp; &nbsp;                                      
+
+	
     	</div>		  
     	`,
     mounted () {
@@ -37,7 +36,9 @@ Vue.component("zaglavlje", {
 			this.showLogOut = true;
 			router.push(`/login`);	    
 		},
-		
+		dodavanjeOsoblja : function() {
+			router.push(`/radnici`);	    
+		},
 		registracija : function() {
 			this.showLogReg = false;
 			this.showProfile = true;

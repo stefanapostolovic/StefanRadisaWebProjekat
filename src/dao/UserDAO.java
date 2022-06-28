@@ -113,7 +113,7 @@ public class UserDAO {
 		User custTest = new User(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
-				user.getGender(), user.getDateOfBirth(), Role.Customer,
+				user.getGender(), user.getDateOfBirth(), user.getRole(),
 				null, null, null, null,
 				1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
@@ -123,7 +123,7 @@ public class UserDAO {
 		//serijalizacija								
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
-			
+			System.out.println(contextPath + "/users.json");
 			Gson gson = new GsonBuilder().serializeNulls().create();
 			String json = gson.toJson(users.values());
 			System.out.println(json);

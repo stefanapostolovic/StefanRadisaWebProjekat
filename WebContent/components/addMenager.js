@@ -1,8 +1,8 @@
-Vue.component("registracija", {
+Vue.component("addMenager", {
 	data: function () {
 		    return {
 			  users:{},
-		      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null,role:"Customer" },
+		      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null,role:"Manager" },
 		      username:'',
 		      password:'',
 		      name:'',
@@ -46,7 +46,13 @@ Vue.component("registracija", {
 		<td>Datum rodjenja:</td>
 		<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/></td>
 	</tr>
-	
+	<tr>
+		<td>Tip radnika:</td>
+		<td><select name="tipRadnika" id="tipRadnika" v-model = "user.role" >
+ 				  <option value="Manager" selected>Menadžer</option>
+				  <option value="Trainer">Trener</option>
+			</select></td>
+	</tr>
 	<tr>
 		<td >
 		<input type="submit"  v-on:click = "edituser" value="Poslaji">

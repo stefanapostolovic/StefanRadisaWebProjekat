@@ -1,7 +1,7 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     ed:null,
+	     user:null,
 	     username : "",
 	     password : "",
 		image:""
@@ -50,12 +50,16 @@ Vue.component("login", {
 					let profil = document.getElementsByName("pom")[0];
 					let p  =profil.getElementsByTagName("button")[0];
 					let p1  =profil.getElementsByTagName("button")[1];
+					let p2  =profil.getElementsByTagName("button")[2];
 		
-					if(this.username==="2"){
+					axios.get('rest/currentUser').then(response=>(this.user = response.data))
+					if(this.user.role ==="Administrator"){
 						p.hidden=false;
+						p1.hidden=false;
+						console.log(p2)
 					}
 					console.log(p)
-					p1.hidden =false;
+					p2.hidden =false;
 					router.push(`/`)
 				})
 				.catch(response => {

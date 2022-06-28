@@ -114,7 +114,7 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		try {
 			
 			Reader reader = new BufferedReader(new FileReader(contextPath + "/facilities.json"));
-			
+			System.out.println(contextPath + "/facilities.json");
 			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<SportFacility>>() {}.getType();
 			List<SportFacility> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
 			reader.close();
