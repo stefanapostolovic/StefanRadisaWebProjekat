@@ -3,6 +3,7 @@ Vue.component("facilities", {
 	    return {
 	      facilities: [],
 	      facilitiesCopy: [],
+		  fac:null,
 	      searchtype: '',
 	      //searchname: '',
 	      //searchlocation: '',
@@ -35,7 +36,7 @@ Vue.component("facilities", {
     			<input type="text" v-model="srchrat" placeholder="search by rating"/>
     			<input type="button" @click="multiSearch" value="search"/>
     		</p>	
-    		<table 
+    		<table >
     			<tr>							<!--SORT && FILTER-->
     				<th rowspan="2">Icon</th>
     				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
@@ -54,7 +55,7 @@ Vue.component("facilities", {
     			</tr>
     											<!--TABLE-->
     			
-				<tr v-for="(p, index) in filteredFacilities">
+				<tr v-for="(p, index) in filteredFacilities" v-on:click="sentToChild(p)">
 					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
@@ -97,7 +98,11 @@ Vue.component("facilities", {
 			})
     },
     methods: {
-	
+		sentToChild:function(p){
+		//	this.$root.$emit('messageFromParent', "Valjda ovo radi");
+			pom=p
+			router.push(`/facility`);
+		},
 		radnoVreme : function(p) {
 				return "Radno vreme:"+ vreme(p.startTime) +"-"+vreme(p.endTime);
     	},
