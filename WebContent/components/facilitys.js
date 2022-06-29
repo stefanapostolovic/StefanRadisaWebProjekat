@@ -100,6 +100,8 @@ Vue.component("facilities", {
 			this.facilitiesCopy = first_response.data;
 			
 			this.loggedUser = second_response.data;
+			
+			console.log(this.facilities[0].image);
 		}))
     },
     methods: {

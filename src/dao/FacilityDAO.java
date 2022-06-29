@@ -2,11 +2,13 @@ package dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -16,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.google.gson.Gson;
@@ -131,6 +135,8 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		SportFacility facilityToUpdate = this.facilities.get(id);
 		facilityToUpdate.setImage(facility.getImage());
 		
+		System.out.println("DAO UPDATE TEST");
+		
 		try {
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
 			Gson gson = new GsonBuilder().serializeNulls().create();
@@ -159,7 +165,11 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<SportFacility>>() {}.getType();
 			List<SportFacility> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
 			reader.close();
-				
+			
+			if (facilityList == null) {
+				facilityList = new ArrayList<SportFacility>();
+			}
+			
 			for (SportFacility facility : facilityList) {
 				facilities.put(facility.getId(), facility);
 			}
@@ -238,6 +248,35 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		
 		save(newlyCreatedFacility);
 		return newlyCreatedFacility;
+	}
+	
+	public void saveImage(InputStream uploadedInputStream, String fileName, SportFacility facility) {
+		try {
+			String pathOutsideProject = contextPath + "/" + fileName;
+			String pathInProject = fileName;
+			
+			File file = new File(pathInProject);
+			if (file.exists()) return;
+			
+			if (file.canRead() == false) {
+				Boolean a = file.setReadable(true);
+				Boolean b = file.setWritable(true);
+				Boolean c = file.setExecutable(true);
+				
+				if (file.canRead() == false) System.out.println("NE MOZE CITA");
+				if (file.canWrite() == false) System.out.println("NE MOZE PISE");
+				
+				BufferedImage icon = ImageIO.read(uploadedInputStream);
+				ImageIO.write(icon, "png", file);
+		        
+				facility.setImage(pathInProject);
+				update(facility.getId(), facility);
+			}	
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
 

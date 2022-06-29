@@ -1,6 +1,8 @@
 package services;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,8 +23,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-//import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import beans.Location;
 import beans.SportFacility;
@@ -119,11 +122,13 @@ public class FacilityService {
 		return newlyCreatedFacility;
 	}
 	
-	/*@POST
+	@POST
 	@Path("/uploadFile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public void uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		
+		System.out.println("REST API TEST");
 		
 		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
 		HashMap<String, SportFacility> allFacilities = dao.GetFacilityMap();
@@ -135,17 +140,23 @@ public class FacilityService {
 		}
 		
 		SportFacility latestFacility = allFacilities.get(String.valueOf(maxId));
-		
-		try {
-			BufferedImage icon = ImageIO.read(uploadedInputStream);
-			latestFacility.setImage(icon);
-			dao.update(latestFacility.getId(), latestFacility);
+		//String saveFileLocation = "image/" + fileDetail.getFileName();
+			//byte[] icon = uploadedInputStream.readAllBytes();
+			//latestFacility.setImage(icon);
+
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
+			/*FileOutputStream out = new FileOutputStream(file);  
+            int read = 0;  
+            byte[] bytes = new byte[1024];  
+            out = new FileOutputStream(fileDetail.getFileName());  
+            while ((read = uploadedInputStream.read(bytes)) != -1) {  
+                out.write(bytes, 0, read);  
+            }  
+            out.flush();  
+            out.close();*/
+		
+		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestFacility);
+	}
 }
 
 

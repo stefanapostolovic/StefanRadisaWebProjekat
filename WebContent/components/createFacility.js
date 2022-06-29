@@ -202,7 +202,17 @@ Vue.component("createFacility", {
 		},
 		
 		uploadFIle() {
-			return axios.post('rest/facilities/uploadFile', this.formData);
+			//return axios.post('rest/facilities/uploadFile', this.formData);
+			return axios({
+				url:'rest/facilities/uploadFile',
+				data:this.formData,
+				method:'POST',
+				headers:{
+					Accept:'application/json',
+					'content-type':'multipart/form-data'
+				},
+				
+			})
 		},
 		
 		getAllValidManagers() {
@@ -306,7 +316,7 @@ Vue.component("createFacility", {
 			
 			axios.all([
 				this.createFacility(),
-				//this.uploadFIle(),
+				this.uploadFIle(),
 				this.updateManager()
 			])
 			.then(axios.spread((first_response) => {
