@@ -1,11 +1,16 @@
 package services;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +20,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+//import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import beans.Location;
 import beans.SportFacility;
@@ -110,4 +118,41 @@ public class FacilityService {
 		SportFacility newlyCreatedFacility = dao.CreateFacility(facility);
 		return newlyCreatedFacility;
 	}
+	
+	/*@POST
+	@Path("/uploadFile")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public void uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		HashMap<String, SportFacility> allFacilities = dao.GetFacilityMap();
+		
+		int maxId = -1;
+		for (String id : allFacilities.keySet()) {
+			if (Integer.parseInt(id) > maxId) 
+				maxId = Integer.parseInt(id);
+		}
+		
+		SportFacility latestFacility = allFacilities.get(String.valueOf(maxId));
+		
+		try {
+			BufferedImage icon = ImageIO.read(uploadedInputStream);
+			latestFacility.setImage(icon);
+			dao.update(latestFacility.getId(), latestFacility);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
 }
+
+
+
+
+
+
+
+
+

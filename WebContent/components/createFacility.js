@@ -5,7 +5,7 @@ Vue.component("createFacility", {
 			address: {street:null, number: null, city:null, zipCode:null},
 			location: {id:null, longitude:null, latitude:null, address:null},
 			
-			selectedFile: null,
+			formData: null,
 			
 			objectname: '',
 			type: '',
@@ -50,14 +50,14 @@ Vue.component("createFacility", {
 		template: `
 			<div>
 				<h1>Create a new facility</h1>
-				<form>
+				<form enctype="multipart/form-data">
 					<table>
 						<tr>
 							<td>
 								Icon
 							</td>
 							<td>
-								<input type="file" @change="onFileSelected"/>
+								<input type="file" name="file" @change="onFileSelected"/>
 							</td>
 						</tr>
 						<tr>
@@ -196,8 +196,13 @@ Vue.component("createFacility", {
 	
 	methods: {
 		onFileSelected(event) {
-			this.selectedFile = event.target.files[0];
-			console.log(this.selectedFile);
+			let file = event.target.files[0];
+			this.formData = new FormData();
+			this.formData.append("file", file);
+		},
+		
+		uploadFIle() {
+			return axios.post('rest/facilities/uploadFile', this.formData);
 		},
 		
 		getAllValidManagers() {
@@ -288,6 +293,8 @@ Vue.component("createFacility", {
 		},
 		
 		confirmCreate() {
+			event.preventDefault();
+			
 			this.fillOutFacility();
 			this.user.sportFacility = this.newFacility;
 		
@@ -299,6 +306,7 @@ Vue.component("createFacility", {
 			
 			axios.all([
 				this.createFacility(),
+				//this.uploadFIle(),
 				this.updateManager()
 			])
 			.then(axios.spread((first_response) => {

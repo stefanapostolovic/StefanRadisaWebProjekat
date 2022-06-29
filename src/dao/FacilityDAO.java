@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Address;
@@ -57,6 +58,10 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	 */
 	public Collection<SportFacility> findAll() {
 		return facilities.values();
+	}
+	
+	public HashMap<String, SportFacility> GetFacilityMap() {
+		return facilities;
 	}
 	
 	/***
@@ -120,6 +125,25 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			e.printStackTrace();
 		}
 		return facilityList;
+	}
+	
+	public SportFacility update(String id, SportFacility facility) {
+		SportFacility facilityToUpdate = this.facilities.get(id);
+		facilityToUpdate.setImage(facility.getImage());
+		
+		try {
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(facilities.values());
+			System.out.println(json);
+			writer.write(json);
+			
+			writer.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return facilityToUpdate;
 	}
 	
 	/**
