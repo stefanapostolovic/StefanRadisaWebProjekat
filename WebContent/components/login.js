@@ -1,7 +1,7 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     	  	      user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null,role:"" ,trainingHistory:null,
+	    user: {username:null, password:null, name:"pedro", surename:null, gender:null, dateOfBirth:null,role:"" ,trainingHistory:null,
 	membership:null,
 	sportFacility:null,
 	visitedFacilities:null,
@@ -50,29 +50,37 @@ Vue.component("login", {
 			}
 			ime.style.background = "white"
 			sifra.style.background ="white"
-			let poo
-			axios
-				.post('rest/login', {username:this.username, password:this.password})
-				.then(response => {
-					let profil = document.getElementsByName("pom")[0];
+		
+			const jedan = axios.post('rest/login', {username:this.username, password:this.password})
+				
+			const dva = axios.post('rest/ulogovani',{username:this.username, password:this.password})
+			axios.all([jedan,dva])
+				.then(axios.spread((first_response, second_response) => {
+					let profil = document.getElementsByName("pomPom")[0]
 					let p  =profil.getElementsByTagName("button")[0];
 					let p1  =profil.getElementsByTagName("button")[1];
 					let p2  =profil.getElementsByTagName("button")[2];
-		
-					axios.get('rest/currentUser').then(response=>(this.user=response.data))
-					if(poo ==="Administrator"){
+				this.user=second_response.data
+				
+				if(this.user.role ==="Administrator"){
 						p.hidden=false;
 						p1.hidden=false;
-						console.log(p2)
+						
 					}
-					console.log(poo
-					)
+					
 					p2.hidden =false;
 					router.push(`/`)
-				})
+					
+				}))
 				.catch(response => {
 					toast('Wrong username and/or password!')
-						})	    
+	
+						})
+						
+				
+					
+					
+					    
 		}
    }
 });
