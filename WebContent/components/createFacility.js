@@ -290,6 +290,12 @@ Vue.component("createFacility", {
 		confirmCreate() {
 			this.fillOutFacility();
 			this.user.sportFacility = this.newFacility;
+		
+			if (this.canCreateFlag == -1) {
+				this.canCreateFlag = 1;
+				return;
+			}
+			else this.canCreateFlag = 1; 	
 			
 			axios.all([
 				this.createFacility(),
