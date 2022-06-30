@@ -43,7 +43,7 @@ import beans.SportFacility;
  */
 
 public class FacilityDAO {
-private HashMap<String, SportFacility> facilities = new HashMap<String, SportFacility>();
+	private HashMap<String, SportFacility> facilities = new HashMap<String, SportFacility>();
 	
 	public FacilityDAO() {
 		

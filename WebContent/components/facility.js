@@ -8,6 +8,7 @@ Vue.component("facility", {
 		  comments:[],
 		  trainings:[],
 		
+		  loggedUser: null
 		}
 	},
 	    template: ` 
@@ -66,13 +67,37 @@ Vue.component("facility", {
 						</td>
 					</tr>
 		    </table>
+		    <input type="button" value="Create new training" style="float:right"
+		    v-if="isCorrectManager()"
+		    @click="createTraining"/>
    		</div>		  
     	`,
     mounted () {
 		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-		this.facility=pom
+		this.facility=pom;
+		axios
+			.get('rest/currentUser')
+			.then((response) => {
+				this.loggedUser = response.data;
+			})
     },
     methods: {
+		createTraining() {
+			router.push('/createTraining');	
+		},
+		
+		isCorrectManager() {
+			//return (this.loggedUser.role === 'Manager' && this.loggedUser.sportFacility.id
+			//=== this.facility.id);
+			if (this.loggedUser.sportFacility == null) {
+				return false;
+			}
+			else if (this.loggedUser.sportFacility.name === this.facility.name &&
+			this.loggedUser.role === 'Manager') {
+				return true;
+			}
+			return false;		
+		},
 	
 		radnoVreme : function(p) {
 				return "Radno vreme:"+ vreme(p.startTime) +"-"+vreme(p.endTime);

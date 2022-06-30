@@ -1,9 +1,5 @@
 package services;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,11 +18,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import beans.Location;
 import beans.SportFacility;
 import dao.FacilityDAO;
 

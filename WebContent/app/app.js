@@ -7,6 +7,7 @@ const Korisnici = { template: '<users></users>' }
 const Radnici = { template: '<addMenager></addMenager>' }
 const Facility={template:'<facility></facility>'}
 const CreateFacility={ template: '<createFacility></createFacility>'}
+const CreateTraining={ template: '<createTraining></createTraining>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -20,6 +21,7 @@ const router = new VueRouter({
 		{ path: '/radnici', component: Radnici},
 		{ path: '/facility', component: Facility},
 		{ path: '/createFacility', component: CreateFacility},
+		{ path: '/createTraining', component: CreateTraining}
 	]
 });
 
