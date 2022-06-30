@@ -28,6 +28,8 @@ Vue.component("createFacility", {
 	        gender:'',
 	        dateOfBirth:'',
 	        
+	        file: null,
+	        
 	        //validation
 	        canCreateFlag: 1,
 	        isFacilityName: false,
@@ -45,7 +47,9 @@ Vue.component("createFacility", {
 	        isManagerGender: false,
 	        isManagerDate: false,
 	        isManagerGender: false,
-	        isFacilityManager: false
+	        isFacilityManager: false,
+	        
+	        isTrainingFile: false
 		}
 	},
 		template: `
@@ -58,7 +62,8 @@ Vue.component("createFacility", {
 								Icon
 							</td>
 							<td>
-								<input type="file" name="file" @change="onFileSelected"/>
+								<input type="file" name="file" @change="onFileSelected"
+								:class="{ invalidField : isTrainingFile}"/>
 							</td>
 						</tr>
 						<tr>
@@ -198,9 +203,9 @@ Vue.component("createFacility", {
 	
 	methods: {
 		onFileSelected(event) {
-			let file = event.target.files[0];
+			this.file = event.target.files[0];
 			this.formData = new FormData();
-			this.formData.append("file", file);
+			this.formData.append("file", this.file);
 		},
 		
 		uploadFIle() {
@@ -318,7 +323,15 @@ Vue.component("createFacility", {
 				this.user.sportFacility = this.newFacility;
 			}
 			console.log(this.user);
-
+			
+			if (this.file == null) {
+				this.isTrainingFile = true;
+				this.canCreateFlag = -1;	
+			}
+			else {
+				this.isTrainingFile = false;
+			}
+			
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;
 				return;
@@ -396,6 +409,14 @@ Vue.component("createFacility", {
 			}
 			
 			this.user.sportFacility = this.newFacility;
+			
+			if (this.file == null) {
+				this.isTrainingFile = true;
+				this.canCreateFlag = -1;	
+			}
+			else {
+				this.isTrainingFile = false;
+			}
 			
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;

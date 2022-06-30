@@ -103,6 +103,7 @@ public class TrainingDAO {
 	public Training update(String id, Training training) {
 		Training trainingToUpdate = this.trainings.get(id);
 		trainingToUpdate.setImage(training.getImage());
+		
 		System.out.println("DAO UPDATE TEST");
 		
 		try {
@@ -146,6 +147,15 @@ public class TrainingDAO {
 	}
 	
 	public Training CreateTraining(Training training) {
+		if (training != null) {
+			for (Training temp : trainings.values()) {
+				if (temp.getName().trim().toLowerCase().equals(
+						training.getName().trim().toLowerCase())) {
+					return null;
+				}
+			}
+		}
+		
 		Training newlyCreatedTraining = new Training(
 				"-1", training.getName(), training.getTrainingType(), training.getSportFacility(),
 				training.getDuration(), training.getTrainer(), training.getDescription(),

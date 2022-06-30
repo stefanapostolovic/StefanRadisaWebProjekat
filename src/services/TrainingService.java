@@ -3,6 +3,7 @@ package services;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -56,11 +58,15 @@ public class TrainingService {
 	@Path("/createTraining")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Training createTraining(Training training) {
+	public Response createTraining(Training training) {
 		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
 		
 		Training newlyCreatedTrainig = dao.CreateTraining(training);
-		return newlyCreatedTrainig;
+		
+		if (newlyCreatedTrainig == null) {
+			return Response.status(400).entity("That name is already taken").build();
+		}
+		return Response.status(200).build();
 	}
 	
 	@POST
@@ -70,8 +76,16 @@ public class TrainingService {
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
 		System.out.println("REST API TEST");
-		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
 		
-		//TODO//
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		HashMap<String, Training> allTrainings = dao.GetTrainingMap();
+		
+		int maxId = -1;
+		for (String id : allTrainings.keySet()) {
+			if (Integer.parseInt(id) > maxId) maxId = Integer.parseInt(id);
+		}
+		
+		Training latestTraining = allTrainings.get(String.valueOf(maxId));
+		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestTraining);
 	}
 }

@@ -52,36 +52,105 @@ Vue.component("facility", {
 				</tr>
 	    	</table>    
 	
-			
-			<table >
+			<h3 style="margin-top:3cm; margin-bottom:1cm">Training list:</h3>
+			<table>
+				<tr>
+					<th>
+						Icon
+					</th>
+					<th>
+						Name
+					</th>
+					<th>
+						Type
+					</th>
+					<th>
+						Description
+					</th>
+					<th>
+						Duration
+					</th>
+					<th>
+						Trainer
+					</th>
+				</tr>
 				<tr v-for="(p, index) in trainings">
+					<td width="100%" height="100%"><img alt="fato" 
+					:src="p.image" width="100px" height="100px"></td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.name}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainingType}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.description}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.duration}}
+						</p>
+					</td>
+					<td v-if="p.trainer.name !== null" class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainer.name + ' ' + p.trainer.surename}}
+						</p>
+					</td>
+					<td v-else>
+						<p style="width:150px;height=150px">
+							-
+						</p>
+					</td>
 				</tr>
 		    </table>    
-			<table >
-					<tr v-for="(p, index) in comments">
-						<td class="kolona">
-								{{p.text}}
-						</td>
-						<td class="kolona">
-							{{p.grade}}
-						</td>
-					</tr>
+			<table>
+				<tr v-for="(p, index) in comments">
+					<td class="kolona">
+							{{p.text}}
+					</td>
+					<td class="kolona">
+						{{p.grade}}
+					</td>
+				</tr>
 		    </table>
-		    <input type="button" value="Create new training" style="float:right"
-		    v-if="isCorrectManager()"
-		    @click="createTraining"/>
+		    <p style="margin-top:2cm; margin-bottom:3cm;">
+		    	<input type="button" value="Create new training" style="float:right;"
+			    v-if="isCorrectManager()" @click="createTraining"/>
+		    </p>
    		</div>		  
     	`,
     mounted () {
 		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
 		this.facility=pom;
-		axios
+		/*axios
 			.get('rest/currentUser')
 			.then((response) => {
 				this.loggedUser = response.data;
-			})
+			})*/
+		axios.all([
+			this.getLoggedUser(),
+			this.getAllTrainingsForCurrentFacility()
+		])
+		.then(axios.spread((first_response, second_response) => {
+			this.loggedUser = first_response.data;
+			this.trainings = second_response.data;
+		}))
     },
     methods: {
+		getLoggedUser() {
+			return axios.get('rest/currentUser');
+		},
+		
+		getAllTrainingsForCurrentFacility() {
+			return axios.get('rest/trainings/');
+		},
+		
 		createTraining() {
 			router.push('/createTraining');	
 		},
