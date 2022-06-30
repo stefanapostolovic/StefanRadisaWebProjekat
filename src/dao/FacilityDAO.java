@@ -2,22 +2,32 @@ package dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
+import javax.imageio.ImageIO;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Address;
@@ -58,6 +68,10 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		return facilities.values();
 	}
 	
+	public HashMap<String, SportFacility> GetFacilityMap() {
+		return facilities;
+	}
+	
 	/***
 	 *  Vraca proizvod na osnovu njegovog id-a. 
 	 *  @return Proizvod sa id-em ako postoji, u suprotnom null
@@ -69,9 +83,10 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	/***
 	 * Dodaje proizvod u mapu proizvoda. Id novog proizvoda �e biti postavljen na maxPostojeciId + 1.
 	 * @param product
-	 */
-	public List<SportFacility> save(List<SportFacility> facilityList) {
-		for (SportFacility facility : facilityList) {
+	 * 
+	 */								//List<SportFacility> facilityList
+	public List<SportFacility> save(SportFacility facility) {
+		/*for (SportFacility facility : facilityList) {
 			Integer maxId = -1;
 			for (String id : facilities.keySet()) {
 				int idNum =Integer.parseInt(id);
@@ -82,27 +97,63 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			maxId++;
 			facility.setId(maxId.toString());
 			facilities.put(facility.getId(), facility);
-		}
+		}*/
 		
+		Integer maxId = -1;
+		for (String id : facilities.keySet()) {
+			int idNum =Integer.parseInt(id);
+			if (idNum > maxId) {
+				maxId = idNum;
+			}
+		}
+		maxId++;
+		
+		facility.setId(maxId.toString());
+		facilities.put(facility.getId(), facility);
+		
+		List<SportFacility> facilityList = new ArrayList<SportFacility>();
+		
+		for (SportFacility temp : facilities.values()) {
+			facilityList.add(temp);
+		}
 		
 		//serijalizacija
 		try {				
 		
-		//Gson gson = new Gson();
-		
-		Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
-		//Writer writer = new FileWriter(contextPath + "/facilities.json", true);
-		//gson.toJson(facilityList, writer);
-		String json = new Gson().toJson(facilityList);
-		System.out.println(json);
-		writer.write(json);
-		
-		writer.close();
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
+			//Writer writer = new FileWriter(contextPath + "/facilities.json", true);
+			//gson.toJson(facilityList, writer);
+			String json = new Gson().toJson(facilityList);
+			System.out.println(json);
+			writer.write(json);
+			
+			writer.close();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return facilityList;
+	}
+	
+	public SportFacility update(String id, SportFacility facility) {
+		SportFacility facilityToUpdate = this.facilities.get(id);
+		facilityToUpdate.setImage(facility.getImage());
+		
+		System.out.println("DAO UPDATE TEST");
+		
+		try {
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/facilities.json"));
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(facilities.values());
+			System.out.println(json);
+			writer.write(json);
+			
+			writer.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return facilityToUpdate;
 	}
 	
 	/**
@@ -118,7 +169,11 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<SportFacility>>() {}.getType();
 			List<SportFacility> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
 			reader.close();
-				
+			
+			if (facilityList == null) {
+				facilityList = new ArrayList<SportFacility>();
+			}
+			
 			for (SportFacility facility : facilityList) {
 				facilities.put(facility.getId(), facility);
 			}
@@ -186,6 +241,57 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 			}
 		}
 		return returnList;
+	}
+	
+	public SportFacility CreateFacility(SportFacility facility) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		SportFacility newlyCreatedFacility = new SportFacility(
+				"-1", facility.getName(), facility.getObjectType(), 
+				false, facility.getLocation(), null, 0, 
+				formatter.format(LocalTime.now()), formatter.format(LocalTime.now()));
+		
+		save(newlyCreatedFacility);
+		return newlyCreatedFacility;
+	}
+	
+	public void saveImage(InputStream uploadedInputStream, String fileName, SportFacility facility) {
+		try {
+			String pathOutsideProject = contextPath + "/" + fileName;
+			String pathInProject = fileName;
+			String absPath = "E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
+			String test = "image/" + fileName;
+			String relPath = "../WebContent/image/" + fileName;
+			
+			/*Class cls = this.getClass();
+			ProtectionDomain pDomain = cls.getProtectionDomain();
+			CodeSource cSource = pDomain.getCodeSource();
+			URL loc = cSource.getLocation();
+			System.out.println(loc);*/
+			
+			File file = new File
+					(absPath);
+			if (file.exists()) {
+				facility.setImage(test);
+				update(facility.getId(), facility);
+				return;
+			}
+			
+			if (file.canRead() == false) {
+				file.setReadable(true);
+				file.setWritable(true);
+				file.setExecutable(true);
+	
+				BufferedImage icon = ImageIO.read(uploadedInputStream);
+				ImageIO.write(icon, "png", file);
+	
+				facility.setImage(test);
+				update(facility.getId(), facility);
+			}	
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
 

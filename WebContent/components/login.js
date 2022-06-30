@@ -1,27 +1,25 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	     user:null,
+	     user: {},
 	     username : "",
 	     password : "",
-		image:""
+		 image:""
 	    }
 	},
 	    template: ` 
     	<div class="centar">
-	<form id="forma" >
-		<table>
-			<tr><td>Username</td><td><input type="text" name="username" v-model="username"></td></tr>
-			<tr><td>Password</td><td><input type="password" name="password" v-model="password"></td></tr>							
-			<tr><td><input type="submit" v-on:click="aProduct" value="Login"></td></tr>
-		</table>
-	</form>
-
-
+			<form id="forma" >
+				<table>
+					<tr><td>Username</td><td><input type="text" name="username" v-model="username"></td></tr>
+					<tr><td>Password</td><td><input type="password" name="password" v-model="password"></td></tr>							
+					<tr><td><input type="submit" v-on:click="aProduct" value="Login"></td></tr>
+				</table>
+			</form>
     	</div>		  
     	`,
     mounted () {
-	axios.get('rest/svi').then(response =>(this.ed=response.data))
+		axios.get('rest/svi').then(response =>(this.ed=response.data))
     },
     methods: {
     	aProduct : function() {
@@ -52,12 +50,15 @@ Vue.component("login", {
 					let p1  =profil.getElementsByTagName("button")[1];
 					let p2  =profil.getElementsByTagName("button")[2];
 		
-					axios.get('rest/currentUser').then(response=>(this.user = response.data))
-					if(this.user.role ==="Administrator"){
-						p.hidden=false;
-						p1.hidden=false;
-						console.log(p2)
-					}
+					axios.get('rest/currentUser').then(response=> {
+						this.user = response.data
+						console.log(this.user);
+						if(this.user.role == "Administrator"){
+							p.hidden=false;
+							p1.hidden=false;
+							console.log(p2)
+						}
+					})	
 					console.log(p)
 					p2.hidden =false;
 					router.push(`/`)

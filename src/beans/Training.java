@@ -5,7 +5,7 @@ public class Training {
 	private String trainingType;
 	private SportFacility sportFacility;
 	private float duration;
-	private User user;
+	private User trainer;
 	private String description;
 	private String image;
 	
@@ -14,14 +14,14 @@ public class Training {
 		
 	}
 	
-	public Training(String name, String trainingType, SportFacility sportFacility, float duration, User user,
+	public Training(String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
 			String description, String image) {
 		super();
 		this.name = name;
 		this.trainingType = trainingType;
 		this.sportFacility = sportFacility;
 		this.duration = duration;
-		this.user = user;
+		this.trainer = trainer;
 		this.description = description;
 		this.image = image;
 	}
@@ -49,11 +49,11 @@ public class Training {
 	public void setDuration(float duration) {
 		this.duration = duration;
 	}
-	public User getUser() {
-		return user;
+	public User getTrainer() {
+		return trainer;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setTrainer(User trainer) {
+		this.trainer = trainer;
 	}
 	public String getDescription() {
 		return description;

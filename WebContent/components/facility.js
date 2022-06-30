@@ -1,7 +1,10 @@
 Vue.component("facility", { 
 	data: function () {
 	    return {
-	      facility: {"id":null, "name":null, "objectType":null, "status":null,"location":{"longitude":null,"latitude":null,"address":{}}, "image":null, "averageRating":null, "startTime":null, "endTime":null},
+	      facility: {"id":null, "name":null, "objectType":null, "status":null,
+	      "location":{"longitude":null,"latitude":null,"address":{}}, 
+	      "image":null, "averageRating":null, "startTime":null, "endTime":null},
+	      
 		  comments:[],
 		  trainings:[],
 		
@@ -9,15 +12,17 @@ Vue.component("facility", {
 	},
 	    template: ` 
     	<div class="center">
-		<h3>{{facility.name}}</h3>
-		<table><tr><th>Logo</th>
-    				<th>Name</th>
-    				<th>Type</th>
-    				<th>Location</th>
-    				<th>Rating</th>
-    				<th>Status</th>
-    			</tr>
-					<tr>
+			<h3>{{facility.name}}</h3>
+			<table>
+				<tr>
+					<th>Logo</th>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Location</th>
+					<th>Rating</th>
+					<th>Status</th>
+				</tr>
+				<tr>
 					<td width="100%" height="100%"><img alt="fato" v-bind:src="facility.image" width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
@@ -45,27 +50,27 @@ Vue.component("facility", {
 					<td v-else="facility.status">Closed</td>
 				</tr>
 	    	</table>    
-
-		
-		<table >
+	
+			
+			<table >
 				<tr v-for="(p, index) in trainings">
 				</tr>
-	    	</table>    
-		<table >
-				<tr v-for="(p, index) in comments">
-					<td class="kolona">
-							{{p.text}}
-					</td>
-					<td class="kolona">
-						{{p.grade}}
-					</td>
-				</tr>
-	    	</table>
+		    </table>    
+			<table >
+					<tr v-for="(p, index) in comments">
+						<td class="kolona">
+								{{p.text}}
+						</td>
+						<td class="kolona">
+							{{p.grade}}
+						</td>
+					</tr>
+		    </table>
    		</div>		  
     	`,
     mounted () {
-//        this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-this.facility=pom
+		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
+		this.facility=pom
     },
     methods: {
 	

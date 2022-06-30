@@ -45,7 +45,7 @@ Vue.component("profil", {
 	</tr>
 	<tr>
 		<td>Datum rodjenja:</td>
-		<td><input type="date" id="rodjenje" name="rodjenje" /></td>
+		<td><input type="date" id="rodjenje" name="rodjenje" v-model="user.dateOfBirth"/></td>
 	</tr>
 	<tr>
 		<td >
@@ -119,9 +119,11 @@ Vue.component("profil", {
 			rod.style.background ="white"
 			console.log(this.username);
 			
-			axios.put('rest/'+this.user.username,this.user).
-				then(response => (this.user = response.data));
-			
+			axios.put('rest/updateUser/' + this.user.username, this.user).
+				then(response => {
+					this.user = response.data;
+					router.push(`/`);
+				});		
 
 			l.hidden=true;
 		}

@@ -1,5 +1,7 @@
 package beans;
 
+import java.awt.image.BufferedImage;
+
 public class SportFacility {
 	private String id;	//dodao
 	private String name;

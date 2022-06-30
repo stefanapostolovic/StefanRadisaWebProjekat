@@ -71,21 +71,34 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
-	public User update(String id, User user) {
-		User productToUpdate = this.find(id,user.getPassword());
-		if(productToUpdate == null) {
-			return this.register(user);
+	public User update(String username, User updatedUser) {
+		//User userToUpdate = this.find(username,updatedUser.getPassword());
+		User userToUpdate = this.users.get(username);
+		userToUpdate.setName(updatedUser.getName());
+		userToUpdate.setSurename(updatedUser.getSurename());
+		userToUpdate.setPassword(updatedUser.getPassword());
+		userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
+		userToUpdate.setGender(updatedUser.getGender());
+		
+		if (updatedUser.getSportFacility() != null) {
+			userToUpdate.setSportFacility(updatedUser.getSportFacility());
 		}
-		productToUpdate.setName(user.getName());
-		productToUpdate.setSurename(user.getSurename());
-		productToUpdate.setPassword(user.getName());
-		productToUpdate.setUsername(user.getUsername());
-		productToUpdate.setDateOfBirth(user.getDateOfBirth());
-
-		productToUpdate.setGender(user.getGender());
 		
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
+			
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(users.values());
+			System.out.println(json);
+			writer.write(json);
 		
-		return productToUpdate;
+			writer.close();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return userToUpdate;
 	}
 	
 	
@@ -101,8 +114,8 @@ public class UserDAO {
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
 				user.getGender(), user.getDateOfBirth(), user.getRole(),
-				null, null, null, null,
-				1.0, new CustomerType()); 
+				user.getTrainingHistory(), user.getMembership(), user.getSportFacility(), 
+				user.getVisitedFacilities(), 1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
 		custTest = (User) users.get(user.getUsername());
 		//users.put(user.getUsername(), user);
@@ -154,6 +167,16 @@ public class UserDAO {
 			}
 		}
 		
+		return returnList;
+	}
+	
+	public Collection<User> GetValidManagers() {
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null) {
+				returnList.add(user);
+			}
+		}
 		return returnList;
 	}
 }

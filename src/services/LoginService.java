@@ -50,19 +50,19 @@ public class LoginService {
 	}
 	
 	@PUT
-	@Path("/{id}")
+	@Path("/updateUser/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getProducts(@PathParam("id") String id, User user,@Context HttpServletRequest request) {
+	public User getProducts(@PathParam("username") String username, User user,
+			@Context HttpServletRequest request) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		request.getSession().setAttribute("user", dao.update(id, user));
-		return dao.update(id, user);
+		request.getSession().setAttribute("user", dao.update(username, user));
+		return dao.update(username, user);
 	}
 	
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	//public Response login(User user, @Context HttpServletRequest request)
 	public Response login(User user, @Context HttpServletRequest request) {
 		//System.out.println("******************" + contextPath + "******************");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
@@ -87,6 +87,7 @@ public class LoginService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User login(@Context HttpServletRequest request) {
+		User temp = (User) request.getSession().getAttribute("user");
 		return (User) request.getSession().getAttribute("user");
 	}
 	
@@ -116,5 +117,13 @@ public class LoginService {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		
 		return dao.GetByMultiSearch(name, surname, username);
+	}
+	
+	@GET
+	@Path("/getValidManagers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> GetValidManagers() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.GetValidManagers();
 	}
 }
