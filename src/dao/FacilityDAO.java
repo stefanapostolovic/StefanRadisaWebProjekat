@@ -11,8 +11,12 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -254,22 +258,33 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 		try {
 			String pathOutsideProject = contextPath + "/" + fileName;
 			String pathInProject = fileName;
+			String absPath = "E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
+			String test = "image/" + fileName;
+			String relPath = "../WebContent/image/" + fileName;
 			
-			File file = new File(pathInProject);
-			if (file.exists()) return;
+			/*Class cls = this.getClass();
+			ProtectionDomain pDomain = cls.getProtectionDomain();
+			CodeSource cSource = pDomain.getCodeSource();
+			URL loc = cSource.getLocation();
+			System.out.println(loc);*/
+			
+			File file = new File
+					(absPath);
+			if (file.exists()) {
+				facility.setImage(test);
+				update(facility.getId(), facility);
+				return;
+			}
 			
 			if (file.canRead() == false) {
-				Boolean a = file.setReadable(true);
-				Boolean b = file.setWritable(true);
-				Boolean c = file.setExecutable(true);
-				
-				if (file.canRead() == false) System.out.println("NE MOZE CITA");
-				if (file.canWrite() == false) System.out.println("NE MOZE PISE");
-				
+				file.setReadable(true);
+				file.setWritable(true);
+				file.setExecutable(true);
+	
 				BufferedImage icon = ImageIO.read(uploadedInputStream);
 				ImageIO.write(icon, "png", file);
-		        
-				facility.setImage(pathInProject);
+	
+				facility.setImage(test);
 				update(facility.getId(), facility);
 			}	
 			

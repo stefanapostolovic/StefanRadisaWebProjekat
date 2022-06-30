@@ -140,21 +140,6 @@ public class FacilityService {
 		}
 		
 		SportFacility latestFacility = allFacilities.get(String.valueOf(maxId));
-		//String saveFileLocation = "image/" + fileDetail.getFileName();
-			//byte[] icon = uploadedInputStream.readAllBytes();
-			//latestFacility.setImage(icon);
-
-			
-			/*FileOutputStream out = new FileOutputStream(file);  
-            int read = 0;  
-            byte[] bytes = new byte[1024];  
-            out = new FileOutputStream(fileDetail.getFileName());  
-            while ((read = uploadedInputStream.read(bytes)) != -1) {  
-                out.write(bytes, 0, read);  
-            }  
-            out.flush();  
-            out.close();*/
-		
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestFacility);
 	}
 }

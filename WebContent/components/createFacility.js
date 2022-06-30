@@ -45,6 +45,7 @@ Vue.component("createFacility", {
 	        isManagerGender: false,
 	        isManagerDate: false,
 	        isManagerGender: false,
+	        isFacilityManager: false
 		}
 	},
 		template: `
@@ -117,7 +118,8 @@ Vue.component("createFacility", {
 								<input type="button" v-if="this.validManagers.length == 0" 
 								value="Register a new manager"
 								@click="registerNewManager"/>
-								<select name="managers" id="managers" v-else v-model="user">
+								<select name="managers" id="managers" v-else v-model="user"
+								:class="{ invalidField : isFacilityManager}">
 									<option v-for="(p, index) in validManagers"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
@@ -306,14 +308,23 @@ Vue.component("createFacility", {
 			event.preventDefault();
 			
 			this.fillOutFacility();
-			this.user.sportFacility = this.newFacility;
-		
+			
+			if (this.user.username == null){
+				this.isFacilityManager = true;
+				this.canCreateFlag = -1;
+			}
+			else {
+				this.isFacilityManager = false;
+				this.user.sportFacility = this.newFacility;
+			}
+			console.log(this.user);
+
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;
 				return;
 			}
 			else this.canCreateFlag = 1; 	
-			
+				
 			axios.all([
 				this.createFacility(),
 				this.uploadFIle(),
@@ -394,6 +405,7 @@ Vue.component("createFacility", {
 			
 			axios.all([
 				this.createFacility(),
+				this.uploadFIle(),
 				this.createManager()
 			])
 			.then(axios.spread((first_response) => {
