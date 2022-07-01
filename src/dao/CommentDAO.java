@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Comment;
+import beans.User;
 
 
 public class CommentDAO {
@@ -30,16 +31,26 @@ public class CommentDAO {
 	}
 	
 	public Collection<Comment> findAll() {
-		return comments.values();
+		loadComments(contextPath);
+		List<Comment> returnList = new ArrayList<Comment>();
+		for(Comment comment : comments.values()) {
+			if(comment.isActive()) {
+				returnList.add(comment);
+			}
+		}
+		
+		return returnList;
 	}
 	
 	public Comment findComment(String id) {
+		loadComments(contextPath);
 		return comments.containsKey(id) ? comments.get(id) : null;
 	}
 	
 	public Collection<Comment> findForOneObject(String id) {
+		loadComments(contextPath);
 		List<Comment> returnList = new ArrayList<Comment>();
-		for(Comment comment : comments.values()) {
+		for(Comment comment : this.findAll()) {
 			String p =comment.getSportFacility().getId();
 			if(p.equals(id)) {
 			
@@ -50,7 +61,36 @@ public class CommentDAO {
 		return returnList;
 	}
 	
-	
+	public Comment update(Comment comment) {
+		Comment c = this.findComment(comment.getId());
+		if(c == null) {
+			return this.save(comment);
+		}
+		c.setId(comment.getId());
+		c.setSportFacility(comment.getSportFacility());
+		c.setState(comment.getState());
+		c.setActive(comment.isActive());
+		c.setGrade(comment.getGrade());
+
+		c.setText(comment.getText());
+		c.setUser(comment.getUser());
+		
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/comments.json"));
+			System.out.println(contextPath + "/comments.json");
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(comments.values());
+			System.out.println(json);
+			writer.write(json);
+		
+			writer.close();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return c;
+	}
 	
 	public Comment save(Comment newComment) {
 		loadComments(contextPath);		

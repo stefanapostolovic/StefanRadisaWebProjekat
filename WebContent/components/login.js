@@ -61,6 +61,9 @@ Vue.component("login", {
 					let p1  =profil.getElementsByTagName("button")[1];
 					let p2  =profil.getElementsByTagName("button")[2];
 				this.user=second_response.data
+				p.hidden=true;
+				p1.hidden=true;
+				p2.hidden =true;
 				
 				if(this.user.role ==="Administrator"){
 						p.hidden=false;

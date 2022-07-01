@@ -2,7 +2,9 @@ Vue.component("facility", {
 	data: function () {
 	    return {
 	      facility: {"id":null, "name":null, "objectType":null, "status":null,"location":{"longitude":null,"latitude":null,"address":{}}, "image":null, "averageRating":null, "startTime":null, "endTime":null},
+	      comment:{"id":null,"isActive":"true","state":"New","sportFacility":{},"text":null,"grade":0,"user":{}},	
 		  comments:[],
+		  newComment:[],
 		  trainings:[],
 		
 		}
@@ -51,6 +53,23 @@ Vue.component("facility", {
 				<tr v-for="(p, index) in trainings">
 				</tr>
 	    	</table>   
+		<h3>Novi Komentari:</h3> 
+		<table>
+				<tr>
+					<th>Komentar</th>
+					<th>Ocena</th>
+				</tr>
+				<tr v-for="(p, index) in newComment">
+					<td class="kolona">
+							{{p.text}}
+					</td>
+					<td class="kolona">
+						{{p.grade}}
+					</td>
+					<td><button v-on:click="Odobri(p,index)">Odobri</button> </td>
+					<td><button v-on:click="Odbi(p,index)">Odbi</button> </td>
+				</tr>
+	    	</table>
 		<h3>Komentari:</h3> 
 		<table>
 				<tr>
@@ -64,31 +83,78 @@ Vue.component("facility", {
 					<td class="kolona">
 						{{p.grade}}
 					</td>
+					<td name="status">{{status(p.state)}}</td>
+				</tr>
+	    	</table>
+	<h3>Dodaj komentar:</h3> 
+		<table hidden>
+				<tr>
+					</td>
+					<td class="kolona">
+						<textarea v-model="comment.text"></textarea>
+					</td>
+					<td name="status">{{status(p.state)}}</td>
 				</tr>
 	    	</table>
    		</div>		  
     	`,
     mounted () {
 //        this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-this.facility=pom
-	 axios
-          .get('rest/comment/odobreni/'+this.facility.id)
-          .then(response => {
-				this.comments= response.data
-			})
-    },
-    methods: {
+	this.facility=pom
+	const korisnik = axios.get('rest/currentUser')
+	const jedan = axios.get('rest/comment/acceptedAndRejected/'+this.facility.id)		
+	const dva = axios.get('rest/comment/odobreni/'+this.facility.id)
+	const tri = axios.get('rest/comment/novi/'+this.facility.id)
+	let temp=null;
+	axios.all([korisnik,jedan,dva,tri])
+				.then(axios.spread((...response) => {
+		temp=response[0].data;
+		this.comments = response[2].data;
+	{	
+			if(temp.role =="Administrator" || temp.role=="Manager"){
+				this.comments = response[1].data;
+				this.newComment = response[3].data;
+				return;	
+			}else{
+			 this.comments = response[2].data;	
+				return;
+			}
+		}
+		
+		
+		
+		
+    })).catch(response => {
+					toast('Wrong username and/or password!')
 	
+						})},
+    methods: {
+		Odobri : function(p,index) {
+			p.state="Accepted"
+			
+				axios
+	            .put('rest/comment/update/'+p.id, p)
+	            .then(response => (this.newComment.splice(index, 1))).catch(response => {
+					toast('Wrong username and/or password!')
+	
+						})
+    	},
+		Odbi : function(p,index) {
+			p.state="Reject"
+				axios
+	            .put('rest/comment/update', p)
+	            .then(response => (this.newComment.splice(index, 1)))
+    	},
 		radnoVreme : function(p) {
 				return "Radno vreme:"+ vreme(p.startTime) +"-"+vreme(p.endTime);
     	},
-    
-		radi : function(p) {
-    		if (p.status === true){
-	    		return "Radi";
+    	
+		status : function(p) {
+    		if (p == "Accepted"){
+	    		return "Odobren";
     		}
     		else
-				return "Ne radi";
+				return "Odbijen";
     	},
     	vreme: function(p) {
 			var d =p.toString();   

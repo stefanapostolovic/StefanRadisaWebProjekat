@@ -1,9 +1,12 @@
 package beans;
 
+import enums.CommentState;
+
 public class Comment {
 	private String id;				//dodato
 	private boolean isActive;   //dodato
-	
+	private CommentState state; //dodato
+
 	private SportFacility sportFacility;
 	private String text;
 	private int grade;
@@ -13,7 +16,7 @@ public class Comment {
 		
 	}
 	
-	public Comment(SportFacility sportFacility, String text, int grade, User user,boolean isActive,String id) {
+	public Comment(SportFacility sportFacility, String text, int grade, User user,boolean isActive,String id,CommentState state) {
 		super();
 		this.sportFacility = sportFacility;
 		this.text = text;
@@ -21,6 +24,7 @@ public class Comment {
 		this.user = user;
 		this.id = id;
 		this.isActive = isActive;
+		this.state=state;
 	}
 	public SportFacility getSportFacility() {
 		return sportFacility;
@@ -61,5 +65,12 @@ public class Comment {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	public CommentState getState() {
+		return state;
+	}
+
+	public void setState(CommentState state) {
+		this.state = state;
 	}
 }
