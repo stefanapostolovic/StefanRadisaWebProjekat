@@ -11,7 +11,9 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import beans.SportFacility;
 import beans.Training;
 import dao.TrainingDAO;
 
@@ -45,13 +48,30 @@ public class TrainingService {
 	}
 	
 	@GET
-	@Path("/")
+	@Path("/getAllTrainings")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Training> getTrainings() {
 		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
 		List<Training> trainingList = new ArrayList<Training>(dao.findAll());
 		
 		return trainingList;
+	}
+	
+	@GET
+	@Path("/getTrainingsForSelectedFacility/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> getTrainingsForSelectedFacility(@PathParam("id") String id) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getTrainingsForSelectedFacility(id);
+	}
+	
+	@GET
+	@Path("/getTraining/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Training getTraining(@PathParam("id") String id) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		Training training = dao.findTraining(id);
+		return training;
 	}
 	
 	@POST
@@ -64,6 +84,20 @@ public class TrainingService {
 		Training newlyCreatedTrainig = dao.CreateTraining(training);
 		
 		if (newlyCreatedTrainig == null) {
+			return Response.status(400).entity("That name is already taken").build();
+		}
+		return Response.status(200).build();
+	}
+	
+	@PUT
+	@Path("/updateTraining")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateTraining(Training training) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		Training updatedTraining = dao.update(training.getId(), training);
+		
+		if (updatedTraining == null) {
 			return Response.status(400).entity("That name is already taken").build();
 		}
 		return Response.status(200).build();

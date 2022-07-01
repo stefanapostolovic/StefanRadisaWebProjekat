@@ -244,6 +244,15 @@ public class FacilityDAO {
 	}
 	
 	public SportFacility CreateFacility(SportFacility facility) {
+		if (facility != null) {
+			for (SportFacility temp : facilities.values()) {
+				if (temp.getName().trim().toLowerCase().equals(
+						facility.getName().trim().toLowerCase())) {
+					return null;
+				}
+			}
+		}
+		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 		SportFacility newlyCreatedFacility = new SportFacility(
 				"-1", facility.getName(), facility.getObjectType(), 

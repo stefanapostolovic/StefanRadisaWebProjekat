@@ -17,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -67,6 +68,15 @@ public class FacilityService {
 	}
 	
 	@GET
+	@Path("/getFacility/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility getFacility(@PathParam("id") String id) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		SportFacility facility = dao.findFacility(id);
+		return facility;
+	}
+	
+	@GET
 	@Path("/search/{input}/{mode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -108,17 +118,21 @@ public class FacilityService {
 	@Path("/createFacility")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public SportFacility createFacility(SportFacility facility) {
+	public Response createFacility(SportFacility facility) {
 		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
 		
 		SportFacility newlyCreatedFacility = dao.CreateFacility(facility);
-		return newlyCreatedFacility;
+		
+		if (newlyCreatedFacility == null) {
+			return Response.status(400).entity("That name is already taken").build();
+		}
+		return Response.status(200).build();
 	}
 	
 	@POST
 	@Path("/uploadFile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+	public SportFacility uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
 		System.out.println("REST API TEST");
@@ -134,6 +148,8 @@ public class FacilityService {
 		
 		SportFacility latestFacility = allFacilities.get(String.valueOf(maxId));
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestFacility);
+		
+		return latestFacility;
 	}
 }
 

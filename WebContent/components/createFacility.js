@@ -344,8 +344,11 @@ Vue.component("createFacility", {
 				this.updateManager()
 			])
 			.then(axios.spread((first_response) => {
-				this.user = first_response.data;
+				//this.user = first_response.data;
 				router.push(`/`);
+			}))
+			.catch(axios.spread((first_response) => {
+				toast('That name is already taken!');
 			}))
 		},
 		
@@ -433,7 +436,7 @@ Vue.component("createFacility", {
 				router.push(`/`);
 			}))
 			.catch(axios.spread((first_response) => {
-				toast('Username already taken!');
+				toast('Username already taken or a facility with the given name already exists!');
 			}))
 		},
 		

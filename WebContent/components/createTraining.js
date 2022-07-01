@@ -2,6 +2,7 @@ Vue.component("createTraining", {
 	data: function() {
 		return {
 			loggedUser: null,
+			facilityId: '',
 			
 			newTraining: {},
 			facility: {},
@@ -82,18 +83,25 @@ Vue.component("createTraining", {
 		`,
 		
 	mounted() {
+		this.facilityId = localStorage.getItem("selectedFacility");
+		
 		axios.all([
 			this.getAllTrainers(),
-			this.getLoggedUser()
+			this.getLoggedUser(),
+			this.getSelectedFacility()
 		])
-		.then(axios.spread((first_response, second_response) => {
+		.then(axios.spread((first_response, second_response, third_response) => {
 			this.trainers = first_response.data;
 			this.loggedUser = second_response.data;
-			this.facility = this.loggedUser.sportFacility;
+			this.facility = third_response.data;
 		}))
 	},
 	
 	methods: {
+		getSelectedFacility() {
+			return axios.get('rest/facilities/getFacility/' + this.facilityId);
+		},
+		
 		onFileSelected(event) {
 			this.file = event.target.files[0];
 			this.formData = new FormData();

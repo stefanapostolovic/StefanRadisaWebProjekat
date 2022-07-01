@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import beans.SportFacility;
 import beans.Training;
 
 public class TrainingDAO {
@@ -101,8 +102,23 @@ public class TrainingDAO {
 	}
 	
 	public Training update(String id, Training training) {
+		if (training != null && (findTraining(id).getName().trim().toLowerCase().equals(
+				training.getName().trim().toLowerCase()) == false)) {
+			for (Training temp : trainings.values()) {
+				if (temp.getName().trim().toLowerCase().equals(
+						training.getName().trim().toLowerCase())) {
+					return null;
+				}
+			}
+		}
+		
 		Training trainingToUpdate = this.trainings.get(id);
 		trainingToUpdate.setImage(training.getImage());
+		trainingToUpdate.setName(training.getName());
+		trainingToUpdate.setTrainingType(training.getTrainingType());
+		trainingToUpdate.setDuration(training.getDuration());
+		trainingToUpdate.setDescription(training.getDescription());
+		trainingToUpdate.setTrainer(training.getTrainer());
 		
 		System.out.println("DAO UPDATE TEST");
 		
@@ -119,6 +135,17 @@ public class TrainingDAO {
 			e.printStackTrace();
 		}
 		return trainingToUpdate;
+	}
+	
+	public List<Training> getTrainingsForSelectedFacility(String selectedFacilityId) {
+		List<Training> returnList = new ArrayList<Training>();
+		for (Training temp : trainings.values()) {
+			if (temp.getSportFacility().getId().equals(
+					selectedFacilityId)) {
+				returnList.add(temp);
+			}
+		}
+		return returnList;
 	}
 	
 	/**

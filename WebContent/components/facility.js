@@ -1,6 +1,8 @@
 Vue.component("facility", { 
 	data: function () {
 	    return {
+		  id: '',
+		
 	      facility: {"id":null, "name":null, "objectType":null, "status":null,
 	      "location":{"longitude":null,"latitude":null,"address":{}}, 
 	      "image":null, "averageRating":null, "startTime":null, "endTime":null},
@@ -9,6 +11,8 @@ Vue.component("facility", {
 		  trainings:[],
 		
 		  loggedUser: null
+		  
+		  //selectedTraining: null
 		}
 	},
 	    template: ` 
@@ -74,7 +78,7 @@ Vue.component("facility", {
 						Trainer
 					</th>
 				</tr>
-				<tr v-for="(p, index) in trainings">
+				<tr v-for="(p, index) in trainings" @click="changeTraining(p)">
 					<td width="100%" height="100%"><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -127,28 +131,68 @@ Vue.component("facility", {
     	`,
     mounted () {
 		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-		this.facility=pom;
 		/*axios
 			.get('rest/currentUser')
 			.then((response) => {
 				this.loggedUser = response.data;
 			})*/
+		//this.facility=pom;
+		this.id = localStorage.getItem("selectedFacility");
+		
 		axios.all([
 			this.getLoggedUser(),
+			this.getSelectedFacility(),
 			this.getAllTrainingsForCurrentFacility()
 		])
-		.then(axios.spread((first_response, second_response) => {
+		.then(axios.spread((first_response, second_response, third_response) => {
 			this.loggedUser = first_response.data;
-			this.trainings = second_response.data;
+			this.facility = second_response.data;
+			this.trainings = third_response.data;
 		}))
+		/*axios
+			.get('rest/currentUser')
+			.then((response) => {
+				this.loggedUser = response.data;
+			})
+		axios
+			.get('rest/facilities/getFacility/' + this.id)
+			.then((response) => {
+				this.facility = response.data;
+			})
+		axios
+			.get('rest/trainings/getTrainingsForSelectedFacility/' + this.facility.name)
+			.then((response) => {
+				this.trainings = response.data;
+			})
+			
+		console.log(this.loggedUser);
+		console.log(this.facility);
+		console.log(this.trainings);*/
     },
     methods: {
+		getSelectedFacility() {
+			return axios.get('rest/facilities/getFacility/' + this.id);
+		},
+	
+		changeTraining(selectedTraining) {
+			//this.$root.$emit('trainingFromParent', selectedTraining);	
+			//this.selectedTraining = selectedTraining;
+			//this.$root.SendSelectedTraining();
+			localStorage.setItem("selectedTraining", selectedTraining.id);
+			router.push('/viewTraining');
+		},
+		
+		SendSelectedTraining() {
+			return this.selectedTraining;
+		},
+		
 		getLoggedUser() {
 			return axios.get('rest/currentUser');
 		},
 		
 		getAllTrainingsForCurrentFacility() {
-			return axios.get('rest/trainings/');
+			return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + this.id);
+			//return axios.get('rest/trainings/getAllTrainings');
 		},
 		
 		createTraining() {
