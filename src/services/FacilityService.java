@@ -1,9 +1,5 @@
 package services;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,12 +17,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import beans.Location;
 import beans.SportFacility;
 import dao.FacilityDAO;
 
@@ -74,6 +68,24 @@ public class FacilityService {
 	}
 	
 	@GET
+	@Path("/getFacility/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility getFacility(@PathParam("id") String id) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		SportFacility facility = dao.findFacility(id);
+		return facility;
+	}
+	
+	@GET
+	@Path("/getFacilityByName/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility getFacilityByName(@PathParam("name") String name) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		SportFacility facility = dao.getFacilityByName(name);
+		return facility;
+	}
+	
+	@GET
 	@Path("/search/{input}/{mode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -115,17 +127,22 @@ public class FacilityService {
 	@Path("/createFacility")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public SportFacility createFacility(SportFacility facility) {
+	public Response createFacility(SportFacility facility) {
 		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
 		
 		SportFacility newlyCreatedFacility = dao.CreateFacility(facility);
-		return newlyCreatedFacility;
+		
+		if (newlyCreatedFacility == null) {
+			return Response.status(400).entity("That name is already taken").build();
+		}
+		return Response.status(200).build();
 	}
 	
 	@POST
 	@Path("/uploadFile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
 		System.out.println("REST API TEST");
@@ -141,6 +158,8 @@ public class FacilityService {
 		
 		SportFacility latestFacility = allFacilities.get(String.valueOf(maxId));
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestFacility);
+		
+		return latestFacility;
 	}
 }
 

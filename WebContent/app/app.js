@@ -6,7 +6,10 @@ const Profil = { template: '<profil></profil>' }
 const Korisnici = { template: '<users></users>' }
 const Radnici = { template: '<addMenager></addMenager>' }
 const Facility={template:'<facility></facility>'}
-const CreateFacility={ template: '<createFacility></createFacility>'}
+const CreateFacility = { template: '<createFacility></createFacility>'}
+const CreateTraining = { template: '<createTraining></createTraining>'}
+const ViewTraining = { template: '<viewTraining></viewTraining>'}
+const ManagerInfo = { template: '<managerInfo></managerInfo>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -20,6 +23,9 @@ const router = new VueRouter({
 		{ path: '/radnici', component: Radnici},
 		{ path: '/facility', component: Facility},
 		{ path: '/createFacility', component: CreateFacility},
+		{ path: '/createTraining', component: CreateTraining},
+		{ path: '/viewTraining', component: ViewTraining},
+		{ path: '/managerInfo', component: ManagerInfo}
 	]
 });
 

@@ -28,6 +28,8 @@ Vue.component("createFacility", {
 	        gender:'',
 	        dateOfBirth:'',
 	        
+	        file: null,
+	        
 	        //validation
 	        canCreateFlag: 1,
 	        isFacilityName: false,
@@ -45,7 +47,9 @@ Vue.component("createFacility", {
 	        isManagerGender: false,
 	        isManagerDate: false,
 	        isManagerGender: false,
-	        isFacilityManager: false
+	        isFacilityManager: false,
+	        
+	        isTrainingFile: false
 		}
 	},
 		template: `
@@ -58,7 +62,8 @@ Vue.component("createFacility", {
 								Icon
 							</td>
 							<td>
-								<input type="file" name="file" @change="onFileSelected"/>
+								<input type="file" name="file" @change="onFileSelected"
+								:class="{ invalidField : isTrainingFile}"/>
 							</td>
 						</tr>
 						<tr>
@@ -198,9 +203,9 @@ Vue.component("createFacility", {
 	
 	methods: {
 		onFileSelected(event) {
-			let file = event.target.files[0];
+			this.file = event.target.files[0];
 			this.formData = new FormData();
-			this.formData.append("file", file);
+			this.formData.append("file", this.file);
 		},
 		
 		uploadFIle() {
@@ -318,22 +323,66 @@ Vue.component("createFacility", {
 				this.user.sportFacility = this.newFacility;
 			}
 			console.log(this.user);
-
+			
+			if (this.file == null) {
+				this.isTrainingFile = true;
+				this.canCreateFlag = -1;	
+			}
+			else {
+				this.isTrainingFile = false;
+			}
+			
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;
 				return;
 			}
 			else this.canCreateFlag = 1; 	
 				
-			axios.all([
+			/*axios.all([
 				this.createFacility(),
 				this.uploadFIle(),
 				this.updateManager()
 			])
 			.then(axios.spread((first_response) => {
-				this.user = first_response.data;
+				//this.user = first_response.data;
 				router.push(`/`);
 			}))
+			.catch(axios.spread((first_response) => {
+				toast('That name is already taken!');
+			}))*/
+			
+			axios
+				.post('rest/facilities/createFacility', this.newFacility)
+				.then(response => {
+					return axios.get('rest/facilities/getFacilityByName/' + this.newFacility.name);
+				})
+				.then(response => {
+					console.log(response.data)
+					return axios({
+						url:'rest/facilities/uploadFile',
+						data:this.formData,
+						method:'POST',
+						headers:{
+							Accept:'application/json',
+							'content-type':'multipart/form-data'
+						},
+						
+					})
+				})
+				.then(response=> {
+					console.log(response.data);
+					this.newFacility = response.data;
+					this.user.sportFacility = this.newFacility;
+					return axios.put('rest/updateUser/' + this.user.username, this.user);
+				})
+				.then(response => {
+					console.log(response.data)
+					console.log(this.user);
+					router.push('/');
+				})
+				.catch(response => {
+					toast('That name is already taken!');
+				})
 		},
 		
 		confirmCreateWithNewManager() {
@@ -397,13 +446,21 @@ Vue.component("createFacility", {
 			
 			this.user.sportFacility = this.newFacility;
 			
+			if (this.file == null) {
+				this.isTrainingFile = true;
+				this.canCreateFlag = -1;	
+			}
+			else {
+				this.isTrainingFile = false;
+			}
+			
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;
 				return;
 			}
 			else this.canCreateFlag = 1; 
 			
-			axios.all([
+			/*axios.all([
 				this.createFacility(),
 				this.uploadFIle(),
 				this.createManager()
@@ -412,8 +469,34 @@ Vue.component("createFacility", {
 				router.push(`/`);
 			}))
 			.catch(axios.spread((first_response) => {
-				toast('Username already taken!');
-			}))
+				toast('Username already taken or a facility with the given name already exists!');
+			}))*/
+			
+			axios
+				.post('rest/facilities/createFacility', this.newFacility)
+				.then(response => {
+					return axios({
+						url:'rest/facilities/uploadFile',
+						data:this.formData,
+						method:'POST',
+						headers:{
+							Accept:'application/json',
+							'content-type':'multipart/form-data'
+						},
+				
+					})
+				})
+				.then(response => {
+					this.newFacility = response.data;
+					this.user.sportFacility = this.newFacility;
+					return axios.post('rest/register/', this.user);
+				})
+				.then(response => {
+					router.push('/');
+				})
+				.catch(reponse => {
+					toast('Facility name is already taken, or a user with that username already exists');
+				})
 		},
 		
 		createFacility() {

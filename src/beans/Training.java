@@ -1,6 +1,7 @@
 package beans;
 
 public class Training {
+	private String id;
 	private String name;
 	private String trainingType;
 	private SportFacility sportFacility;
@@ -14,9 +15,10 @@ public class Training {
 		
 	}
 	
-	public Training(String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
+	public Training(String id, String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
 			String description, String image) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.trainingType = trainingType;
 		this.sportFacility = sportFacility;
@@ -25,6 +27,13 @@ public class Training {
 		this.description = description;
 		this.image = image;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}

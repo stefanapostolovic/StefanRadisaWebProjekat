@@ -17,7 +17,8 @@ Vue.component("zaglavlje", {
 			<button v-if="showLogReg" v-on:click="aProduct">Prijava</button>  
 			<button v-if="showLogReg" v-on:click="registracija">Registracija</button>
 			<button v-if="showLogOut" @click="logout">Logout</button>
-			<button v-if="showBackBtn" @click="back">Back</button> 
+			<button v-if="showBackBtn" @click="back">Back</button>
+			<button @click="viewManagerFacilityInfo" hidden>View facility</button> 
 			&nbsp;&nbsp; &nbsp;                                      
     	</div>		  
     	`,
@@ -28,7 +29,10 @@ Vue.component("zaglavlje", {
 		this.showBackBtn = false;
     },
     methods: {
-	
+		viewManagerFacilityInfo() {
+			router.push('/managerInfo');
+		},
+		
 		prikaz : function() {
 			this.showBackBtn = true;
 			router.push(`/profil`);	    

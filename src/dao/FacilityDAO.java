@@ -43,7 +43,7 @@ import beans.SportFacility;
  */
 
 public class FacilityDAO {
-private HashMap<String, SportFacility> facilities = new HashMap<String, SportFacility>();
+	private HashMap<String, SportFacility> facilities = new HashMap<String, SportFacility>();
 	
 	public FacilityDAO() {
 		
@@ -78,6 +78,18 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	 */
 	public SportFacility findFacility(String id) {
 		return facilities.containsKey(id) ? facilities.get(id) : null;
+	}
+	
+	public SportFacility getFacilityByName(String name) {
+		SportFacility returnValue = null;
+		
+		for (SportFacility temp : facilities.values()) {
+			if (temp.getName().trim().toLowerCase().equals(name.trim().toLowerCase())) {
+				returnValue = temp;
+			}
+		}
+		
+		return returnValue;
 	}
 	
 	/***
@@ -244,6 +256,15 @@ private HashMap<String, SportFacility> facilities = new HashMap<String, SportFac
 	}
 	
 	public SportFacility CreateFacility(SportFacility facility) {
+		if (facility != null) {
+			for (SportFacility temp : facilities.values()) {
+				if (temp.getName().trim().toLowerCase().equals(
+						facility.getName().trim().toLowerCase())) {
+					return null;
+				}
+			}
+		}
+		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 		SportFacility newlyCreatedFacility = new SportFacility(
 				"-1", facility.getName(), facility.getObjectType(), 

@@ -1,6 +1,8 @@
 Vue.component("facility", { 
 	data: function () {
 	    return {
+		  id: '',
+		
 	      facility: {"id":null, "name":null, "objectType":null, "status":null,
 	      "location":{"longitude":null,"latitude":null,"address":{}}, 
 	      "image":null, "averageRating":null, "startTime":null, "endTime":null},
@@ -8,6 +10,9 @@ Vue.component("facility", {
 		  comments:[],
 		  trainings:[],
 		
+		  loggedUser: null
+		  
+		  //selectedTraining: null
 		}
 	},
 	    template: ` 
@@ -51,28 +56,127 @@ Vue.component("facility", {
 				</tr>
 	    	</table>    
 	
-			
-			<table >
+			<h3 style="margin-top:3cm; margin-bottom:1cm">Training list:</h3>
+			<table>
+				<tr>
+					<th>
+						Icon
+					</th>
+					<th>
+						Name
+					</th>
+					<th>
+						Type
+					</th>
+					<th>
+						Description
+					</th>
+					<th>
+						Duration
+					</th>
+					<th>
+						Trainer
+					</th>
+				</tr>
 				<tr v-for="(p, index) in trainings">
+					<td width="100%" height="100%"><img alt="fato" 
+					:src="p.image" width="100px" height="100px"></td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.name}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainingType}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.description}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.duration}}
+						</p>
+					</td>
+					<td v-if="p.trainer.name !== null" class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainer.name + ' ' + p.trainer.surename}}
+						</p>
+					</td>
+					<td v-else>
+						<p style="width:150px;height=150px">
+							-
+						</p>
+					</td>
 				</tr>
 		    </table>    
-			<table >
-					<tr v-for="(p, index) in comments">
-						<td class="kolona">
-								{{p.text}}
-						</td>
-						<td class="kolona">
-							{{p.grade}}
-						</td>
-					</tr>
+			<table>
+				<tr v-for="(p, index) in comments">
+					<td class="kolona">
+							{{p.text}}
+					</td>
+					<td class="kolona">
+						{{p.grade}}
+					</td>
+				</tr>
 		    </table>
    		</div>		  
     	`,
     mounted () {
-		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-		this.facility=pom
+		this.id = localStorage.getItem("selectedFacility");
+		
+		axios.all([
+			this.getLoggedUser(),
+			this.getSelectedFacility(),
+			this.getAllTrainingsForCurrentFacility()
+		])
+		.then(axios.spread((first_response, second_response, third_response) => {
+			this.loggedUser = first_response.data;
+			this.facility = second_response.data;
+			this.trainings = third_response.data;
+		}))
     },
     methods: {
+		getSelectedFacility() {
+			return axios.get('rest/facilities/getFacility/' + this.id);
+		},
+	
+		/*changeTraining(selectedTraining) {
+			localStorage.setItem("selectedTraining", selectedTraining.id);
+			router.push('/viewTraining');
+		},*/
+		
+		SendSelectedTraining() {
+			return this.selectedTraining;
+		},
+		
+		getLoggedUser() {
+			return axios.get('rest/currentUser');
+		},
+		
+		getAllTrainingsForCurrentFacility() {
+			return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + this.id);
+		},
+		
+		createTraining() {
+			router.push('/createTraining');	
+		},
+		
+		/*isCorrectManager() {
+			//return (this.loggedUser.role === 'Manager' && this.loggedUser.sportFacility.id
+			//=== this.facility.id);
+			if (this.loggedUser.sportFacility == null) {
+				return false;
+			}
+			else if (this.loggedUser.sportFacility.name === this.facility.name &&
+			this.loggedUser.role === 'Manager') {
+				return true;
+			}
+			return false;		
+		},*/
 	
 		radnoVreme : function(p) {
 				return "Radno vreme:"+ vreme(p.startTime) +"-"+vreme(p.endTime);

@@ -179,6 +179,15 @@ public class UserDAO {
 		}
 		return returnList;
 	}
+	
+	public Collection<User> GetTrainers() {
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getRole().equals(Role.Trainer)) returnList.add(user);
+		}
+		
+		return returnList;
+	}
 }
 
 

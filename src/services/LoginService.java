@@ -126,4 +126,18 @@ public class LoginService {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.GetValidManagers();
 	}
+	
+	@GET
+	@Path("/getTrainers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> GetTrainers() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.GetTrainers();
+	}
 }
+
+
+
+
+
+
