@@ -51,6 +51,7 @@ Vue.component("login", {
 					let p2  =profil.getElementsByTagName("button")[2];
 					
 					let manFacilityBtn = profil.getElementsByTagName("button")[4];
+					let trainerInfoBtn = profil.getElementsByTagName("button")[5];
 					
 					axios.get('rest/currentUser').then(response=> {
 						this.user = response.data
@@ -63,6 +64,10 @@ Vue.component("login", {
 						else if (this.user.role == "Manager") {
 							console.log(manFacilityBtn);
 							manFacilityBtn.hidden = false;	
+						}
+						else if (this.user.role == "Trainer") {
+							console.log(trainerInfoBtn)
+							trainerInfoBtn.hidden = false;
 						}
 					})	
 					console.log(p)

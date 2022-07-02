@@ -119,6 +119,7 @@ public class TrainingDAO {
 		trainingToUpdate.setDuration(training.getDuration());
 		trainingToUpdate.setDescription(training.getDescription());
 		trainingToUpdate.setTrainer(training.getTrainer());
+		trainingToUpdate.setIsCanceled(training.getIsCanceled());
 		
 		System.out.println("DAO UPDATE TEST");
 		
@@ -142,6 +143,30 @@ public class TrainingDAO {
 		for (Training temp : trainings.values()) {
 			if (temp.getSportFacility().getId().equals(
 					selectedFacilityId)) {
+				returnList.add(temp);
+			}
+		}
+		return returnList;
+	}
+	
+	public List<Training> getPersonalTrainingsForSelectedTrainer(String username) {
+		List<Training> returnList = new ArrayList<Training>();
+		for (Training temp : trainings.values()) {
+			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
+					username.toLowerCase().trim()) &&
+					temp.getTrainingType().equals("personal")) {
+				returnList.add(temp);
+			}
+		}
+		return returnList;
+	}
+	
+	public List<Training> getGroupTrainingsForSelectedTrainer(String username) {
+		List<Training> returnList = new ArrayList<Training>();
+		for (Training temp : trainings.values()) {
+			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
+					username.toLowerCase().trim()) &&
+					temp.getTrainingType().equals("group")) {
 				returnList.add(temp);
 			}
 		}
@@ -186,7 +211,7 @@ public class TrainingDAO {
 		Training newlyCreatedTraining = new Training(
 				"-1", training.getName(), training.getTrainingType(), training.getSportFacility(),
 				training.getDuration(), training.getTrainer(), training.getDescription(),
-				training.getImage());
+				training.getImage(), false);
 		
 		save(newlyCreatedTraining);
 		

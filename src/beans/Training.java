@@ -9,14 +9,14 @@ public class Training {
 	private User trainer;
 	private String description;
 	private String image;
-	
+	private Boolean isCanceled;
 	
 	public Training() {
 		
 	}
 	
 	public Training(String id, String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
-			String description, String image) {
+			String description, String image, Boolean isCanceled) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -26,7 +26,16 @@ public class Training {
 		this.trainer = trainer;
 		this.description = description;
 		this.image = image;
+		this.isCanceled = isCanceled;
 	}
+	public Boolean getIsCanceled() {
+		return isCanceled;
+	}
+	
+	public void setIsCanceled(Boolean isCanceled) {
+		this.isCanceled = isCanceled;
+	}
+	
 	public String getId() {
 		return id;
 	}

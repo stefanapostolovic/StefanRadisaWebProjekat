@@ -134,6 +134,24 @@ public class TrainingService {
 		Training training = dao.findTraining(trainingId);
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), training);
 	}
+	
+	@GET
+	@Path("/getPersonalTrainingsForSelectedTrainer/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> getPersonalTrainingsForSelectedTrainer(@PathParam("username") String username) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getPersonalTrainingsForSelectedTrainer(username);
+	}
+	
+	@GET
+	@Path("/getGroupTrainingsForSelectedTrainer/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> getGroupTrainingsForSelectedTrainer(@PathParam("username") String username) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getGroupTrainingsForSelectedTrainer(username);
+	}
 }
 
 

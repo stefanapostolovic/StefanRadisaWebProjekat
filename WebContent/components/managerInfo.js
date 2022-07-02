@@ -155,15 +155,6 @@ Vue.component("managerInfo", {
 		`,
 		
 		mounted () {	
-			/*axios.all([
-			this.getLoggedUser(),
-			this.getAllTrainingsForCurrentFacility()
-		])
-		.then(axios.spread((first_response, second_response, third_response) => {
-			this.loggedUser = first_response.data;
-			this.facility = second_response.data;
-			this.trainings = third_response.data;
-		}))*/
 			axios
 				.get('rest/currentUser')
 				.then(response => {

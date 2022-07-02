@@ -47,6 +47,10 @@ h1{
 	background-color : red;
 }
 
+.invalidRow {
+	background: red;
+}
+
 .tableRow {
 	width:150px;
 	height:auto;
