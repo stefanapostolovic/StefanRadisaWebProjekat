@@ -122,4 +122,21 @@ public class TrainingService {
 		Training latestTraining = allTrainings.get(String.valueOf(maxId));
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), latestTraining);
 	}
+	
+	@POST
+	@Path("/updateFile/{id}")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public void updateFile(@PathParam("id") String trainingId, 
+	@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		Training training = dao.findTraining(trainingId);
+		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), training);
+	}
 }
+
+
+
+
+

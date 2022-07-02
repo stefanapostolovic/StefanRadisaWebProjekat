@@ -37,45 +37,39 @@ Vue.component("viewTraining", {
 							</td>
 							<td>
 								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"
-								:disabled="isCorrectManager()"/>
+								:class="{ invalidField : isTrainingFile}"/>
 							</td>
 						</tr>
 						<tr>
 							<td>Name</td>
 							<td>
 								<input type="text" v-model="training.name"
-								:class="{ invalidField : isTrainingName}"
-								:readonly="isCorrectManager()">
+								:class="{ invalidField : isTrainingName}">
 							</td>
 						</tr>
 						<tr>
 							<td>Type</td>
 							<td>
 								<input type="text" v-model="training.trainingType"
-								:class="{ invalidField : isTrainingType}"
-								:readonly="isCorrectManager()">
+								:class="{ invalidField : isTrainingType}">
 							</td>
 						</tr>
 						<tr>
 							<td>Description</td>
 							<td>
-								<input type="text" v-model="training.description"
-								:readonly="isCorrectManager()">
+								<input type="text" v-model="training.description">
 							</td>
 						</tr>
 						<tr>
 							<td>Duration</td>
 							<td>
-								<input type="number" v-model="training.duration"
-								:readonly="isCorrectManager()">
+								<input type="number" v-model="training.duration">
 							</td>
 						</tr>
 						<tr>
 							<td>Trainer</td>
 							<td>
-								<select name="trainers" id="trainers" v-model="training.trainer"
-								:disabled="isCorrectManager()">
+								<select name="trainers" id="trainers" v-model="training.trainer">
 									<option v-for="(p, index) in trainers"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
@@ -146,7 +140,7 @@ Vue.component("viewTraining", {
 		},
 		uploadFile() {
 			return axios({
-				url:'rest/trainings/uploadFile',
+				url:'rest/trainings/updateFile/' + this.id,
 				data:this.formData,
 				method:'POST',
 				headers:{
@@ -192,7 +186,7 @@ Vue.component("viewTraining", {
 				this.uploadFile()
 			])
 			.then(axios.spread((first_response) => {
-				router.push('/facility');
+				router.push('/managerInfo');
 			}))
 			.catch(axios.spread((first_response) => {
 				toast('That name is already taken!');

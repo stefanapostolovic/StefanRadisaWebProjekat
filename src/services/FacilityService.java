@@ -77,6 +77,15 @@ public class FacilityService {
 	}
 	
 	@GET
+	@Path("/getFacilityByName/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SportFacility getFacilityByName(@PathParam("name") String name) {
+		FacilityDAO dao = (FacilityDAO) ctx.getAttribute("facilityDAO");
+		SportFacility facility = dao.getFacilityByName(name);
+		return facility;
+	}
+	
+	@GET
 	@Path("/search/{input}/{mode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -132,6 +141,7 @@ public class FacilityService {
 	@POST
 	@Path("/uploadFile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
 	public SportFacility uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		

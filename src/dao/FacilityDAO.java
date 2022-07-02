@@ -80,6 +80,18 @@ public class FacilityDAO {
 		return facilities.containsKey(id) ? facilities.get(id) : null;
 	}
 	
+	public SportFacility getFacilityByName(String name) {
+		SportFacility returnValue = null;
+		
+		for (SportFacility temp : facilities.values()) {
+			if (temp.getName().trim().toLowerCase().equals(name.trim().toLowerCase())) {
+				returnValue = temp;
+			}
+		}
+		
+		return returnValue;
+	}
+	
 	/***
 	 * Dodaje proizvod u mapu proizvoda. Id novog proizvoda �e biti postavljen na maxPostojeciId + 1.
 	 * @param product

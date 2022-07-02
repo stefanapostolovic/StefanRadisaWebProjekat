@@ -78,7 +78,7 @@ Vue.component("facility", {
 						Trainer
 					</th>
 				</tr>
-				<tr v-for="(p, index) in trainings" @click="changeTraining(p)">
+				<tr v-for="(p, index) in trainings">
 					<td width="100%" height="100%"><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -123,20 +123,9 @@ Vue.component("facility", {
 					</td>
 				</tr>
 		    </table>
-		    <p style="margin-top:2cm; margin-bottom:3cm;">
-		    	<input type="button" value="Create new training" style="float:right;"
-			    v-if="isCorrectManager()" @click="createTraining"/>
-		    </p>
    		</div>		  
     	`,
     mounted () {
-		//this.$root.$on('messageFromParent',(text)=>{this.facility = text});
-		/*axios
-			.get('rest/currentUser')
-			.then((response) => {
-				this.loggedUser = response.data;
-			})*/
-		//this.facility=pom;
 		this.id = localStorage.getItem("selectedFacility");
 		
 		axios.all([
@@ -149,38 +138,16 @@ Vue.component("facility", {
 			this.facility = second_response.data;
 			this.trainings = third_response.data;
 		}))
-		/*axios
-			.get('rest/currentUser')
-			.then((response) => {
-				this.loggedUser = response.data;
-			})
-		axios
-			.get('rest/facilities/getFacility/' + this.id)
-			.then((response) => {
-				this.facility = response.data;
-			})
-		axios
-			.get('rest/trainings/getTrainingsForSelectedFacility/' + this.facility.name)
-			.then((response) => {
-				this.trainings = response.data;
-			})
-			
-		console.log(this.loggedUser);
-		console.log(this.facility);
-		console.log(this.trainings);*/
     },
     methods: {
 		getSelectedFacility() {
 			return axios.get('rest/facilities/getFacility/' + this.id);
 		},
 	
-		changeTraining(selectedTraining) {
-			//this.$root.$emit('trainingFromParent', selectedTraining);	
-			//this.selectedTraining = selectedTraining;
-			//this.$root.SendSelectedTraining();
+		/*changeTraining(selectedTraining) {
 			localStorage.setItem("selectedTraining", selectedTraining.id);
 			router.push('/viewTraining');
-		},
+		},*/
 		
 		SendSelectedTraining() {
 			return this.selectedTraining;
@@ -192,14 +159,13 @@ Vue.component("facility", {
 		
 		getAllTrainingsForCurrentFacility() {
 			return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + this.id);
-			//return axios.get('rest/trainings/getAllTrainings');
 		},
 		
 		createTraining() {
 			router.push('/createTraining');	
 		},
 		
-		isCorrectManager() {
+		/*isCorrectManager() {
 			//return (this.loggedUser.role === 'Manager' && this.loggedUser.sportFacility.id
 			//=== this.facility.id);
 			if (this.loggedUser.sportFacility == null) {
@@ -210,7 +176,7 @@ Vue.component("facility", {
 				return true;
 			}
 			return false;		
-		},
+		},*/
 	
 		radnoVreme : function(p) {
 				return "Radno vreme:"+ vreme(p.startTime) +"-"+vreme(p.endTime);

@@ -9,6 +9,7 @@ const Facility={template:'<facility></facility>'}
 const CreateFacility = { template: '<createFacility></createFacility>'}
 const CreateTraining = { template: '<createTraining></createTraining>'}
 const ViewTraining = { template: '<viewTraining></viewTraining>'}
+const ManagerInfo = { template: '<managerInfo></managerInfo>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -23,7 +24,8 @@ const router = new VueRouter({
 		{ path: '/facility', component: Facility},
 		{ path: '/createFacility', component: CreateFacility},
 		{ path: '/createTraining', component: CreateTraining},
-		{ path: '/viewTraining', component: ViewTraining}
+		{ path: '/viewTraining', component: ViewTraining},
+		{ path: '/managerInfo', component: ManagerInfo}
 	]
 });
 

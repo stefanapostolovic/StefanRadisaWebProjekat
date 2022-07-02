@@ -49,7 +49,9 @@ Vue.component("login", {
 					let p  =profil.getElementsByTagName("button")[0];
 					let p1  =profil.getElementsByTagName("button")[1];
 					let p2  =profil.getElementsByTagName("button")[2];
-		
+					
+					let manFacilityBtn = profil.getElementsByTagName("button")[4];
+					
 					axios.get('rest/currentUser').then(response=> {
 						this.user = response.data
 						console.log(this.user);
@@ -57,6 +59,10 @@ Vue.component("login", {
 							p.hidden=false;
 							p1.hidden=false;
 							console.log(p2)
+						}
+						else if (this.user.role == "Manager") {
+							console.log(manFacilityBtn);
+							manFacilityBtn.hidden = false;	
 						}
 					})	
 					console.log(p)

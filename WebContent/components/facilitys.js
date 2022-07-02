@@ -120,8 +120,6 @@ Vue.component("facilities", {
 		},
 		
 		sentToChild:function(p){
-			//this.$root.$emit('messageFromParent', "Valjda ovo radi");
-			//pom=p
 			localStorage.setItem("selectedFacility", p.id)
 			router.push(`/facility`);
 		},
