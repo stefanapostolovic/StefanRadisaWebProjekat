@@ -12,8 +12,12 @@ Vue.component("addMenager", {
 		    }
 	},
 	template: ` 
-<div style="width:800px; margin:0 auto;">
-	<header></header>
+<div class="container" style="margin-top:5%">
+	
+	<header>
+		<h1>Register a user</h1>
+		<br></br>
+	</header>
 	<form>
 	<table>
 		
@@ -55,10 +59,11 @@ Vue.component("addMenager", {
 	</tr>
 	<tr>
 		<td >
-		<input type="submit"  v-on:click = "edituser" value="Poslaji">
-		<input type="reset" value="Ponisti">
+			<button class="btn" @click="edituser">Poslaji</button>
+			<input type="reset" class="btn" value="Ponisti">
 		</td>
-		<td></td>
+		<td>
+		</td>
 	</tr>
 		
 	</table>

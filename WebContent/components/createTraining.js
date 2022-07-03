@@ -29,6 +29,9 @@ Vue.component("createTraining", {
 		template:`
 			<div>
 				<h1>Create a new training</h1>
+				<p style="margin-top:2cm; margin-bottom:1cm">
+					To add a personal or group training, in the field "Type" type "personal" or "group".
+				</p>
 				<form enctype="multipart/form-data">
 					<table>
 						<tr>
@@ -63,7 +66,8 @@ Vue.component("createTraining", {
 						<tr>
 							<td>Trainer</td>
 							<td>
-								<select name="trainers" id="trainers" v-model="trainer">
+								<select name="trainers" id="trainers" v-model="trainer"
+								:disabled="isPersonalOrGroup()">
 									<option v-for="(p, index) in trainers"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
@@ -98,6 +102,13 @@ Vue.component("createTraining", {
 	},
 	
 	methods: {
+		isPersonalOrGroup() {
+			if (this.type === 'personal' || this.type === 'group')
+				return false;
+			return true;
+			//return this.type !== 'personal' || 	this.type !== 'group';
+		},
+		
 		getSelectedFacility() {
 			return axios.get('rest/facilities/getFacility/' + this.facilityId);
 		},

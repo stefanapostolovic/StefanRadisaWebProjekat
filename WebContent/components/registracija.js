@@ -12,50 +12,53 @@ Vue.component("registracija", {
 		    }
 	},
 	template: ` 
-<div style="width:800px; margin:0 auto;">
+<div class="container" style="margin-top:10%">
 	<header></header>
 	<form>
-	<table>
-		
-	<tr>
-		<td>Korisnicko ime:</td>
-		<td><input id="username" v-model = "username"  type = "text" name = "username">
-		</td>
-	</tr>
-	<tr>
-		<td>Lozinka:</td>
-			<td><input type="password" v-model = "password"  name="password"></td>
-
-	</tr>
-	<tr>
-		<td>Ime:</td>
-		<td><input id="ime" v-model = "name"  type = "text" name = "name"></td>	
-	</tr>
-	<tr>
-		<td>Prezime:</td>
-		<td><input type="text" v-model = "surename"  name="surename"></td>
-	</tr>
-	<tr>
-		<td>Pol:</td>
-		<td><select name="pol" id="pol" v-model = "gender" >
- 				  <option value="Male">Musko</option>
-				  <option value="Female">Zensko</option>
-			</select></td>
-	</tr>
-	<tr>
-		<td>Datum rodjenja:</td>
-		<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/></td>
-	</tr>
+		<table>
+			
+		<tr>
+			<td>Korisnicko ime:</td>
+			<td>
+				<input id="username" v-model = "username"  type = "text" name = "username">
+			</td>
+		</tr>
+		<tr>
+			<td>Lozinka:</td>
+				<td><input type="password" v-model = "password"  name="password"></td>
 	
-	<tr>
-		<td >
-		<input type="submit"  v-on:click = "edituser" value="Poslaji">
-		<input type="reset" value="Ponisti">
-		</td>
-		<td></td>
-	</tr>
+		</tr>
+		<tr>
+			<td>Ime:</td>
+			<td><input id="ime" v-model = "name"  type = "text" name = "name"></td>	
+		</tr>
+		<tr>
+			<td>Prezime:</td>
+			<td><input type="text" v-model = "surename"  name="surename"></td>
+		</tr>
+		<tr>
+			<td>Pol:</td>
+			<td><select name="pol" id="pol" v-model = "gender" 
+			style="display:block;" class="grey darken-4">
+	 				  <option value="Male">Musko</option>
+					  <option value="Female">Zensko</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Datum rodjenja:</td>
+			<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/></td>
+		</tr>
 		
-	</table>
+		<tr>
+			<td >
+				<button class="btn" @click="edituser">Poslaji</button>
+				<input type="reset" class="btn" value="Ponisti">
+			</td>
+			<td></td>
+		</tr>
+			
+		</table>
 	</form>
 </div>		  
 `

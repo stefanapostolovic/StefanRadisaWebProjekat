@@ -10,18 +10,42 @@ Vue.component("zaglavlje", {
 	    }
 	},
 	    template: ` 
-    	<div class="right">
-			<button v-on:click="dodavanjeOsoblja" name="treneri" hidden>Dodavanje osoblja</button>
-			<button v-on:click="prikazKorisnika" name="korisnici" hidden>Pregled korisnika</button>
-			<button v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>Prikaz profila</button>
-			<button v-if="showLogReg" v-on:click="aProduct">Prijava</button>  
-			<button v-if="showLogReg" v-on:click="registracija">Registracija</button>
-			<button v-if="showLogOut" @click="logout">Logout</button>
-			<button v-if="showBackBtn" @click="back">Back</button>
-			<button @click="viewManagerFacilityInfo" hidden>View facility</button>
-			<button @click="viewTrainerInfo" hidden>View info</button> 
-			&nbsp;&nbsp; &nbsp;                                      
-    	</div>		  
+    	<nav class="teal darken-2">
+    		<div class="nav-wrapper" id="testDiv">
+    			<a href="#" class="brand-logo">
+    				  &nbsp;&nbsp;Fit Corp<i class="material-icons large">&nbsp;&nbsp;&nbsp;spa</i>
+    			</a>
+    			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
+    				<li><a @click="dodavanjeOsoblja" id="treneri" hidden>
+    					Dodavanje osoblja
+    				</a></li>
+    				<li><a @click="prikazKorisnika" id="korisnici" hidden>
+    					Pregled korisnika</a>
+    				</li>
+    				<li><a v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>
+    					Prikaz profila
+    				</a></li>
+    				<li><a v-if="showLogReg" v-on:click="aProduct">
+    					Prijava &nbsp;&nbsp;
+    				</a></li>
+    				<li><a v-if="showLogReg" v-on:click="registracija">
+    					Registracija &nbsp;&nbsp;
+    				</a></li>
+    				<li><a v-if="showLogOut" @click="logout">
+    					Logout
+    				</a></li>
+    				<li><a v-if="showBackBtn" @click="back">
+    					Back
+    				</a></li>
+    				<li><a @click="viewManagerFacilityInfo" hidden name="manInfo">
+    					View facility
+    				</a></li>
+    				<li><a @click="viewTrainerInfo" hidden name="traInfo">
+    					View info
+    				</a></li>
+    			</ul>                                      
+    	</div>
+    	</nav>		  
     	`,
     mounted () {
 		this.showLogReg = true;

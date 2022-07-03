@@ -8,14 +8,36 @@ Vue.component("login", {
 	    }
 	},
 	    template: ` 
-    	<div class="centar">
-			<form id="forma" >
-				<table>
-					<tr><td>Username</td><td><input type="text" name="username" v-model="username"></td></tr>
-					<tr><td>Password</td><td><input type="password" name="password" v-model="password"></td></tr>							
-					<tr><td><input type="submit" v-on:click="aProduct" value="Login"></td></tr>
-				</table>
-			</form>
+    	<div class="row" style="margin-top:10%">
+    		<div class="col s12 m4 offset-m4">
+    			<div class="card">
+    				<div class="card-action teal darken-2 white-text">
+    					<h3>Login</h3>
+    				</div>
+    				
+    				<div class="card-content" class="grey darken-4">
+    					<div class="form-field">
+	    					<label for="username"><b>Username</b></label>
+	    					<input type="text" name="username" v-model="username"
+	    					class="white-text">
+    					</div><br>
+    					
+    					<div class="form-field">
+	    					<label for="password"><b>Password</b></label>
+	    					<input type="password" name="password" v-model="password"
+	    					class="white-text">
+    					</div><br>
+    					
+    					<div class="form-field">
+	    					<button class="btn-large waves-effect waves-dark"
+	    					style="width:100%"
+	    					@click="aProduct">
+	    						Login
+	    					</button>
+    					</div><br>
+    				</div>
+    			</div>
+    		</div>
     	</div>		  
     	`,
     mounted () {
@@ -46,32 +68,44 @@ Vue.component("login", {
 				.post('rest/login', {username:this.username, password:this.password})
 				.then(response => {
 					let profil = document.getElementsByName("pom")[0];
-					let p  =profil.getElementsByTagName("button")[0];
-					let p1  =profil.getElementsByTagName("button")[1];
-					let p2  =profil.getElementsByTagName("button")[2];
+					//console.log(profil.firstElementChild.firstElementChild);
+					let headerDiv = profil.firstElementChild;
 					
-					let manFacilityBtn = profil.getElementsByTagName("button")[4];
-					let trainerInfoBtn = profil.getElementsByTagName("button")[5];
+					const nodes = headerDiv.childNodes;
+					let list = nodes[2];
+					let listElements = list.childNodes;
+					console.log(listElements)
+					
+					//let p  =profil.getElementsByTagName("button")[0];
+					//let p1  =profil.getElementsByTagName("button")[1];
+					//let p2  =profil.getElementsByTagName("button")[2];
+					let dodavanjeOsoblja = listElements[0].firstElementChild;
+					let prikazKorisnika = listElements[2].firstElementChild;
+					
+					//let manFacilityBtn = profil.getElementsByTagName("button")[4];
+					//let trainerInfoBtn = profil.getElementsByTagName("button")[5];
+					let manFacilityInfo = listElements[14].firstElementChild;
+					let trainerInfoInfo = listElements[16].firstElementChild;
 					
 					axios.get('rest/currentUser').then(response=> {
 						this.user = response.data
 						console.log(this.user);
 						if(this.user.role == "Administrator"){
-							p.hidden=false;
-							p1.hidden=false;
-							console.log(p2)
+							dodavanjeOsoblja.hidden=false;
+							prikazKorisnika.hidden=false;
+							//console.log(p2)
 						}
 						else if (this.user.role == "Manager") {
-							console.log(manFacilityBtn);
-							manFacilityBtn.hidden = false;	
+							console.log(manFacilityInfo);
+							manFacilityInfo.hidden = false;	
 						}
 						else if (this.user.role == "Trainer") {
-							console.log(trainerInfoBtn)
-							trainerInfoBtn.hidden = false;
+							console.log(trainerInfoInfo)
+							trainerInfoInfo.hidden = false;
 						}
 					})	
-					console.log(p)
-					p2.hidden =false;
+					//console.log(p)
+					//p2.hidden =false;
 					router.push(`/`)
 				})
 				.catch(response => {

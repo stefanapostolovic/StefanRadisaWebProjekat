@@ -16,49 +16,51 @@ Vue.component("managerInfo", {
 	
 		template: `
 			<div class="center">
-				<h3>{{facility.name}}</h3>
+				<h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">{{facility.name}}</h3>
 				
 				<table>
-				<tr>
-					<th>Logo</th>
-					<th>Name</th>
-					<th>Type</th>
-					<th>Location</th>
-					<th>Rating</th>
-					<th>Status</th>
-				</tr>
-				<tr>
-					<td width="100%" height="100%"><img alt="fato" v-bind:src="facility.image" width="100px" height="100px"></td>
-					<td class="kolona">
-						<p style="width:150px;height=150px">
-							{{facility.name}}
-						</p>
-					</td>
-					<td class="kolona">
-						{{facility.objectType}}
-					</td>
-					<td>
-						<p style="width:150px;height=150px">
-							{{facility.location.address.street+" "+facility.location.address.number}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{facility.location.address.city+"  "+facility.location.address.zipCode}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{facility.location.longitude+",    "+ facility.location.latitude}}
-						</p>
-					</td>
-					<td>
-						<p style="width:150px;height=150px">{{facility.averageRating}}</p>
-					</td>
-					<td v-if="facility.status">Open</td>
-					<td v-else="facility.status">Closed</td>
-				</tr>
-	    	</table>    
+					<tr class="tableRowBorder">
+						<th>Logo</th>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Location</th>
+						<th>Rating</th>
+						<th>Status</th>
+					</tr>
+					<tr class="tableRowBorder">
+						<td>
+							<img alt="fato" v-bind:src="facility.image" width="100px" height="100px">
+						</td>
+						<td class="kolona">
+							<p style="width:150px;height=150px">
+								{{facility.name}}
+							</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">{{facility.objectType}}</p>	
+						</td>
+						<td>
+							<p style="width:150px;height=150px">
+								{{facility.location.address.street+" "+facility.location.address.number}}
+							</p>
+							<p style="width:150px;height=150px">
+								{{facility.location.address.city+"  "+facility.location.address.zipCode}}
+							</p>
+							<p style="width:150px;height=150px">
+								{{facility.location.longitude+",    "+ facility.location.latitude}}
+							</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">{{facility.averageRating}}</p>
+						</td>
+						<td v-if="facility.status">Open</td>
+						<td v-else="facility.status">Closed</td>
+					</tr>
+		    	</table>    
 	
-			<h3 style="margin-top:3cm; margin-bottom:1cm">Training list:</h3>
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training list:</h3>
 			<table>
-				<tr>
+				<tr class="tableRowBorder">
 					<th>
 						Icon
 					</th>
@@ -78,8 +80,8 @@ Vue.component("managerInfo", {
 						Trainer
 					</th>
 				</tr>
-				<tr v-for="(p, index) in trainings" @click="changeTraining(p)">
-					<td width="100%" height="100%"><img alt="fato" 
+				<tr v-for="(p, index) in trainings" @click="changeTraining(p)" class="tableRowBorder">
+					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
@@ -113,15 +115,23 @@ Vue.component("managerInfo", {
 					</td>
 				</tr>
 		    </table>
-		    <h3 style="margin-top:2cm; margin-bottom:1cm;">Trainer list</h3>
+		    <p style="margin-top:2cm; margin-bottom:3cm;">
+			    
+			    	<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+		    		  @click="createTraining"
+		    		  style="margin-right: 0; margin-left:auto; display:block;">
+		    		  	<i class="material-icons">add</i>
+		    		</a>
+			    </p>
+		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Trainer list</h3>
 		    <table>
-		    	<tr>	
+		    	<tr class="tableRowBorder">	
 		    		<th>Ime</th>
 		    		<th>Prezime</th>
 		    		<th>Pol</th>
 		    		<th>Datum rodjenja</th>
 		    	</tr>
-		    	<tr v-for="(p, index) in trainers">
+		    	<tr v-for="(p, index) in trainers" class="tableRowBorder">
 		    		<td>
 		    			<p class="tableRow">{{p.name}}</p>
 		    		</td>
@@ -136,9 +146,9 @@ Vue.component("managerInfo", {
 		    		</td>
 		    	</tr>
 		    </table>
-		    <h3 style="margin-top:2cm; margin-bottom:1cm;">Customer list</h3>
+		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Customer list</h3>
 		    <table>
-		    	<tr>	
+		    	<tr class="tableRowBorder">	
 		    		<th>Ime</th>
 		    		<th>Prezime</th>
 		    		<th>Pol</th>
@@ -147,10 +157,6 @@ Vue.component("managerInfo", {
 		    		<th>Tip kupca</th>
 		    	</tr>
 		    </table>
-			    <p style="margin-top:2cm; margin-bottom:3cm;">
-			    	<input type="button" value="Create new training" style="float:right;"
-					@click="createTraining"/>
-			    </p>
 			</div>
 		`,
 		
