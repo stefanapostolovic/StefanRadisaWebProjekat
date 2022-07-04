@@ -83,6 +83,22 @@ input, select, textarea{
 	border-bottom: thin solid;
 }
 
+.tableRowBorderBoth {
+	border-top: thin solid;
+	border-bottom: thin solid;
+}
 
+.navBarText {
+	font-size: large;
+}
 
+.displaySelect {
+	display: block;
+}
 
+.shrink{
+-webkit-transform:scale(0.9);
+-moz-transform:scale(0.9);
+-ms-transform:scale(0.9);
+transform:scale(0.9);
+}

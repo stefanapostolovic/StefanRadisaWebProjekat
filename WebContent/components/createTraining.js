@@ -27,10 +27,11 @@ Vue.component("createTraining", {
 		}
 	},
 		template:`
-			<div>
-				<h1>Create a new training</h1>
-				<p style="margin-top:2cm; margin-bottom:1cm">
-					To add a personal or group training, in the field "Type" type "personal" or "group".
+			<div class="container">
+				<h1 style="margin-top:7%; margin-bottom:7%">Create a new training</h1>
+				<p style="margin-top:5%; margin-bottom:5%; color: #00bfa5;">
+					To add a personal or group training, in the field "Type" type
+					 <b>"personal" </b>or<b>" group"</b> .
 				</p>
 				<form enctype="multipart/form-data">
 					<table>
@@ -67,7 +68,8 @@ Vue.component("createTraining", {
 							<td>Trainer</td>
 							<td>
 								<select name="trainers" id="trainers" v-model="trainer"
-								:disabled="isPersonalOrGroup()">
+								:disabled="isPersonalOrGroup()"
+								class="displaySelect grey darken-4">
 									<option v-for="(p, index) in trainers"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
@@ -77,8 +79,11 @@ Vue.component("createTraining", {
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input type="submit" @click.prevent="confirmCreate"
-								value="confirm">
+								<button class="btn" @click.prevent="confirmCreate">
+									Confirm
+								</button>
+								<input type="reset" value="Reset" class="btn">
+								<td></td>
 							</td>
 						</tr>
 					</table>

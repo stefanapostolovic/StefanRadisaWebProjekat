@@ -16,24 +16,67 @@ Vue.component("users", {
 	    }
 	},
 	    template: ` 
-    	<div>
-    		<h1>Prikaz korisnika</h1>
+    	<div class="row" width=100%>
+    		<h1 style="margin-top:4%">Prikaz korisnika</h1>
     		
     						<!--SEARCH-->
-    		<p style="margin-bottom:1cm; margin-top:1cm"/>
-    			<input type="text" v-model="srchname" placeholder="search by name"/>
-    			<input type="text" v-model="srchsurname" placeholder="search by surname"/>
-    			<input type="text" v-model="srchusername" placeholder="search by username"/>
-    			<input type="button" @click="multiSearch" value="search"/>
-    		</p>
     		
-    		<table border="1">				<!--SORT && FILTER-->
-    			<tr>
-    				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
-    				<td><input type="button" @click="changeSort('Surname')" value="sort"/></td>
-    				<td><input type="button" @click="changeSort('Username')" value="sort"/></td>
-    				<th rowspan="2" bgcolor="lightgrey">Pol</th>
-    				<td><input type="button" @click="changeSort('Points')" value="sort"/></td>
+    		<div class="col s3" style="margin-top:7%; margin-left:7%">
+				<div class="row">
+				    <div class="col s12 m6">
+				      <div class="card teal darken-2">
+				        <div class="card-content white-text">
+				          <span class="card-title">Search</span>
+				          <p>
+							<input type="text" v-model="srchname" placeholder="search by name"
+							class="white-text"/>
+				          </p>
+				          <p>
+							<input type="text" v-model="srchsurname" placeholder="search by surname"
+							class="white-text"/>
+				          </p>
+				          <p>
+							<input type="text" v-model="srchusername" placeholder="search by username"
+							class="white-text"/>
+				          </p>
+				        </div>
+				        <div class="card-action">
+				          <a @click="multiSearch">search</a>
+				        </div>
+				      </div>
+				    </div>
+		  		</div>
+    		</div>
+    		
+    		<div class="col s6" style="text-align: center; margin-top:3%;">
+    		
+    			<table border="1">				<!--SORT && FILTER-->
+    			<tr class="tableRowBorder">
+    				<td>
+    					<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Name')">
+	  						<i class="material-icons">arrow_drop_down</i>
+	  					</a>
+    				</td>
+    				<td>
+    					<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Surname')">
+	  						<i class="material-icons">arrow_drop_down</i>
+	  					</a>
+    				</td>
+    				<td>
+    					<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Username')">
+	  						<i class="material-icons">arrow_drop_down</i>
+	  					</a>
+    				</td>
+    				<td></td>
+    				<td>
+    					<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Points')">
+	  						<i class="material-icons">arrow_drop_down</i>
+	  					</a>
+    				</td>
     				<td>
     					<input type="text" v-model="filterrole" placeholder=
     					"filter role"/>
@@ -43,16 +86,17 @@ Vue.component("users", {
     					"filter customer type"/>
     				</td>
     			</tr>
-	    		<tr bgcolor="lightgrey">
+	    		<tr class="tableRowBorder">
 	    			<th>Ime</th>
 	    			<th>Prezime</th>
 					<th>Korisnicko ime</th>	
+					<th>Pol</th>
 					<th>Poeni</th>
 					<th>Uloga</th>
 					<th>Tip kupca</th>
 				</tr>
 	    			
-	    		<tr v-for="(p, index) in filteredUsers">
+	    		<tr v-for="(p, index) in filteredUsers" class="tableRowBorder">
 	    			<td>
 	    				<p style="width:150px;height=150px">
 	    					{{p.name}}
@@ -90,6 +134,7 @@ Vue.component("users", {
 					</td>
 				</tr>
 	    	</table>
+    		</div>
    	</div>		  
     	`,
     mounted () {

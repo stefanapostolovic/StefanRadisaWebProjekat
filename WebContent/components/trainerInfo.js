@@ -8,8 +8,7 @@ Vue.component("trainerInfo", {
 	},
 	
 		template: `
-			<div class="container">
-				<br></br>
+			<div class="container shrink" style="margin-top:-3%">
     			<h1>Training schedule</h1>
     			<br></br>
 				

@@ -53,143 +53,145 @@ Vue.component("createFacility", {
 		}
 	},
 		template: `
-			<div>
-				<h1>Create a new facility</h1>
-				<form enctype="multipart/form-data">
-					<table>
-						<tr>
-							<td>
-								Icon
-							</td>
-							<td>
-								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"/>
-							</td>
-						</tr>
-						<tr>
-							<td>Ime</td>
-							<td><input type="text" name="objectname" v-model="objectname"
-								:disabled="showManagerForm" :class="{ invalidField : isFacilityName}">
-							</td>
-						</tr>
-						<tr>
-							<td>Tip objekta</td>
-							<td><input type="text" name="type" v-model="type"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityType}"></td>
-						</tr>
-						<tr>
-							<td colspan="2">Location</td>
-						</tr>
-						<tr>
-							<td>Geografska duzina</td>
-							<td><input type="number" name="longitude" v-model="longitude"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityLong}"></td>
-						</tr>
-						<tr>
-							<td>Geografska sirina</td>
-							<td><input type="number" name="longitude" v-model="latitude"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityLat}"></td>
-						</tr>
-						<tr>
-							<td>Ulica</td>
-							<td><input type="text" name="latitude" v-model="street"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityStreet}"></td>
-						</tr>
-						<tr>
-							<td>Broj</td>
-							<td><input type="text" name="street" v-model="number"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityNum}"></td>
-						</tr>
-						<tr>
-							<td>Grad</td>
-							<td><input type="text" name="number" v-model="city"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityCity}"></td>
-						</tr>
-						<tr>
-							<td>Postanski broj</td>
-							<td><input type="number" name="zipCode" v-model="zipCode"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityZip}"></td>
-						</tr>
-						<tr>
-							<td>Menadzer</td>
-							<td>
-								<input type="button" v-if="this.validManagers.length == 0" 
-								value="Register a new manager"
-								@click="registerNewManager"/>
-								<select name="managers" id="managers" v-else v-model="user"
-								:class="{ invalidField : isFacilityManager}">
-									<option v-for="(p, index) in validManagers"
-									:value="p">
-										{{p.name + ' ' + p.surename}}
-									</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-					<p style="float:left">
-						<input type="button" value="Poslaji" v-if="this.validManagers.length != 0"
-						@click="confirmCreate"/>
-					</p>
-				</form>
+			<div class="shrink">
+				<h1 style="margin-left:15%; margin-top:-1%; margin-bottom:2%">Create a new facility</h1>
 				
-									<!--CREATE MANAGER-->
-				<div v-if="showManagerForm" style="margin-top:3cm">
+				<div class="row">
+					<div class="col s4" style="margin-left:10%;">
+						<form enctype="multipart/form-data" >
+							<table>
+								<tr>
+									<td>
+										Icon
+									</td>
+									<td>
+										<input type="file" name="file" @change="onFileSelected"
+										:class="{ invalidField : isTrainingFile}"/>
+									</td>
+								</tr>
+								<tr>
+									<td>Ime</td>
+									<td><input type="text" name="objectname" v-model="objectname"
+										:class="{ invalidField : isFacilityName}">
+									</td>
+								</tr>
+								<tr>
+									<td>Tip objekta</td>
+									<td><input type="text" name="type" v-model="type"
+									:class="{ invalidField : isFacilityType}"></td>
+								</tr>
+								<tr class="tableRowBorder">
+									<td colspan="2">Location</td>
+								</tr>
+								<tr>
+									<td>Geografska duzina</td>
+									<td><input type="number" name="longitude" v-model="longitude"
+										:class="{ invalidField : isFacilityLong}"></td>
+								</tr>
+								<tr>
+									<td>Geografska sirina</td>
+									<td><input type="number" name="longitude" v-model="latitude"
+										:class="{ invalidField : isFacilityLat}"></td>
+								</tr>
+								<tr>
+									<td>Ulica</td>
+									<td><input type="text" name="latitude" v-model="street"
+										:class="{ invalidField : isFacilityStreet}"></td>
+								</tr>
+								<tr>
+									<td>Broj</td>
+									<td><input type="text" name="street" v-model="number"
+										:class="{ invalidField : isFacilityNum}"></td>
+								</tr>
+								<tr>
+									<td>Grad</td>
+									<td><input type="text" name="number" v-model="city"
+										:class="{ invalidField : isFacilityCity}"></td>
+								</tr>
+								<tr>
+									<td>Postanski broj</td>
+									<td><input type="number" name="zipCode" v-model="zipCode"
+										:class="{ invalidField : isFacilityZip}"></td>
+								</tr>
+								<tr>
+									<td>Menadzer</td>
+									<td>
+										<input type="button" v-if="this.validManagers.length == 0" 
+										value="Register a new manager" class="btn"
+										@click="registerNewManager"/>
+										<select name="managers" id="managers" v-else v-model="user"
+										:class="{ invalidField : isFacilityManager}" style="display: block; background-color:#212121">
+											<option v-for="(p, index) in validManagers"
+											:value="p">
+												{{p.name + ' ' + p.surename}}
+											</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+							<p style="float:left">
+								<button class="btn" v-if="this.validManagers.length != 0"
+								@click="confirmCreate">Confirm</button>
+							</p>
+						</form>
+					</div>	
+					<div class="col s4" style="text-align: center;">
+						<!--CREATE MANAGER-->
+				<div v-if="showManagerForm" style="margin-left:35%">
 					<form>
-					<table>
-						<tr>
-							<td>Korisnicko ime:</td>
-							<td><input id="username" v-model = "username"  type = "text" name = "username"
-							:class="{ invalidField : isManagerUsername}">
-							</td>
-						</tr>
-						<tr>
-							<td>Lozinka:</td>
-							<td><input type="password" v-model = "password"  name="password"
-							:class="{ invalidField : isManagerPass}"></td>
-					
-						</tr>
-						<tr>
-							<td>Ime:</td>
-							<td><input id="ime" v-model = "name"  type = "text" name = "name"
-							:class="{ invalidField : isManagerName}"></td>	
-						</tr>
-						<tr>
-							<td>Prezime:</td>
-							<td><input type="text" v-model = "surename"  name="surename"
-							:class="{ invalidField : isManagerSurname}"></td>
-						</tr>
-						<tr>
-							<td>Pol:</td>
-							<td>
-								<select name="pol" id="pol" v-model = "gender" 
-								:class="{ invalidField : isManagerGender}">
-					 				  <option value="Male">Musko</option>
-									  <option value="Female">Zensko</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>Datum rodjenja:</td>
-							<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"
-							:class="{ invalidField : isManagerDate}"/></td>
-						</tr>
-						<tr>
-							<td >
-								<input type="submit"  v-on:click = "confirmCreateWithNewManager" value="Poslaji">
-								<input type="reset" value="Ponisti">
-							</td>
-						</tr>
-					</table>
-				</form>
-				</div>
+							<table style="margin-bottom:5%">
+								<tr>
+									<td>Korisnicko ime:</td>
+									<td><input id="username" v-model = "username"  type = "text" name = "username"
+									:class="{ invalidField : isManagerUsername}">
+									</td>
+								</tr>
+								<tr>
+									<td>Lozinka:</td>
+									<td><input type="password" v-model = "password"  name="password"
+									:class="{ invalidField : isManagerPass}"></td>
+							
+								</tr>
+								<tr>
+									<td>Ime:</td>
+									<td><input id="ime" v-model = "name"  type = "text" name = "name"
+									:class="{ invalidField : isManagerName}"></td>	
+								</tr>
+								<tr>
+									<td>Prezime:</td>
+									<td><input type="text" v-model = "surename"  name="surename"
+									:class="{ invalidField : isManagerSurname}"></td>
+								</tr>
+								<tr>
+									<td>Pol:</td>
+									<td>
+										<select name="pol" id="pol" v-model = "gender" 
+										:class="{ invalidField : isManagerGender}"
+										style="display: block; background-color: #212121;">
+							 				  <option value="Male">Musko</option>
+											  <option value="Female">Zensko</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Datum rodjenja:</td>
+									<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"
+									:class="{ invalidField : isManagerDate}"/></td>
+								</tr>
+								<tr>
+									<td >
+										<button  @click="confirmCreateWithNewManager" 
+										class="btn">Poslaji</button>
+										<input type="reset" value="Ponisti" class="btn">
+										<td></td>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>				
 			</div>
+		</div>
 		`,
 	
 	mounted() {

@@ -12,10 +12,11 @@ Vue.component("registracija", {
 		    }
 	},
 	template: ` 
-<div class="container" style="margin-top:10%">
+<div class="container" style="margin-top:5%">
 	<header></header>
 	<form>
-		<table>
+		<h1>Register</h1>
+		<table style="margin-top:6%">
 			
 		<tr>
 			<td>Korisnicko ime:</td>
@@ -39,7 +40,7 @@ Vue.component("registracija", {
 		<tr>
 			<td>Pol:</td>
 			<td><select name="pol" id="pol" v-model = "gender" 
-			style="display:block;" class="grey darken-4">
+			class="grey darken-4 displaySelect">
 	 				  <option value="Male">Musko</option>
 					  <option value="Female">Zensko</option>
 				</select>

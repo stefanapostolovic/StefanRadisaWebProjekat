@@ -34,16 +34,20 @@ Vue.component("facilities", {
 					        <div class="card-content white-text">
 					          <span class="card-title">Search</span>
 					          <p>
-								<input type="text" v-model="srchname" placeholder="search by name"/>
+								<input type="text" v-model="srchname" placeholder="search by name"
+								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchtype" placeholder="search by type"/>
+								<input type="text" v-model="srchtype" placeholder="search by type"
+								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchloc" placeholder="search by location"/>
+								<input type="text" v-model="srchloc" placeholder="search by location"
+								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchrat" placeholder="search by rating"/>
+								<input type="text" v-model="srchrat" placeholder="search by rating"
+								class="white-text"/>
 					          </p>
 					        </div>
 					        <div class="card-action">
@@ -86,7 +90,7 @@ Vue.component("facilities", {
 	    				<th></th>
 	    				
 	    				<a class="waves-effect waves-light btn-small teal darken-2" @click="filterOpenFacilities">
-	    					<i class="material-icons left">business</i>show opened
+	    					<i class="material-icons left">business</i>Opened
 	    				</a>
 	    			</tr>
 	    			<tr style="border-top: thin solid; 

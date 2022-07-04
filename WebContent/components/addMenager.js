@@ -41,7 +41,8 @@ Vue.component("addMenager", {
 	</tr>
 	<tr>
 		<td>Pol:</td>
-		<td><select name="pol" id="pol" v-model = "gender" >
+		<td><select name="pol" id="pol" v-model = "gender" 
+		class="grey darken-4 displaySelect">
  				  <option value="Male">Musko</option>
 				  <option value="Female">Zensko</option>
 			</select></td>
@@ -52,7 +53,8 @@ Vue.component("addMenager", {
 	</tr>
 	<tr>
 		<td>Tip radnika:</td>
-		<td><select name="tipRadnika" id="tipRadnika" v-model = "user.role" >
+		<td><select name="tipRadnika" id="tipRadnika" v-model = "user.role" 
+		class="grey darken-4 displaySelect">
  				  <option value="Manager" selected>Menadžer</option>
 				  <option value="Trainer">Trener</option>
 			</select></td>

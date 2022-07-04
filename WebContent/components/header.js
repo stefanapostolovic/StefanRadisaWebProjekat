@@ -17,31 +17,31 @@ Vue.component("zaglavlje", {
     			</a>
     			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
     				<li><a @click="dodavanjeOsoblja" id="treneri" hidden>
-    					Dodavanje osoblja
+    					<font size="+2">Dodavanje osoblja &nbsp;&nbsp;</font>
     				</a></li>
     				<li><a @click="prikazKorisnika" id="korisnici" hidden>
-    					Pregled korisnika</a>
+    					<font size="+2">Pregled korisnika &nbsp;&nbsp;</font></a>
     				</li>
     				<li><a v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>
-    					Prikaz profila
+    					<font size="+2">Prikaz profila &nbsp;&nbsp;</font>
     				</a></li>
     				<li><a v-if="showLogReg" v-on:click="aProduct">
-    					Prijava &nbsp;&nbsp;
+    					<font size="+2">Prijava &nbsp;&nbsp;</font> &nbsp;&nbsp;
     				</a></li>
     				<li><a v-if="showLogReg" v-on:click="registracija">
-    					Registracija &nbsp;&nbsp;
+    					<font size="+2">Registracija &nbsp;&nbsp;</font> &nbsp;&nbsp;
     				</a></li>
     				<li><a v-if="showLogOut" @click="logout">
-    					Logout
+    					<font size="+2">Logout &nbsp;&nbsp</font>
     				</a></li>
     				<li><a v-if="showBackBtn" @click="back">
-    					Back
+    					<font size="+2">Back &nbsp;&nbsp;</font>
     				</a></li>
     				<li><a @click="viewManagerFacilityInfo" hidden name="manInfo">
-    					View facility
+    					<font size="+2">View facility</font>
     				</a></li>
     				<li><a @click="viewTrainerInfo" hidden name="traInfo">
-    					View info
+    					<font size="+2">View info</font>
     				</a></li>
     			</ul>                                      
     	</div>

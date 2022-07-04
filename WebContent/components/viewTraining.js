@@ -27,11 +27,11 @@ Vue.component("viewTraining", {
 	},
 	
 	template: `
-		<div>
-			<h1>Change training</h1>
+		<div class="container">
+			<h1 style="margin-top:7%; margin-bottom:7%">Change training</h1>
 			<form enctype="multipart/form-data">
 					<table>
-						<tr>
+						<tr class="tableRowBorderBoth">
 							<td>
 								<img alt="fato" v-bind:src="training.image" width="100px" height="100px">
 							</td>
@@ -69,7 +69,8 @@ Vue.component("viewTraining", {
 						<tr>
 							<td>Trainer</td>
 							<td>
-								<select name="trainers" id="trainers" v-model="training.trainer">
+								<select name="trainers" id="trainers" v-model="training.trainer"
+								class="displaySelect grey darken-4">
 									<option v-for="(p, index) in trainers"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
@@ -79,8 +80,11 @@ Vue.component("viewTraining", {
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input type="submit" @click.prevent="confirmUpdate"
-								value="confirm">
+								<button class="btn" @click.prevent="confirmUpdate">
+									Confirm
+								</button>
+								<input type="reset" value="Reset" class="btn">
+								<td></td>
 							</td>
 						</tr>
 					</table>
