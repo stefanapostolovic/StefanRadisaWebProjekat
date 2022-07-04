@@ -16,33 +16,44 @@ Vue.component("zaglavlje", {
     				  &nbsp;&nbsp;Fit Corp<i class="material-icons large">&nbsp;&nbsp;&nbsp;spa</i>
     			</a>
     			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
+    			
     				<li><a @click="dodavanjeOsoblja" id="treneri" hidden>
     					<font size="+2">Dodavanje osoblja &nbsp;&nbsp;</font>
-    				</a></li>
+    				</a>
+    				</li>
+    				
     				<li><a @click="prikazKorisnika" id="korisnici" hidden>
     					<font size="+2">Pregled korisnika &nbsp;&nbsp;</font></a>
     				</li>
+    				
     				<li><a v-if="showProfile" v-on:click="prikaz" name="Profil" hidden>
     					<font size="+2">Prikaz profila &nbsp;&nbsp;</font>
     				</a></li>
+    				
     				<li><a v-if="showLogReg" v-on:click="aProduct">
     					<font size="+2">Prijava &nbsp;&nbsp;</font> &nbsp;&nbsp;
     				</a></li>
+    				
     				<li><a v-if="showLogReg" v-on:click="registracija">
     					<font size="+2">Registracija &nbsp;&nbsp;</font> &nbsp;&nbsp;
     				</a></li>
+    				
     				<li><a v-if="showLogOut" @click="logout">
     					<font size="+2">Logout &nbsp;&nbsp</font>
     				</a></li>
+    				
     				<li><a v-if="showBackBtn" @click="back">
     					<font size="+2">Back &nbsp;&nbsp;</font>
     				</a></li>
+    				
     				<li><a @click="viewManagerFacilityInfo" hidden name="manInfo">
     					<font size="+2">View facility</font>
     				</a></li>
+    				
     				<li><a @click="viewTrainerInfo" hidden name="traInfo">
     					<font size="+2">View info</font>
     				</a></li>
+    				
     			</ul>                                      
     	</div>
     	</nav>		  
@@ -104,8 +115,8 @@ Vue.component("zaglavlje", {
 					let p  =profil.getElementsByTagName("button")[0];
 					let p1  =profil.getElementsByTagName("button")[1];
 					
-					p.hidden=true;
-					p1.hidden=true;
+					//p.hidden=true;
+					//p1.hidden=true;
 					
 					router.push(`/`);
 				})

@@ -4,6 +4,8 @@ Vue.component("trainerInfo", {
 			personalTrainings: [],
 			groupTrainings: [],
 			trainer: {},
+			
+			isCancel: false
 		}
 	},
 	
@@ -26,7 +28,7 @@ Vue.component("trainerInfo", {
 						<th></th>
 					</tr>
 					<tr v-for="(p, index) in personalTrainings" class="tableRowBorder"
-					:style="{background: p.isCanceled == true ? 'red' : 'grey darken-4'}">
+					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
 						<td>
 							<img alt="fato" 
 							:src="p.image" width="100px" height="100px">
@@ -60,6 +62,10 @@ Vue.component("trainerInfo", {
 				    		  style="margin-right: 0; margin-left:auto; display:block;">
 				    		  <i class="material-icons">cancel</i>
 		    		  		</a>
+						</td>
+						<td class="red-text">
+							<span v-if="p.isCanceled">
+							Canceled</span>
 						</td>
 					</tr>
 				</table>
@@ -142,6 +148,7 @@ Vue.component("trainerInfo", {
 		
 		methods: {
 			cancelTraining(training) {
+				this.isCancel = !training.isCanceled;
 				training.isCanceled = !training.isCanceled;
 				axios.put('rest/trainings/updateTraining', training);
 			}

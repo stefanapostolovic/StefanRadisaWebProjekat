@@ -65,62 +65,99 @@ Vue.component("createFacility", {
 										Icon
 									</td>
 									<td>
-										<input type="file" name="file" @change="onFileSelected"
-										:class="{ invalidField : isTrainingFile}"/>
+										<span v-if="isTrainingFile" class="red-text">
+											Please upload a file
+										</span>
+										<input type="file" name="file" @change="onFileSelected"/>
 									</td>
 								</tr>
 								<tr>
 									<td>Ime</td>
-									<td><input type="text" name="objectname" v-model="objectname"
-										:class="{ invalidField : isFacilityName}">
+									<td>	
+										<span v-if="isFacilityName" class="red-text">
+											Please enter name
+										</span>
+										<input type="text" name="objectname" v-model="objectname">
 									</td>
 								</tr>
 								<tr>
 									<td>Tip objekta</td>
-									<td><input type="text" name="type" v-model="type"
-									:class="{ invalidField : isFacilityType}"></td>
+									<td>
+										<span v-if="isFacilityType" class="red-text">
+											Please facility type
+										</span>
+										<input type="text" name="type" v-model="type">
+									</td>
 								</tr>
 								<tr class="tableRowBorder">
 									<td colspan="2">Location</td>
 								</tr>
 								<tr>
 									<td>Geografska duzina</td>
-									<td><input type="number" name="longitude" v-model="longitude"
-										:class="{ invalidField : isFacilityLong}"></td>
+									<td>
+										<span v-if="isFacilityLong" class="red-text">
+											Please enter longitude
+										</span>
+										<input type="number" name="longitude" v-model="longitude">
+									</td>
 								</tr>
 								<tr>
 									<td>Geografska sirina</td>
-									<td><input type="number" name="longitude" v-model="latitude"
-										:class="{ invalidField : isFacilityLat}"></td>
+									<td>
+										<span v-if="isFacilityLat" class="red-text">
+											Please enter latitude
+										</span>
+										<input type="number" name="longitude" v-model="latitude">
+									</td>
 								</tr>
 								<tr>
 									<td>Ulica</td>
-									<td><input type="text" name="latitude" v-model="street"
-										:class="{ invalidField : isFacilityStreet}"></td>
+									<td>
+										<span v-if="isFacilityStreet" class="red-text">
+											Please enter street name
+										</span>
+										<input type="text" name="latitude" v-model="street">
+									</td>
 								</tr>
 								<tr>
 									<td>Broj</td>
-									<td><input type="text" name="street" v-model="number"
-										:class="{ invalidField : isFacilityNum}"></td>
+									<td>
+										<span v-if="isFacilityNum" class="red-text">
+											Please enter a number
+										</span>
+										<input type="text" name="street" v-model="number">
+									</td>
 								</tr>
 								<tr>
 									<td>Grad</td>
-									<td><input type="text" name="number" v-model="city"
-										:class="{ invalidField : isFacilityCity}"></td>
+									<td>
+										<span v-if="isFacilityCity" class="red-text">
+											Please the city name
+										</span>
+										<input type="text" name="number" v-model="city">
+									</td>
 								</tr>
 								<tr>
 									<td>Postanski broj</td>
-									<td><input type="number" name="zipCode" v-model="zipCode"
-										:class="{ invalidField : isFacilityZip}"></td>
+									<td>
+										<span v-if="isFacilityZip" class="red-text">
+											Please the the zip code
+										</span>
+										<input type="number" name="zipCode" v-model="zipCode">
+									</td>
 								</tr>
 								<tr>
 									<td>Menadzer</td>
 									<td>
+										<span v-if="isFacilityManager" class="red-text">
+											Please select a manager
+										</span>
+										
 										<input type="button" v-if="this.validManagers.length == 0" 
 										value="Register a new manager" class="btn"
 										@click="registerNewManager"/>
 										<select name="managers" id="managers" v-else v-model="user"
-										:class="{ invalidField : isFacilityManager}" style="display: block; background-color:#212121">
+										style="display: block; background-color:#212121">
 											<option v-for="(p, index) in validManagers"
 											:value="p">
 												{{p.name + ' ' + p.surename}}
@@ -142,31 +179,49 @@ Vue.component("createFacility", {
 							<table style="margin-bottom:5%">
 								<tr>
 									<td>Korisnicko ime:</td>
-									<td><input id="username" v-model = "username"  type = "text" name = "username"
-									:class="{ invalidField : isManagerUsername}">
+									<td>	
+										<span v-if="isManagerUsername" class="red-text">
+											Please enter the username
+										</span>
+										<input id="username" v-model = "username"  
+										type = "text" name = "username">
 									</td>
 								</tr>
 								<tr>
 									<td>Lozinka:</td>
-									<td><input type="password" v-model = "password"  name="password"
-									:class="{ invalidField : isManagerPass}"></td>
+									<td>
+										<span v-if="isManagerPass" class="red-text">
+											Please enter the password
+										</span>
+										<input type="password" v-model = "password"  name="password">
+								</td>
 							
 								</tr>
 								<tr>
 									<td>Ime:</td>
-									<td><input id="ime" v-model = "name"  type = "text" name = "name"
-									:class="{ invalidField : isManagerName}"></td>	
+									<td>
+										<span v-if="isManagerName" class="red-text">
+											Please enter the name
+										</span>
+										<input id="ime" v-model = "name"  type = "text" name = "name">
+								</td>	
 								</tr>
 								<tr>
 									<td>Prezime:</td>
-									<td><input type="text" v-model = "surename"  name="surename"
-									:class="{ invalidField : isManagerSurname}"></td>
+									<td>
+										<span v-if="isManagerSurname" class="red-text">
+											Please enter the surname
+										</span>
+										<input type="text" v-model = "surename"  name="surename">
+								</td>
 								</tr>
 								<tr>
 									<td>Pol:</td>
 									<td>
+										<span v-if="isManagerGender" class="red-text">
+											Please enter the gender
+										</span>
 										<select name="pol" id="pol" v-model = "gender" 
-										:class="{ invalidField : isManagerGender}"
 										style="display: block; background-color: #212121;">
 							 				  <option value="Male">Musko</option>
 											  <option value="Female">Zensko</option>
@@ -175,8 +230,13 @@ Vue.component("createFacility", {
 								</tr>
 								<tr>
 									<td>Datum rodjenja:</td>
-									<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"
-									:class="{ invalidField : isManagerDate}"/></td>
+									<td>
+										<span v-if="isManagerDate" class="red-text">
+											Please enter the date
+										</span>
+										<input type="date" id="rodjenje" name="rodjenje" 
+										v-model = "dateOfBirth"/>
+								</td>
 								</tr>
 								<tr>
 									<td >

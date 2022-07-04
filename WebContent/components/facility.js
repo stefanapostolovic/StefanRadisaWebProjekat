@@ -28,7 +28,7 @@ Vue.component("facility", {
 					<th>Status</th>
 				</tr>
 				<tr class="tableRowBorder">
-					<td width="100%" height="100%"><img alt="fato" v-bind:src="facility.image" 
+					<td><img alt="fato" v-bind:src="facility.image" 
 					width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
@@ -36,7 +36,10 @@ Vue.component("facility", {
 						</p>
 					</td>
 					<td class="kolona">
-						{{facility.objectType}}
+						<p style="width:150px;height=150px">
+							{{facility.objectType}}
+						</p>
+						
 					</td>
 					<td>
 						<p style="width:150px;height=150px">
@@ -80,7 +83,7 @@ Vue.component("facility", {
 					</th>
 				</tr>
 				<tr v-for="(p, index) in trainings" class="tableRowBorder">
-					<td width="100%" height="100%"><img alt="fato" 
+					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">

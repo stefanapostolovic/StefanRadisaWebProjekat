@@ -4,7 +4,11 @@ Vue.component("login", {
 	     user: {},
 	     username : "",
 	     password : "",
-		 image:""
+		 image:"",
+		 
+		 isUsername: false,
+		 isPassword: false,
+		 returnFlag: -1
 	    }
 	},
 	    template: ` 
@@ -15,15 +19,21 @@ Vue.component("login", {
     					<h3>Login</h3>
     				</div>
     				
-    				<div class="card-content" class="grey darken-4">
+    				<div class="card-content grey darken-4">
     					<div class="form-field">
 	    					<label for="username"><b>Username</b></label>
+	    					<span v-if="isUsername" class="red-text">
+	    						&nbsp;&nbsp;Please enter the username
+	    					</span>
 	    					<input type="text" name="username" v-model="username"
 	    					class="white-text">
     					</div><br>
     					
     					<div class="form-field">
 	    					<label for="password"><b>Password</b></label>
+	    					<span v-if="isPassword" class="red-text">
+	    						&nbsp;&nbsp;Please enter the password
+	    					</span>
 	    					<input type="password" name="password" v-model="password"
 	    					class="white-text">
     					</div><br>
@@ -49,20 +59,38 @@ Vue.component("login", {
 		
 			let ime = document.getElementsByName("username")[0]
 			let sifra = document.getElementsByName("password")[0]
-			ime.style.background = "white"
-			sifra.style.background ="white"
+			this.isUsername = false;
+			this.isPassword = false;
+			//ime.style.background = "white"
+			//sifra.style.background ="white"
 			
 			if(this.username ==="")
 			{
-				ime.style.background = "red"
-				return;
-			}else if(this.password ===""){
-				ime.style.background = "white"
-				sifra.style.background = "red"
+				//ime.style.background = "red"
+				this.isUsername = true;
+				this.returnFlag = 1;
+			}
+			else {
+				this.isUsername = false;
+			}
+			if(this.password ===""){
+				//ime.style.background = "white"
+				//sifra.style.background = "red"
+				this.isPassword = true;
+				this.returnFlag = 1;
+			}
+			else {
+				this.isPassword = false;
+			}
+			if (this.returnFlag == 1) {
+				this.returnFlag = -1;
 				return;
 			}
-			ime.style.background = "white"
-			sifra.style.background ="white"
+			else this.returnFlag = -1;
+			
+			this.isPassword = false;
+			//ime.style.background = "white"
+			//sifra.style.background ="white"
 			
 			axios
 				.post('rest/login', {username:this.username, password:this.password})
@@ -81,6 +109,7 @@ Vue.component("login", {
 					//let p2  =profil.getElementsByTagName("button")[2];
 					let dodavanjeOsoblja = listElements[0].firstElementChild;
 					let prikazKorisnika = listElements[2].firstElementChild;
+					let prikazProfila = listElements[4].firstElementChild;
 					
 					//let manFacilityBtn = profil.getElementsByTagName("button")[4];
 					//let trainerInfoBtn = profil.getElementsByTagName("button")[5];
@@ -90,6 +119,7 @@ Vue.component("login", {
 					axios.get('rest/currentUser').then(response=> {
 						this.user = response.data
 						console.log(this.user);
+						prikazProfila.hidden = false;
 						if(this.user.role == "Administrator"){
 							dodavanjeOsoblja.hidden=false;
 							prikazKorisnika.hidden=false;
@@ -110,7 +140,7 @@ Vue.component("login", {
 				})
 				.catch(response => {
 					toast('Wrong username and/or password!')
-						})	    
+				})	    
 		}
    }
 });

@@ -13,14 +13,16 @@ Vue.component("profil", {
 		    }
 	},
 	template: ` 
-<div style="width:800px; margin:0 auto;">
+<div class="container ">
 	<header></header>
+	<h1 style="margin-bottom:10%; margin-top:5%">Profile</h1>
 	<form>
 	<table>
 		
-	<tr>
+	<tr style=" border-bottom: thin solid; border-top: thin solid;">
 		<td>Korisnicko ime:</td>
-		<td><input disabled id="username" v-model = "user.username"  type = "text" name = "username">
+		<td><input  id="username" v-model = "user.username" class="white-text" disabled
+		type = "text" name = "username">
 		</td>
 	</tr>
 	<tr>
@@ -38,7 +40,8 @@ Vue.component("profil", {
 	</tr>
 	<tr>
 		<td>Pol:</td>
-		<td><select name="pol" id="pol" v-model = "user.gender" >
+		<td><select name="pol" id="pol" v-model = "user.gender" 
+			class="displaySelect grey darken-4">
  				  <option value="Male">Musko</option>
 				  <option value="Female">Zensko</option>
 			</select></td>
@@ -49,7 +52,9 @@ Vue.component("profil", {
 	</tr>
 	<tr>
 		<td >
-		<input type="submit"  v-on:click = "edituser" value="Poslaji">
+			<button class="btn" @click="edituser">
+				Posalji
+	    	</button>
 		</td>
 		<td></td>
 	</tr>	
