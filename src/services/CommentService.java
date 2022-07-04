@@ -54,6 +54,20 @@ public class CommentService {
 		return filteredList;
 	}
 	
+	
+	@POST
+	@Path("/dodavanje")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response create(Comment comment) {
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		Comment newComment = dao.save(comment);
+		if (newComment == null) {
+			return Response.status(400).entity("Komentar vec dodat!").build();
+		}
+		return Response.status(200).build();
+	}
+	
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -89,12 +103,14 @@ public class CommentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Comment> getCommentsForMenager(@PathParam("id") String id) {
 		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
-		List<Comment> facilityList = new ArrayList<Comment>(dao.findForOneObject(id)) ;
+		List<Comment> facilityList = new ArrayList<Comment>();
 		
-		List<Comment> filteredList = facilityList.stream().filter
-				(facility -> !facility.getState().equals("New")).collect(Collectors.toList());
-		
-		return filteredList;
+		for(Comment com : dao.findForOneObject(id)) {
+			if(!com.getState().toString().equals("New")) {
+				facilityList.add(com);
+			}
+		}
+		return facilityList;
 	}
 	
 	@GET

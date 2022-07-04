@@ -95,18 +95,17 @@ public class CommentDAO {
 	public Comment save(Comment newComment) {
 		loadComments(contextPath);		
 		Integer maxId = -1;
-		if(comments !=null) {	
-			for (Comment comment : comments.values()) {
-				int idNum =Integer.parseInt(comment.getId());
-				if (idNum > maxId) {
-					maxId = idNum;
-				}
+		for (Comment comment : comments.values()) {
+			int idNum =Integer.parseInt(comment.getId());
+			if (idNum > maxId) {
+				maxId = idNum;
+			}
 				
-				if(newComment.getSportFacility().getId() == comment.getSportFacility().getId() && newComment.getUser().getUsername() == comment.getUser().getUsername()) {
-					return null;
-				}
+			if(newComment.getSportFacility().getId().equals(comment.getSportFacility().getId()) && newComment.getUser().getUsername().equals(comment.getUser().getUsername())) {
+				return null;
 			}
 		}
+		
 		maxId++;
 		newComment.setId(maxId.toString());
 		comments.put(newComment.getId(), newComment);
