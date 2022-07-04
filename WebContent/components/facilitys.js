@@ -166,6 +166,13 @@ Vue.component("facilities", {
 			this.facilitiesCopy = first_response.data;
 			
 			this.loggedUser = second_response.data;
+			const refresh = localStorage.getItem('test');
+			if (refresh === 'login') {
+				localStorage.removeItem('test');
+				localStorage.setItem('test', 'nemoj');
+				this.$router.go(0);
+			}
+			//this.$router.go();
 		}))
     },
     methods: {

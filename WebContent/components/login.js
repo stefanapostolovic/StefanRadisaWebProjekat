@@ -8,7 +8,8 @@ Vue.component("login", {
 		 
 		 isUsername: false,
 		 isPassword: false,
-		 returnFlag: -1
+		 returnFlag: -1,
+		 
 	    }
 	},
 	    template: ` 
@@ -51,6 +52,10 @@ Vue.component("login", {
     	</div>		  
     	`,
     mounted () {
+		if (this.test == 1) {
+			this.test = 0;
+			router.push('/');
+		}
 		axios.get('rest/svi').then(response =>(this.ed=response.data))
     },
     methods: {
@@ -119,7 +124,7 @@ Vue.component("login", {
 					axios.get('rest/currentUser').then(response=> {
 						this.user = response.data
 						console.log(this.user);
-						prikazProfila.hidden = false;
+						//prikazProfila.hidden = false;
 						if(this.user.role == "Administrator"){
 							dodavanjeOsoblja.hidden=false;
 							prikazKorisnika.hidden=false;
@@ -136,6 +141,10 @@ Vue.component("login", {
 					})	
 					//console.log(p)
 					//p2.hidden =false;
+					//window.location.reload();
+					//router.push(`/`)
+					//this.$router.go(0);
+					localStorage.setItem('test', 'login')
 					router.push(`/`)
 				})
 				.catch(response => {
