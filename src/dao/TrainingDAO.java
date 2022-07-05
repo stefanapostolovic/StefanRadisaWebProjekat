@@ -156,6 +156,7 @@ public class TrainingDAO {
 	public List<Training> getPersonalTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {
+			if (temp.getTrainer().getUsername() == null) continue;
 			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
 					username.toLowerCase().trim()) &&
 					temp.getTrainingType().equals("personal")) {
@@ -194,6 +195,7 @@ public class TrainingDAO {
 	public List<Training> getGroupTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {
+			if (temp.getTrainer().getUsername() == null) continue;
 			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
 					username.toLowerCase().trim()) &&
 					temp.getTrainingType().equals("group")) {
