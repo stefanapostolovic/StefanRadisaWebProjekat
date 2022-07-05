@@ -103,5 +103,7 @@ input, select, textarea{
 transform:scale(0.9);
 }
 
-
+ #map {
+     height: 300px;
+ }
 

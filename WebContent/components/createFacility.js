@@ -49,12 +49,36 @@ Vue.component("createFacility", {
 	        isManagerGender: false,
 	        isFacilityManager: false,
 	        
-	        isTrainingFile: false
+	        isTrainingFile: false,
+	        
+	        test: ''
 		}
 	},
 		template: `
 			<div class="shrink">
-				<h1 style="margin-left:15%; margin-top:-1%; margin-bottom:2%">Create a new facility</h1>
+				
+				<!-- Search input -->
+					<input id="searchInput"
+					class="controls white" type="text" placeholder="Enter a location">
+				
+				<!-- Google map -->
+				<div id="nesto" style="height: 300px; width: 90%; position: absolute;
+				margin-left:10%;"></div>
+				
+				<!-- Display geolocation data -->
+				<ul class="geo-data">
+				    <li class="white-text">Full Address: <span id="location"></span></li>
+				    <li class="white-text">Postal Code: <span id="postal_code"></span></li>
+				    <li class="white-text">Country: <span id="country"></span></li>
+				    <li class="white-text">Latitude: <span id="lat"></span></li>
+				    <li class="white-text">Longitude: <span id="lon"></span></li>
+				</ul>
+				
+				<br></br>
+				<button  @click="fillFormWithMapData" 
+										class="btn">Fill form</button>
+				
+				<h1 style="margin-left:15%; margin-top:30%; margin-bottom:2%">Create a new facility</h1>
 				
 				<div class="row">
 					<div class="col s4" style="margin-left:10%;">
@@ -264,6 +288,33 @@ Vue.component("createFacility", {
 	},
 	
 	methods: {
+		fillFormWithMapData() {
+			console.log(document.getElementById('location').innerHTML);
+			this.longitude = document.getElementById('lon').innerHTML;
+			this.latitude = document.getElementById('lat').innerHTML;
+			
+			let fullAddress = document.getElementById('location').innerHTML;
+			let fullAddressSplit = fullAddress.split(",");
+			
+			if (fullAddressSplit[1].trim().split(" ").length > 1) {
+				this.city = fullAddressSplit[1].trim().split(" ")[0];
+				this.zipCode = fullAddressSplit[1].trim().split(" ")[1];
+			}
+			else {
+				this.city = fullAddressSplit[1];
+			}
+
+			let addressWithoutCityCountry = fullAddressSplit[0];
+			let addressWithoutCityCountrySplit = addressWithoutCityCountry.split(" ");
+			
+			let addrNum = addressWithoutCityCountrySplit.pop();
+			this.number = addrNum;
+			this.street = addressWithoutCityCountrySplit;
+			
+			
+			console.log(fullAddressSplit);
+		},
+		
 		onFileSelected(event) {
 			this.file = event.target.files[0];
 			this.formData = new FormData();
@@ -293,6 +344,7 @@ Vue.component("createFacility", {
 		},
 		
 		fillOutFacility() {
+			
 			if (this.street === '') {
 				this.isFacilityStreet = true;
 				this.canCreateFlag = -1;
