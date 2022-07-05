@@ -56,32 +56,10 @@ Vue.component("createFacility", {
 	},
 		template: `
 			<div class="shrink">
-				
-				<!-- Search input -->
-					<input id="searchInput"
-					class="controls white" type="text" placeholder="Enter a location">
-				
-				<!-- Google map -->
-				<div id="nesto" style="height: 300px; width: 90%; position: absolute;
-				margin-left:10%;"></div>
-				
-				<!-- Display geolocation data -->
-				<ul class="geo-data">
-				    <li class="white-text">Full Address: <span id="location"></span></li>
-				    <li class="white-text">Postal Code: <span id="postal_code"></span></li>
-				    <li class="white-text">Country: <span id="country"></span></li>
-				    <li class="white-text">Latitude: <span id="lat"></span></li>
-				    <li class="white-text">Longitude: <span id="lon"></span></li>
-				</ul>
-				
+				<h1 style="margin-top:-0.5%">Create a new facility</h1>
 				<br></br>
-				<button  @click="fillFormWithMapData" 
-										class="btn">Fill form</button>
-				
-				<h1 style="margin-left:15%; margin-top:30%; margin-bottom:2%">Create a new facility</h1>
-				
 				<div class="row">
-					<div class="col s4" style="margin-left:10%;">
+					<div class="col s4" style="margin-left:5%; margin-right:5%">
 						<form enctype="multipart/form-data" >
 							<table>
 								<tr>
@@ -195,11 +173,11 @@ Vue.component("createFacility", {
 								@click="confirmCreate">Confirm</button>
 							</p>
 						</form>
-					</div>	
-					<div class="col s4" style="text-align: center;">
+						<br></br>
+						<br></br>
 						<!--CREATE MANAGER-->
-				<div v-if="showManagerForm" style="margin-left:35%">
-					<form>
+					<div v-if="showManagerForm" style="margin-left:35%">
+						<form>
 							<table style="margin-bottom:5%">
 								<tr>
 									<td>Korisnicko ime:</td>
@@ -273,7 +251,35 @@ Vue.component("createFacility", {
 							</table>
 						</form>
 					</div>
-				</div>				
+					</div>	
+									<!-- GOOGLE MAPA -->
+									
+					<div class="col s4" style="text-align: center;">
+						<!-- Search input -->
+						<input id="searchInput"
+						class="controls white" type="text" placeholder="Enter a location">
+					
+						<!-- Google map -->
+						<div id="nesto" style="height: 760px; width: 150%; 
+						margin-left:10%;"></div>
+					
+						<br></br>
+						<span>
+							<button @click="showMap" class="btn">Show Map</button>
+							&nbsp;&nbsp;
+							<button  @click="fillFormWithMapData" 
+							class="btn">Fill form</button>
+						</span>
+						
+						<!-- Display geolocation data -->
+						<ul class="geo-data" hidden>
+						    <li class="white-text">Full Address: <span id="location"></span></li>
+						    <li class="white-text">Postal Code: <span id="postal_code"></span></li>
+						    <li class="white-text">Country: <span id="country"></span></li>
+						    <li class="white-text">Latitude: <span id="lat"></span></li>
+						    <li class="white-text">Longitude: <span id="lon"></span></li>
+						</ul>
+					</div>				
 			</div>
 		</div>
 		`,
@@ -288,13 +294,17 @@ Vue.component("createFacility", {
 	},
 	
 	methods: {
+		showMap() {
+			location.reload();
+		},
+		
 		fillFormWithMapData() {
 			console.log(document.getElementById('location').innerHTML);
 			this.longitude = document.getElementById('lon').innerHTML;
 			this.latitude = document.getElementById('lat').innerHTML;
 			
 			let fullAddress = document.getElementById('location').innerHTML;
-			let fullAddressSplit = fullAddress.split(",");
+			/*let fullAddressSplit = fullAddress.split(",");
 			
 			if (fullAddressSplit[1].trim().split(" ").length > 1) {
 				this.city = fullAddressSplit[1].trim().split(" ")[0];
@@ -309,10 +319,13 @@ Vue.component("createFacility", {
 			
 			let addrNum = addressWithoutCityCountrySplit.pop();
 			this.number = addrNum;
-			this.street = addressWithoutCityCountrySplit;
+			this.street = addressWithoutCityCountrySplit;*/
+			//console.log(fullAddressSplit);
 			
-			
-			console.log(fullAddressSplit);
+			this.street = fullAddress;
+			this.number = '-';
+			this.city = '-';
+			this.zipCode = 0;	
 		},
 		
 		onFileSelected(event) {
