@@ -1,6 +1,7 @@
 package services;
 
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,8 +23,9 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import beans.SportFacility;
 import beans.Training;
+import beans.TrainingHistory;
+import beans.User;
 import dao.TrainingDAO;
 
 @Path("/trainings")
@@ -134,6 +136,46 @@ public class TrainingService {
 		Training training = dao.findTraining(trainingId);
 		dao.saveImage(uploadedInputStream, fileDetail.getFileName(), training);
 	}
+	
+	@GET
+	@Path("/getPersonalTrainingsForSelectedTrainer/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> getPersonalTrainingsForSelectedTrainer(@PathParam("username") String username) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getPersonalTrainingsForSelectedTrainer(username);
+	}
+	
+	@GET
+	@Path("/getGroupTrainingsForSelectedTrainer/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> getGroupTrainingsForSelectedTrainer(@PathParam("username") String username) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getGroupTrainingsForSelectedTrainer(username);
+	}
+	
+	/*@GET
+	@Path("/getPersonalTrainingHistoryForSelectedTrainer/{trainer}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getPersonalTrainingHistoryForSelectedTrainer(
+			@PathParam("trainer") User trainer) throws ParseException {
+		
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getPersonalTrainingHistoryForSelectedTrainer(trainer);
+	}
+	
+	@GET
+	@Path("/getGroupTrainingHistoryForSelectedTrainer/{trainer}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getGroupTrainingHistoryForSelectedTrainer(
+			@PathParam("trainer") User trainer) throws ParseException {
+		
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		return dao.getGroupTrainingHistoryForSelectedTrainer(trainer);
+	}*/
 }
 
 

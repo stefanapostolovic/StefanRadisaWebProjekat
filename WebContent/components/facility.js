@@ -17,9 +17,9 @@ Vue.component("facility", {
 	},
 	    template: ` 
     	<div class="center">
-			<h3>{{facility.name}}</h3>
+			<h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">{{facility.name}}</h3>
 			<table>
-				<tr>
+				<tr class="tableRowBorder">
 					<th>Logo</th>
 					<th>Name</th>
 					<th>Type</th>
@@ -27,15 +27,19 @@ Vue.component("facility", {
 					<th>Rating</th>
 					<th>Status</th>
 				</tr>
-				<tr>
-					<td width="100%" height="100%"><img alt="fato" v-bind:src="facility.image" width="100px" height="100px"></td>
+				<tr class="tableRowBorder">
+					<td><img alt="fato" v-bind:src="facility.image" 
+					width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">
 							{{facility.name}}
 						</p>
 					</td>
 					<td class="kolona">
-						{{facility.objectType}}
+						<p style="width:150px;height=150px">
+							{{facility.objectType}}
+						</p>
+						
 					</td>
 					<td>
 						<p style="width:150px;height=150px">
@@ -56,9 +60,9 @@ Vue.component("facility", {
 				</tr>
 	    	</table>    
 	
-			<h3 style="margin-top:3cm; margin-bottom:1cm">Training list:</h3>
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training list:</h3>
 			<table>
-				<tr>
+				<tr class="tableRowBorder">
 					<th>
 						Icon
 					</th>
@@ -78,8 +82,8 @@ Vue.component("facility", {
 						Trainer
 					</th>
 				</tr>
-				<tr v-for="(p, index) in trainings">
-					<td width="100%" height="100%"><img alt="fato" 
+				<tr v-for="(p, index) in trainings" class="tableRowBorder">
+					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
 						<p style="width:150px;height=150px">

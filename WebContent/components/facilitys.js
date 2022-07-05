@@ -20,74 +20,140 @@ Vue.component("facilities", {
 	    }
 	},
 	    template: ` 
-    	<div class="center">
+    	<div>
+    		<br></br>
     		<h1>Sport facilities</h1>
-    										<!--SEARCH-->
-    		<p style="margin-bottom:1cm; margin-top:1cm">
-    			<input type="text" v-model="srchname" placeholder="search by name"/>
-    			<input type="text" v-model="srchtype" placeholder="search by type"/>
+    		<br></br>
+    										<!--SEARCH-->		
     		
-    			<input type="text" v-model="srchloc" placeholder="search by location"/>    		
-    			<input type="text" v-model="srchrat" placeholder="search by rating"/>
-    			<input type="button" @click="multiSearch" value="search"/>
-    		</p>	
-    		<table >
-    			<tr>							<!--SORT && FILTER-->
-    				<th rowspan="2">Icon</th>
-    				<td><input type="button" @click="changeSort('Name')" value="sort"/></td>
-    				<td><input type="text" v-model="searchtype" placeholder="filter type"/></td>
-    				<td><input type="button" @click="changeSort('Location')" value="sort"/></td>
-    				<td><input type="button" @click="changeSort('Rating')" value="sort"/></td>
-    				<th rowspan="2">Work hours</th>
-    				<td><input type="button" @click="filterOpenFacilities" value="Show opened"/></td>
-    			</tr>
-    			<tr>
-    				<th>Name</th>
-    				<th>Type</th>
-    				<th>Location</th>
-    				<th>Rating</th>
-    				<th>Status</th>
-    			</tr>
-    											<!--TABLE-->
-    			
-				<tr v-for="(p, index) in filteredFacilities" v-on:click="sentToChild(p)">
-					<td width="100%" height="100%"><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
-					<td class="kolona">
-						<p style="width:150px;height=150px">
-							{{p.name}}
-						</p>
-					</td>
-					<td class="kolona">
-						{{p.objectType}}
-					</td>
-					<td>
-						<p style="width:150px;height=150px">
-							{{p.location.address.street+" "+p.location.address.number}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{p.location.address.city+"  "+p.location.address.zipCode}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{p.location.longitude+",    "+ p.location.latitude}}
-						</p>
-					</td>
-					<td>
-						<p style="width:150px;height=150px">{{p.averageRating}}</p>
-					</td>
-					<td>
-						<p style="width:150px;height=150px">From: {{p.startTime}}</p>
-						<p style="width:150px;height=100px">Until: {{p.endTime}}</p>
-					</td>
-					<td v-if="p.status">Open</td>
-					<td v-else="p.status">Closed</td>
-				</tr>
-	    	</table>
-	    	<p style="margin-bottom:1cm; margin-top:1cm">
-	    		<input type="button" value="Create new facility" 
-	    		style="margin-right: 0; margin-left:auto; display:block;"
-	    		@click="createFacility"
-	    		v-if="isAdmin()"/>
-	    	</p>
+    		<div class="row" width=100%>
+    			<div class="col s3" style="margin-top:5%; margin-left:7%">
+    				<div class="row">
+					    <div class="col s12 m6">
+					      <div class="card teal darken-2">
+					        <div class="card-content white-text">
+					          <span class="card-title">Search</span>
+					          <p>
+								<input type="text" v-model="srchname" placeholder="search by name"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="text" v-model="srchtype" placeholder="search by type"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="text" v-model="srchloc" placeholder="search by location"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="text" v-model="srchrat" placeholder="search by rating"
+								class="white-text"/>
+					          </p>
+					        </div>
+					        <div class="card-action">
+					          <a @click="multiSearch">search</a>
+					        </div>
+					      </div>
+					    </div>
+			  		</div>
+    			</div>
+    			<div class="col s6" style="text-align: center;">
+    				<table>
+	    			<tr
+	    			style=" border-bottom: thin solid;">		<!--SORT && FILTER-->
+	    				<th></th>
+	    				<td>
+	  						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Name')">
+	  							<i class="material-icons">arrow_drop_down</i>
+	  						</a>
+	        			</td>
+	    				
+	    				<td>
+	    					<input type="text" v-model="searchtype" placeholder="filter type"/>
+	    				</td>
+	    				
+	    				<td>
+	  						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Location')">
+	  							<i class="material-icons">arrow_drop_down</i>
+	  						</a>
+	        			</td>
+	    				
+	    				<td>
+	  						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+	  						@click="changeSort('Rating')">
+	  							<i class="material-icons">arrow_drop_down</i>
+	  						</a>
+	        			</td>
+	    				
+	    				<th></th>
+	    				
+	    				<a class="waves-effect waves-light btn-small teal darken-2" @click="filterOpenFacilities">
+	    					<i class="material-icons left">business</i>Opened
+	    				</a>
+	    			</tr>
+	    			<tr style="border-top: thin solid; 
+    					border-bottom: thin solid;">
+	    				<th>Icon</th>
+	    				<th>Name</th>
+	    				<th>Type</th>
+	    				<th>Location</th>
+	    				<th>Rating</th>
+	    				<th>Work hours</th>
+	    				<th>Status</th>
+	    			</tr>
+	    											<!--TABLE-->
+	    			
+					<tr v-for="(p, index) in filteredFacilities" v-on:click="sentToChild(p)"
+						style="border-top: thin solid; 
+    					border-bottom: thin solid;">
+						<td><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
+						<td>
+							<p style="width:150px;height=150px">
+								{{p.name}}
+							</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">
+								{{p.objectType}}
+							</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">
+								{{p.location.address.street+" "+p.location.address.number}}
+							</p>
+							<p style="width:150px;height=150px">
+								{{p.location.address.city+"  "+p.location.address.zipCode}}
+							</p>
+							<p style="width:150px;height=150px">
+								{{p.location.longitude+",    "+ p.location.latitude}}
+							</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">{{p.averageRating}}</p>
+						</td>
+						<td>
+							<p style="width:150px;height=150px">From: {{p.startTime}}</p>
+							<p style="width:150px;height=100px">Until: {{p.endTime}}</p>
+						</td>
+						<td v-if="p.status">
+							<p style="width:150px;height=150px">Open</p>
+						</td>
+						<td v-else="p.status">
+							<p style="width:150px;height=150px">Closed</p>
+						</td>
+					</tr>
+		    	</table>
+		    	<p style="margin-bottom:1cm; margin-top:1cm">
+		    		  <a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+		    		  @click="createFacility" v-if="isAdmin()"
+		    		  style="margin-right: 0; margin-left:auto; display:block;">
+		    		  	<i class="material-icons">add</i>
+		    		  </a>
+		    	</p>
+	    			</div>
+    		</div>
    		</div>		  
     	`,
     mounted () {
@@ -100,6 +166,13 @@ Vue.component("facilities", {
 			this.facilitiesCopy = first_response.data;
 			
 			this.loggedUser = second_response.data;
+			const refresh = localStorage.getItem('test');
+			if (refresh === 'login') {
+				localStorage.removeItem('test');
+				localStorage.setItem('test', 'nemoj');
+				this.$router.go(0);
+			}
+			//this.$router.go();
 		}))
     },
     methods: {

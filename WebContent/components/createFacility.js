@@ -49,147 +49,239 @@ Vue.component("createFacility", {
 	        isManagerGender: false,
 	        isFacilityManager: false,
 	        
-	        isTrainingFile: false
+	        isTrainingFile: false,
+	        
+	        test: ''
 		}
 	},
 		template: `
-			<div>
-				<h1>Create a new facility</h1>
-				<form enctype="multipart/form-data">
-					<table>
-						<tr>
-							<td>
-								Icon
-							</td>
-							<td>
-								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"/>
-							</td>
-						</tr>
-						<tr>
-							<td>Ime</td>
-							<td><input type="text" name="objectname" v-model="objectname"
-								:disabled="showManagerForm" :class="{ invalidField : isFacilityName}">
-							</td>
-						</tr>
-						<tr>
-							<td>Tip objekta</td>
-							<td><input type="text" name="type" v-model="type"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityType}"></td>
-						</tr>
-						<tr>
-							<td colspan="2">Location</td>
-						</tr>
-						<tr>
-							<td>Geografska duzina</td>
-							<td><input type="number" name="longitude" v-model="longitude"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityLong}"></td>
-						</tr>
-						<tr>
-							<td>Geografska sirina</td>
-							<td><input type="number" name="longitude" v-model="latitude"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityLat}"></td>
-						</tr>
-						<tr>
-							<td>Ulica</td>
-							<td><input type="text" name="latitude" v-model="street"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityStreet}"></td>
-						</tr>
-						<tr>
-							<td>Broj</td>
-							<td><input type="text" name="street" v-model="number"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityNum}"></td>
-						</tr>
-						<tr>
-							<td>Grad</td>
-							<td><input type="text" name="number" v-model="city"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityCity}"></td>
-						</tr>
-						<tr>
-							<td>Postanski broj</td>
-							<td><input type="number" name="zipCode" v-model="zipCode"
-								:disabled="showManagerForm"
-								:class="{ invalidField : isFacilityZip}"></td>
-						</tr>
-						<tr>
-							<td>Menadzer</td>
-							<td>
-								<input type="button" v-if="this.validManagers.length == 0" 
-								value="Register a new manager"
-								@click="registerNewManager"/>
-								<select name="managers" id="managers" v-else v-model="user"
-								:class="{ invalidField : isFacilityManager}">
-									<option v-for="(p, index) in validManagers"
-									:value="p">
-										{{p.name + ' ' + p.surename}}
-									</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-					<p style="float:left">
-						<input type="button" value="Poslaji" v-if="this.validManagers.length != 0"
-						@click="confirmCreate"/>
-					</p>
-				</form>
-				
-									<!--CREATE MANAGER-->
-				<div v-if="showManagerForm" style="margin-top:3cm">
-					<form>
-					<table>
-						<tr>
-							<td>Korisnicko ime:</td>
-							<td><input id="username" v-model = "username"  type = "text" name = "username"
-							:class="{ invalidField : isManagerUsername}">
-							</td>
-						</tr>
-						<tr>
-							<td>Lozinka:</td>
-							<td><input type="password" v-model = "password"  name="password"
-							:class="{ invalidField : isManagerPass}"></td>
+			<div class="shrink">
+				<h1 style="margin-top:-0.5%">Create a new facility</h1>
+				<br></br>
+				<div class="row">
+					<div class="col s4" style="margin-left:5%; margin-right:5%">
+						<form enctype="multipart/form-data" >
+							<table>
+								<tr>
+									<td>
+										Icon
+									</td>
+									<td>
+										<span v-if="isTrainingFile" class="red-text">
+											Please upload a file
+										</span>
+										<input type="file" name="file" @change="onFileSelected"/>
+									</td>
+								</tr>
+								<tr>
+									<td>Ime</td>
+									<td>	
+										<span v-if="isFacilityName" class="red-text">
+											Please enter name
+										</span>
+										<input type="text" name="objectname" v-model="objectname">
+									</td>
+								</tr>
+								<tr>
+									<td>Tip objekta</td>
+									<td>
+										<span v-if="isFacilityType" class="red-text">
+											Please facility type
+										</span>
+										<input type="text" name="type" v-model="type">
+									</td>
+								</tr>
+								<tr class="tableRowBorder">
+									<td colspan="2">Location</td>
+								</tr>
+								<tr>
+									<td>Geografska duzina</td>
+									<td>
+										<span v-if="isFacilityLong" class="red-text">
+											Please enter longitude
+										</span>
+										<input type="number" name="longitude" v-model="longitude">
+									</td>
+								</tr>
+								<tr>
+									<td>Geografska sirina</td>
+									<td>
+										<span v-if="isFacilityLat" class="red-text">
+											Please enter latitude
+										</span>
+										<input type="number" name="longitude" v-model="latitude">
+									</td>
+								</tr>
+								<tr>
+									<td>Ulica</td>
+									<td>
+										<span v-if="isFacilityStreet" class="red-text">
+											Please enter street name
+										</span>
+										<input type="text" name="latitude" v-model="street">
+									</td>
+								</tr>
+								<tr>
+									<td>Broj</td>
+									<td>
+										<span v-if="isFacilityNum" class="red-text">
+											Please enter a number
+										</span>
+										<input type="text" name="street" v-model="number">
+									</td>
+								</tr>
+								<tr>
+									<td>Grad</td>
+									<td>
+										<span v-if="isFacilityCity" class="red-text">
+											Please the city name
+										</span>
+										<input type="text" name="number" v-model="city">
+									</td>
+								</tr>
+								<tr>
+									<td>Postanski broj</td>
+									<td>
+										<span v-if="isFacilityZip" class="red-text">
+											Please the the zip code
+										</span>
+										<input type="number" name="zipCode" v-model="zipCode">
+									</td>
+								</tr>
+								<tr>
+									<td>Menadzer</td>
+									<td>
+										<span v-if="isFacilityManager" class="red-text">
+											Please select a manager
+										</span>
+										
+										<input type="button" v-if="this.validManagers.length == 0" 
+										value="Register a new manager" class="btn"
+										@click="registerNewManager"/>
+										<select name="managers" id="managers" v-else v-model="user"
+										style="display: block; background-color:#212121">
+											<option v-for="(p, index) in validManagers"
+											:value="p">
+												{{p.name + ' ' + p.surename}}
+											</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+							<p style="float:left">
+								<button class="btn" v-if="this.validManagers.length != 0"
+								@click="confirmCreate">Confirm</button>
+							</p>
+						</form>
+						<br></br>
+						<br></br>
+						<!--CREATE MANAGER-->
+					<div v-if="showManagerForm" style="margin-left:35%">
+						<form>
+							<table style="margin-bottom:5%">
+								<tr>
+									<td>Korisnicko ime:</td>
+									<td>	
+										<span v-if="isManagerUsername" class="red-text">
+											Please enter the username
+										</span>
+										<input id="username" v-model = "username"  
+										type = "text" name = "username">
+									</td>
+								</tr>
+								<tr>
+									<td>Lozinka:</td>
+									<td>
+										<span v-if="isManagerPass" class="red-text">
+											Please enter the password
+										</span>
+										<input type="password" v-model = "password"  name="password">
+								</td>
+							
+								</tr>
+								<tr>
+									<td>Ime:</td>
+									<td>
+										<span v-if="isManagerName" class="red-text">
+											Please enter the name
+										</span>
+										<input id="ime" v-model = "name"  type = "text" name = "name">
+								</td>	
+								</tr>
+								<tr>
+									<td>Prezime:</td>
+									<td>
+										<span v-if="isManagerSurname" class="red-text">
+											Please enter the surname
+										</span>
+										<input type="text" v-model = "surename"  name="surename">
+								</td>
+								</tr>
+								<tr>
+									<td>Pol:</td>
+									<td>
+										<span v-if="isManagerGender" class="red-text">
+											Please enter the gender
+										</span>
+										<select name="pol" id="pol" v-model = "gender" 
+										style="display: block; background-color: #212121;">
+							 				  <option value="Male">Musko</option>
+											  <option value="Female">Zensko</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Datum rodjenja:</td>
+									<td>
+										<span v-if="isManagerDate" class="red-text">
+											Please enter the date
+										</span>
+										<input type="date" id="rodjenje" name="rodjenje" 
+										v-model = "dateOfBirth"/>
+								</td>
+								</tr>
+								<tr>
+									<td >
+										<button  @click="confirmCreateWithNewManager" 
+										class="btn">Poslaji</button>
+										<input type="reset" value="Ponisti" class="btn">
+										<td></td>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					</div>	
+									<!-- GOOGLE MAPA -->
+									
+					<div class="col s4" style="text-align: center;">
+						<!-- Search input -->
+						<input id="searchInput"
+						class="controls white" type="text" placeholder="Enter a location">
 					
-						</tr>
-						<tr>
-							<td>Ime:</td>
-							<td><input id="ime" v-model = "name"  type = "text" name = "name"
-							:class="{ invalidField : isManagerName}"></td>	
-						</tr>
-						<tr>
-							<td>Prezime:</td>
-							<td><input type="text" v-model = "surename"  name="surename"
-							:class="{ invalidField : isManagerSurname}"></td>
-						</tr>
-						<tr>
-							<td>Pol:</td>
-							<td>
-								<select name="pol" id="pol" v-model = "gender" 
-								:class="{ invalidField : isManagerGender}">
-					 				  <option value="Male">Musko</option>
-									  <option value="Female">Zensko</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>Datum rodjenja:</td>
-							<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"
-							:class="{ invalidField : isManagerDate}"/></td>
-						</tr>
-						<tr>
-							<td >
-								<input type="submit"  v-on:click = "confirmCreateWithNewManager" value="Poslaji">
-								<input type="reset" value="Ponisti">
-							</td>
-						</tr>
-					</table>
-				</form>
-				</div>
+						<!-- Google map -->
+						<div id="nesto" style="height: 760px; width: 150%; 
+						margin-left:10%;"></div>
+					
+						<br></br>
+						<span>
+							<button @click="showMap" class="btn">Show Map</button>
+							&nbsp;&nbsp;
+							<button  @click="fillFormWithMapData" 
+							class="btn">Fill form</button>
+						</span>
+						
+						<!-- Display geolocation data -->
+						<ul class="geo-data" hidden>
+						    <li class="white-text">Full Address: <span id="location"></span></li>
+						    <li class="white-text">Postal Code: <span id="postal_code"></span></li>
+						    <li class="white-text">Country: <span id="country"></span></li>
+						    <li class="white-text">Latitude: <span id="lat"></span></li>
+						    <li class="white-text">Longitude: <span id="lon"></span></li>
+						</ul>
+					</div>				
 			</div>
+		</div>
 		`,
 	
 	mounted() {
@@ -202,6 +294,40 @@ Vue.component("createFacility", {
 	},
 	
 	methods: {
+		showMap() {
+			location.reload();
+		},
+		
+		fillFormWithMapData() {
+			console.log(document.getElementById('location').innerHTML);
+			this.longitude = document.getElementById('lon').innerHTML;
+			this.latitude = document.getElementById('lat').innerHTML;
+			
+			let fullAddress = document.getElementById('location').innerHTML;
+			/*let fullAddressSplit = fullAddress.split(",");
+			
+			if (fullAddressSplit[1].trim().split(" ").length > 1) {
+				this.city = fullAddressSplit[1].trim().split(" ")[0];
+				this.zipCode = fullAddressSplit[1].trim().split(" ")[1];
+			}
+			else {
+				this.city = fullAddressSplit[1];
+			}
+
+			let addressWithoutCityCountry = fullAddressSplit[0];
+			let addressWithoutCityCountrySplit = addressWithoutCityCountry.split(" ");
+			
+			let addrNum = addressWithoutCityCountrySplit.pop();
+			this.number = addrNum;
+			this.street = addressWithoutCityCountrySplit;*/
+			//console.log(fullAddressSplit);
+			
+			this.street = fullAddress;
+			this.number = '-';
+			this.city = '-';
+			this.zipCode = 0;	
+		},
+		
 		onFileSelected(event) {
 			this.file = event.target.files[0];
 			this.formData = new FormData();
@@ -231,6 +357,7 @@ Vue.component("createFacility", {
 		},
 		
 		fillOutFacility() {
+			
 			if (this.street === '') {
 				this.isFacilityStreet = true;
 				this.canCreateFlag = -1;

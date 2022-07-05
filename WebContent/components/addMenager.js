@@ -8,57 +8,108 @@ Vue.component("addMenager", {
 		      name:'',
 		      surename:'',
 		      gender:'',
-		      dateOfBirth:''
+		      dateOfBirth:'',
+		      
+		      //validacija
+		      returnFlag: -1,
+		      
+		      isUsername: false,
+		      isPassword: false,
+		      isName: false,
+		      isSurname: false,
+		      isGender: false,
+		      isDate: false,
+		      isRole: false
 		    }
 	},
 	template: ` 
-<div style="width:800px; margin:0 auto;">
-	<header></header>
+<div class="container" style="margin-top:5%">
+	
+	<header>
+		<h1>Register a user</h1>
+		<br></br>
+	</header>
 	<form>
 	<table>
 		
 	<tr>
 		<td>Korisnicko ime:</td>
-		<td><input id="username" v-model = "username"  type = "text" name = "username">
+		<td>
+			<span v-if="isUsername" class="red-text">
+	    				&nbsp;&nbsp;Please enter the username
+	    	</span>
+			<input id="username" v-model = "username"  type = "text" name = "username">
 		</td>
 	</tr>
 	<tr>
 		<td>Lozinka:</td>
-			<td><input type="password" v-model = "password"  name="password"></td>
-
+			<td>
+				<span v-if="isPassword" class="red-text">
+	    				&nbsp;&nbsp;Please enter the password
+	    		</span>
+				<input type="password" v-model = "password"  name="password">
+			</td>
 	</tr>
 	<tr>
 		<td>Ime:</td>
-		<td><input id="ime" v-model = "name"  type = "text" name = "name"></td>	
+		<td>
+			<span v-if="isName" class="red-text">
+	    				&nbsp;&nbsp;Please enter the name
+	    	</span>
+			<input id="ime" v-model = "name"  type = "text" name = "name">
+		</td>	
 	</tr>
 	<tr>
 		<td>Prezime:</td>
-		<td><input type="text" v-model = "surename"  name="surename"></td>
+		<td>
+			<span v-if="isSurname" class="red-text">
+	    				&nbsp;&nbsp;Please enter the surname
+	    	</span>
+			<input type="text" v-model = "surename"  name="surename">
+		</td>
 	</tr>
 	<tr>
 		<td>Pol:</td>
-		<td><select name="pol" id="pol" v-model = "gender" >
+		<td>
+			<span v-if="isGender" class="red-text">
+	    				&nbsp;&nbsp;Please enter the gender
+	    	</span>
+			<select name="pol" id="pol" v-model = "gender" 
+			class="grey darken-4 displaySelect">
  				  <option value="Male">Musko</option>
 				  <option value="Female">Zensko</option>
-			</select></td>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td>Datum rodjenja:</td>
-		<td><input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/></td>
+		<td>
+			<span v-if="isDate" class="red-text">
+	    				&nbsp;&nbsp;Please enter the date
+	    	</span>
+			<input type="date" id="rodjenje" name="rodjenje" v-model = "dateOfBirth"/>
+		</td>
 	</tr>
 	<tr>
 		<td>Tip radnika:</td>
-		<td><select name="tipRadnika" id="tipRadnika" v-model = "user.role" >
+		<td>
+			<span v-if="isRole" class="red-text">
+	    				&nbsp;&nbsp;Please enter the role
+	    	</span>
+			<select name="tipRadnika" id="tipRadnika" v-model = "user.role" 
+			class="grey darken-4 displaySelect">
  				  <option value="Manager" selected>Menadžer</option>
 				  <option value="Trainer">Trener</option>
-			</select></td>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td >
-		<input type="submit"  v-on:click = "edituser" value="Poslaji">
-		<input type="reset" value="Ponisti">
+			<button class="btn" @click="edituser">Poslaji</button>
+			<input type="reset" class="btn" value="Ponisti">
 		</td>
-		<td></td>
+		<td>
+		</td>
 	</tr>
 		
 	</table>
@@ -76,52 +127,91 @@ Vue.component("addMenager", {
 				let pol = document.getElementsByName("pol")[0]
 				let rod = document.getElementsByName("rodjenje")[0]
 				let l = document.getElementsByName("lab")[0]
-				username.style.background = "white"
+				/*username.style.background = "white"
 				sifra.style.background ="white"
 				ime.style.background ="white"
 				prezime.style.background ="white"
 				pol.style.background="white"
-				rod.style.background ="white"
+				rod.style.background ="white"*/
 			
 				if(this.username ==="")
 				{
-					username.style.background = "red"
+					this.isUsername = true;
+					this.returnFlag = 1;
+					/*username.style.background = "red"
 					sifra.style.background ="white"
 					ime.style.background ="white"
 					prezime.style.background ="white"
 					pol.style.background="white"
 					rod.style.background ="white"	
-					return;
-				}else if(this.password ===""){	
-					sifra.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isUsername = false;
+				}
+				if(this.password ===""){
+					this.isPassword = true;
+					this.returnFlag = 1;	
+					/*sifra.style.background = "red"
 					ime.style.background ="white"
 					prezime.style.background ="white"
 					pol.style.background="white"
 					rod.style.background ="white"
-					return;
-				}else if(this.name===""){
-					ime.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isPassword = false;
+				}
+				if(this.name===""){
+					this.isName = true;
+					this.returnFlag = 1;	
+					/*ime.style.background = "red"
 					prezime.style.background ="white"
 					pol.style.background="white"
 					rod.style.background ="white"
-					return;
-				}else if(this.surename===""){
-					prezime.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isName = false;
+				}
+				if(this.surename===""){
+					this.isSurname = true;
+					this.returnFlag = 1;	
+					/*prezime.style.background = "red"
 					pol.style.background="white"
 					rod.style.background ="white"
 		
-					return;
-				}else if(this.gender===""){
-					pol.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isSurname = false;
+				}
+				if(this.gender===""){
+					this.isGender = true;
+					this.returnFlag = 1;
+					/*pol.style.background = "red"
 					rod.style.background ="white"
-					return;
-				}else if(this.dateOfBirth===""){
-					rod.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isGender = false;
+				}
+				if(this.dateOfBirth===""){
+					this.isDate = true;
+					this.returnFlag = 1;
+					/*rod.style.background = "red"
+					return;*/
+				}
+				else {
+					this.isDate = false;
+				}
+				//rod.style.background ="white"
+				
+				if (this.returnFlag == 1) {
+					this.returnFlag = -1;
 					return;
 				}
-			
-				rod.style.background ="white"
-
+				
 				this.user.username = this.username;
 				this.user.password = this.password;
 				this.user.name = this.name;

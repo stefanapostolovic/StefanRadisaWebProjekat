@@ -29,22 +29,40 @@ tr {
 }
 
 table, th, td {
-	border: 1px solid black; font-size: 100%; color:black; width:auto;
+	border: 2px solid #00796b; font-size: 100%; color:#00796b;
 	text-align: center; vertical-align: middle;
 }
 
+.tabela {
+	border-collapse: collapse 2px solid #00796b;
+	text-align: center;
+}
+
 td {
-	color:blue;
+	color:#00bfa5 ;
+	font-weight: 900;
+	text-align: center;
+}
+
+th {
+	color:#00bfa5 ;
+	text-align: center;
+	font-weight: 1200;
 }
 
 .okvir{border:solid;color:black;}
 
 h1{
-	color:blue;
+	color:#00bfa5;
+	text-align: center;
 }
 
 .invalidField {
 	background-color : red;
+}
+
+.invalidRow {
+	background: red;
 }
 
 .tableRow {
@@ -53,10 +71,39 @@ h1{
 }
 
 
+.centerDiv {
+	margin: 0 auto;
+}
 
+input, select, textarea{
+    color: #00bfa5;
+}
 
+.tableRowBorder {
+	border-bottom: thin solid;
+}
 
+.tableRowBorderBoth {
+	border-top: thin solid;
+	border-bottom: thin solid;
+}
 
+.navBarText {
+	font-size: large;
+}
 
+.displaySelect {
+	display: block;
+}
 
+.shrink{
+-webkit-transform:scale(0.9);
+-moz-transform:scale(0.9);
+-ms-transform:scale(0.9);
+transform:scale(0.9);
+}
+
+ #map {
+     height: 300px;
+ }
 
