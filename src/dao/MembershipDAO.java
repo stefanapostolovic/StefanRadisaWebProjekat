@@ -30,7 +30,7 @@ public class MembershipDAO {
 	
 	public MembershipDAO(String contextPath) {
 		this.contextPath = contextPath;
-		//		loadProducts(contextPath);
+		loadMembership(contextPath);
 	}
 	
 	public Collection<Membership> findAll() {
@@ -108,7 +108,7 @@ public class MembershipDAO {
 		return membershipToUpdate;
 	}
 	
-	private void loadTrainings(String contextPath) {
+	private void loadMembership(String contextPath) {
 		try {
 			Reader reader = new BufferedReader(new FileReader(contextPath + "/memberships.json"));
 			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<Membership>>() {}.getType();
