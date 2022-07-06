@@ -49,6 +49,14 @@ public class LoginService {
 		return dao.findAll();
 	}
 	
+	@GET
+	@Path("/getFacilityManager/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getFacilityManager(@PathParam("facilityId") String facilityId) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.getFacilityManager(facilityId);
+	}
+	
 	@PUT
 	@Path("/updateUser/{username}")
 	@Produces(MediaType.APPLICATION_JSON)

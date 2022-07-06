@@ -97,7 +97,9 @@ Vue.component("users", {
 					<th></th>
 				</tr>
 	    			
-	    		<tr v-for="(p, index) in filteredUsers" class="tableRowBorder">
+	    		<tr v-for="(p, index) in filteredUsers"
+	    		v-if="p.isDeleted == false" 
+	    		class="tableRowBorder">
 	    			<td>
 	    				<p style="width:150px;height=150px">
 	    					{{p.name}}
@@ -152,7 +154,41 @@ Vue.component("users", {
     },
     methods: {
 		deleteUser(user) {
+			user.isDeleted = true;
 			
+			if (user.role === 'Customer') {
+				axios
+					.put('rest/updateUser/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
+			else if (user.role === 'Trainer') {
+				axios
+					/*.put('rest/trainings/deleteTrainingsForSelectedTrainer', user)
+					.then(response => {
+						console.log(response.data);
+						return axios.put('rest/updateUser/' + user.username, user);
+					})
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})*/
+					.put('rest/updateUser/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
+			else if (user.role === 'Manager') {
+				axios
+					.put('rest/updateUser/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
 		},
 	
     	multiSearch() {

@@ -80,7 +80,9 @@ Vue.component("managerInfo", {
 						Trainer
 					</th>
 				</tr>
-				<tr v-for="(p, index) in trainings" @click="changeTraining(p)" class="tableRowBorder">
+				<tr v-for="(p, index) in trainings" 
+				v-if="p.isDeleted == false"
+				@click="changeTraining(p)" class="tableRowBorder">
 					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -131,7 +133,9 @@ Vue.component("managerInfo", {
 		    		<th>Pol</th>
 		    		<th>Datum rodjenja</th>
 		    	</tr>
-		    	<tr v-for="(p, index) in trainers" class="tableRowBorder">
+		    	<tr v-for="(p, index) in trainers"
+		    	v-if="p.isDeleted == false" 
+		    	class="tableRowBorder">
 		    		<td>
 		    			<p class="tableRow">{{p.name}}</p>
 		    		</td>
@@ -180,6 +184,9 @@ Vue.component("managerInfo", {
 		
 		methods: {
 			getTrainingTrainer(item, index) {
+				//DODAO//
+				if (item.isDeleted == true) return;
+				
 				var obj = this.trainers.filter(function(elem) {
 					if(elem.name === item.trainer.name) {
 						return item.trainer.name;

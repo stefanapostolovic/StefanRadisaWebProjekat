@@ -66,6 +66,18 @@ public class UserDAO {
 		return users.values();
 	}
 	
+	public User getFacilityManager(String facilityId) {
+		User returnUser = new User();
+		
+		for (User value : users.values()) {
+			if (value.getSportFacility().getId().equals(facilityId)){
+				returnUser = value;
+				break;
+			}	
+		}
+		return returnUser;
+	}
+	
 	/**
 	 * U�itava korisnike iz WebContent/users.txt fajla i dodaje ih u mapu {@link #users}.
 	 * Klju� je korisni�ko ime korisnika.
@@ -83,6 +95,8 @@ public class UserDAO {
 		if (updatedUser.getSportFacility() != null) {
 			userToUpdate.setSportFacility(updatedUser.getSportFacility());
 		}
+		
+		userToUpdate.setIsDeleted(updatedUser.getIsDeleted());
 		
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));

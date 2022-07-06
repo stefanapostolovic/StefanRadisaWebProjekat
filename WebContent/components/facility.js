@@ -10,7 +10,8 @@ Vue.component("facility", {
 		  comments:[],
 		  trainings:[],
 		
-		  loggedUser: null
+		  loggedUser: null,
+		  facilityManager: null
 		  
 		  //selectedTraining: null
 		}
@@ -26,6 +27,7 @@ Vue.component("facility", {
 					<th>Location</th>
 					<th>Rating</th>
 					<th>Status</th>
+					<th></th>
 				</tr>
 				<tr class="tableRowBorder">
 					<td><img alt="fato" v-bind:src="facility.image" 
@@ -57,9 +59,19 @@ Vue.component("facility", {
 					</td>
 					<td v-if="facility.status">Open</td>
 					<td v-else="facility.status">Closed</td>
+					<td class="red-text">
+						<span v-if="hasManager()">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No manager</span>
+					</td>
 				</tr>
 	    	</table>    
-	
+			
+			<br></br>
+			<button v-if="hasManager()" class="btn" 
+			@click.prevent="showManagerForm">
+				Assign a manager
+			</button>
+			
 			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training list:</h3>
 			<table>
 				<tr class="tableRowBorder">
@@ -83,7 +95,8 @@ Vue.component("facility", {
 					</th>
 					<th></th>
 				</tr>
-				<tr v-for="(p, index) in trainings" class="tableRowBorder">
+				<tr v-for="(p, index) in trainings" class="tableRowBorder"
+				v-if="p.isDeleted == false">
 					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -153,12 +166,35 @@ Vue.component("facility", {
 		}))
     },
     methods: {
+		showManagerForm() {
+			
+		},
+		
+		hasManager() {
+			/*var facId = localStorage.getItem("selectedFacility");
+			axios
+				.get('rest/getFacilityManager/' + facId)
+				.then(response => {
+					this.facilityManager = response.data;
+					if (this.facilityManager.isDeleted == true)
+						return true;
+					return false;
+				})*/
+			return true;
+		},
+		
 		isAdmin() {
 			return this.loggedUser.role === 'Administrator'
 		},
 	
 		deleteTrainingType(training) {
-			
+			training.isDeleted = true;
+			axios
+				.put('rest/trainings/updateTraining', training)
+				.then(response => {
+					console.log(response.data);
+					router.push('/facility');
+				})
 		},
 		
 		getSelectedFacility() {

@@ -125,6 +125,8 @@ public class TrainingDAO {
 		trainingToUpdate.setTrainer(training.getTrainer());
 		trainingToUpdate.setIsCanceled(training.getIsCanceled());
 		
+		trainingToUpdate.setIsDeleted(training.getIsDeleted());
+		
 		System.out.println("DAO UPDATE TEST");
 		
 		try {
@@ -147,6 +149,21 @@ public class TrainingDAO {
 		
 		for (Training value : trainings.values()) {
 			if (value.getSportFacility().getId().equals(facilityId)) {
+				value.setIsDeleted(true);
+				update(value.getId(), value);
+				returnList.add(value);
+			}
+		}
+		
+		return returnList;
+	}
+	
+	public Collection<Training> deleteTrainingsForSelectedTrainer(User trainer) {
+		List<Training> returnList = new ArrayList<Training>();
+		
+		for (Training value : trainings.values()) {
+			if (value.getTrainer().getUsername().equals(trainer.getUsername()) &&
+					value.getIsDeleted() == false) {
 				value.setIsDeleted(true);
 				update(value.getId(), value);
 				returnList.add(value);
