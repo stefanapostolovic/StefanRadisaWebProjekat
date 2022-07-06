@@ -1,12 +1,12 @@
 package beans;
 
-import java.time.LocalDateTime;
-
 public class TrainingHistory {
 	private String applicationDateTime;
 	private Training training;
 	private User user;
 	private User coach;
+	
+	private Boolean isDeleted;
 	
 	public TrainingHistory() {
 		
@@ -18,7 +18,18 @@ public class TrainingHistory {
 		this.training = training;
 		this.user = user;
 		this.coach = coach;
+		
+		this.isDeleted = false;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	public String getApplicationDateTime() {
 		return applicationDateTime;
 	}

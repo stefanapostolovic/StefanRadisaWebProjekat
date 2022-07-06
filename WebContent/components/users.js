@@ -21,7 +21,7 @@ Vue.component("users", {
     		
     						<!--SEARCH-->
     		
-    		<div class="col s3" style="margin-top:7%; margin-left:7%">
+    		<div class="col s3" style="margin-top:7%; margin-left:4%">
 				<div class="row">
 				    <div class="col s12 m6">
 				      <div class="card teal darken-2">
@@ -94,6 +94,7 @@ Vue.component("users", {
 					<th>Poeni</th>
 					<th>Uloga</th>
 					<th>Tip kupca</th>
+					<th></th>
 				</tr>
 	    			
 	    		<tr v-for="(p, index) in filteredUsers" class="tableRowBorder">
@@ -132,6 +133,13 @@ Vue.component("users", {
 							{{p.customerType.name}}
 						</p>
 					</td>
+					<td>	
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteUser(p)"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+		    		  	</a>
+					</td>
 				</tr>
 	    	</table>
     		</div>
@@ -143,6 +151,10 @@ Vue.component("users", {
           .then(response => (this.users = response.data))
     },
     methods: {
+		deleteUser(user) {
+			
+		},
+	
     	multiSearch() {
 			axios
 				.get('rest/search/' + this.srchname + '/' + this.srchsurname + '/' + this.srchusername)

@@ -142,6 +142,20 @@ public class TrainingDAO {
 		return trainingToUpdate;
 	}
 	
+	public Collection<Training> removeTrainingsFromFacility(String facilityId) {
+		List<Training> returnList = new ArrayList<Training>();
+		
+		for (Training value : trainings.values()) {
+			if (value.getSportFacility().getId().equals(facilityId)) {
+				value.setIsDeleted(true);
+				update(value.getId(), value);
+				returnList.add(value);
+			}
+		}
+		
+		return returnList;
+	}
+	
 	public List<Training> getTrainingsForSelectedFacility(String selectedFacilityId) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {

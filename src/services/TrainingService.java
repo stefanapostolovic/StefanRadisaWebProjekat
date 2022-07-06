@@ -68,6 +68,16 @@ public class TrainingService {
 	}
 	
 	@GET
+	@Path("/removeTrainingsFromFacility/{facilityId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> removeTrainingsFromFacility(@PathParam("facilityId") String facilityId) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		
+		return dao.removeTrainingsFromFacility(facilityId);
+	}
+	
+	@GET
 	@Path("/getTraining/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Training getTraining(@PathParam("id") String id) {

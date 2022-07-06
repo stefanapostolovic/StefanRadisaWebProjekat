@@ -22,6 +22,7 @@ Vue.component("createTraining", {
 			isTrainingName: false,
 			isTrainingType: false,
 			isTrainingFile: false,
+			isTrainer: false,
 			
 			canCreateFlag:  1
 		}
@@ -38,35 +39,46 @@ Vue.component("createTraining", {
 						<tr>
 							<td>Icon</td>
 							<td>
-								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"/>
+								<span v-if="isTrainingFile" class="red-text">
+									Please upload a file
+								</span>
+								<input type="file" name="file" @change="onFileSelected"/>
 							</td>
 						</tr>
 						<tr>
 							<td>Name</td>
 							<td>
-								<input type="text" v-model="name"
-								:class="{ invalidField : isTrainingName}">
+								<span v-if="isTrainingName" class="red-text">
+									Please enter the name
+								</span>
+								<input type="text" v-model="name">
 							</td>
 						</tr>
 						<tr>
 							<td>Type</td>
 							<td>
-								<input type="text" v-model="type"
-								:class="{ invalidField : isTrainingType}">
+								<span v-if="isTrainingType" class="red-text">
+									Please enter the type
+								</span>
+								<input type="text" v-model="type">
 							</td>
 						</tr>
 						<tr>
 							<td>Description</td>
-							<td><input type="text" v-model="description"></td>
+							<td>
+								<input type="text" v-model="description">
+							</td>
 						</tr>
 						<tr>
-							<td>Duration</td>
+							<td>Duration (hours)</td>
 							<td><input type="number" v-model="duration"></td>
 						</tr>
 						<tr>
 							<td>Trainer</td>
 							<td>
+								<span v-if="isTrainer" class="red-text">
+									Please select a trainer
+								</span>
 								<select name="trainers" id="trainers" v-model="trainer"
 								:disabled="isPersonalOrGroup()"
 								class="displaySelect grey darken-4">
@@ -74,7 +86,7 @@ Vue.component("createTraining", {
 									:value="p">
 										{{p.name + ' ' + p.surename}}
 									</option>
-								</select>
+								</select>				
 							</td>
 						</tr>
 						<tr>
@@ -82,7 +94,6 @@ Vue.component("createTraining", {
 								<button class="btn" @click.prevent="confirmCreate">
 									Confirm
 								</button>
-								<input type="reset" value="Reset" class="btn">
 								<td></td>
 							</td>
 						</tr>
@@ -93,6 +104,7 @@ Vue.component("createTraining", {
 		
 	mounted() {
 		this.facilityId = localStorage.getItem("selectedFacility");
+		this.isTrainer = false;
 		
 		axios.all([
 			this.getAllTrainers(),
@@ -108,8 +120,10 @@ Vue.component("createTraining", {
 	
 	methods: {
 		isPersonalOrGroup() {
-			if (this.type === 'personal' || this.type === 'group')
+			if (this.type === 'personal' || this.type === 'group') {
 				return false;
+			}
+			
 			return true;
 			//return this.type !== 'personal' || 	this.type !== 'group';
 		},
@@ -172,6 +186,16 @@ Vue.component("createTraining", {
 				this.isTrainingFile = false;
 			}
 			
+			if (this.trainer.username == null || this.trainer.username === '') {
+				if (this.isPersonalOrGroup() == false) {
+					this.isTrainer = true;
+					this.canCreateFlag = -1;
+				}
+			}
+			else {
+				this.isTrainer = false;
+			}
+			
 			this.newTraining.sportFacility = this.facility;
 			this.newTraining.duration = this.duration;
 			this.newTraining.trainer = this.trainer;
@@ -188,7 +212,7 @@ Vue.component("createTraining", {
 				this.uploadFile()
 			])
 			.then(axios.spread((first_response) => {
-				router.push('/facility');
+				router.push('/managerInfo');
 			}))
 			.catch(axios.spread((first_response) => {
 				toast('That name is already taken!');

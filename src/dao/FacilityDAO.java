@@ -150,6 +150,7 @@ public class FacilityDAO {
 	public SportFacility update(String id, SportFacility facility) {
 		SportFacility facilityToUpdate = this.facilities.get(id);
 		facilityToUpdate.setImage(facility.getImage());
+		facilityToUpdate.setIsDeleted(facility.getIsDeleted());
 		
 		System.out.println("DAO UPDATE TEST");
 		

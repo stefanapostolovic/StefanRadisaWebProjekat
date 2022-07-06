@@ -24,6 +24,8 @@ public class User implements Serializable {
 	private double points;
 	private CustomerType customerType;
 	
+	private Boolean isDeleted;
+	
 	public User() {
 		
 	}
@@ -45,8 +47,18 @@ public class User implements Serializable {
 		this.visitedFacilities = visitedFacilities;
 		this.points = points;
 		this.customerType = customerType;
+		
+		this.isDeleted = false;
 	}
-
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}	
+	
 	public String getUsername() {
 		return username;
 	}

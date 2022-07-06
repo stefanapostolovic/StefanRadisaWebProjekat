@@ -4,7 +4,9 @@ public class Comment {
 	private SportFacility sportFacility;
 	private String text;
 	private int grade;
-	private User user;	
+	private User user;
+	
+	private Boolean isDeleted;
 	
 	public Comment() {
 		
@@ -16,7 +18,17 @@ public class Comment {
 		this.text = text;
 		this.grade = grade;
 		this.user = user;
+		this.isDeleted = false;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	public SportFacility getSportFacility() {
 		return sportFacility;
 	}

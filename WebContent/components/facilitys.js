@@ -16,7 +16,10 @@ Vue.component("facilities", {
 		  sortDirectionLocation: 'ASC',
 		  sortDirectionRating: 'ASC',
 		  
-		  loggedUser: {}
+		  loggedUser: {},
+		  
+		  //brisanje
+		  facilityTrainingTypes: {}
 	    }
 	},
 	    template: ` 
@@ -102,12 +105,14 @@ Vue.component("facilities", {
 	    				<th>Rating</th>
 	    				<th>Work hours</th>
 	    				<th>Status</th>
+	    				<th></th>
 	    			</tr>
 	    											<!--TABLE-->
 	    			
 					<tr v-for="(p, index) in filteredFacilities" v-on:click="sentToChild(p)"
 						style="border-top: thin solid; 
-    					border-bottom: thin solid;">
+    					border-bottom: thin solid;"
+    					v-if="p.isDeleted == false">
 						<td><img alt="fato" v-bind:src="p.image" width="100px" height="100px"></td>
 						<td>
 							<p style="width:150px;height=150px">
@@ -143,6 +148,14 @@ Vue.component("facilities", {
 						<td v-else="p.status">
 							<p style="width:150px;height=150px">Closed</p>
 						</td>
+						<td>
+							<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+							  v-if="isAdmin()"
+				    		  @click="deleteFacility(p)"
+				    		  style="margin-right: 0; margin-left:auto; display:block;">
+				    		  <i class="material-icons">cancel</i>
+		    		  		</a>
+						</td>
 					</tr>
 		    	</table>
 		    	<p style="margin-bottom:1cm; margin-top:1cm">
@@ -159,7 +172,7 @@ Vue.component("facilities", {
     mounted () {
 		axios.all([
 			this.getAllFacilities(),
-			this.getLoggedUser()
+			this.getLoggedUser(),
 		])
 		.then(axios.spread((first_response, second_response) => {
 			this.facilities = first_response.data;
@@ -176,6 +189,29 @@ Vue.component("facilities", {
 		}))
     },
     methods: {
+		deleteFacility(facility) {
+			facility.isDeleted = !facility.isDeleted;
+			
+			axios
+				.get('rest/removeManagerFromFacility/' + facility.id)
+				.then(response => {
+					console.log(response.data)
+					return axios.get('rest/trainings/removeTrainingsFromFacility/' + facility.id);
+				})
+				.then(response => {
+					console.log(response.data);
+					return axios.put('rest/facilities/updateFacility', facility);
+				})
+				.then(response => {
+					console.log(response.data);
+					router.push('/');
+				})
+		},
+		
+		getTrainingsForThisFacility() {
+			//return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + )
+		},
+		
 		isAdmin() {
 			return this.loggedUser.role === 'Administrator'
 		},

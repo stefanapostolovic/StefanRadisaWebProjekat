@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.PromoCode;
@@ -65,6 +66,25 @@ public class PromoCodeDAO {
 		}
 		
 		return promoCode;
+	}
+	
+	public PromoCode deleteCode(String code) {
+		PromoCode codeToDelete = codes.get(code);
+		codeToDelete.setIsDeleted(true);
+		
+		try {
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/codes.json"));
+			Gson gson = new Gson();
+			String json = gson.toJson(codes.values());
+			System.out.println(json);
+			writer.write(json);
+			
+			writer.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return codeToDelete;
 	}
 	
 	private void loadCodes(String contextPath) {

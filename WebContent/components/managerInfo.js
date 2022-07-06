@@ -27,7 +27,7 @@ Vue.component("managerInfo", {
 						<th>Rating</th>
 						<th>Status</th>
 					</tr>
-					<tr class="tableRowBorder">
+					<tr class="tableRowBorder" v-if="facility.isDeleted == false">
 						<td>
 							<img alt="fato" v-bind:src="facility.image" width="100px" height="100px">
 						</td>
@@ -74,7 +74,7 @@ Vue.component("managerInfo", {
 						Description
 					</th>
 					<th>
-						Duration
+						Duration (hours)
 					</th>
 					<th>
 						Trainer

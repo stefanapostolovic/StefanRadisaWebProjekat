@@ -76,11 +76,12 @@ Vue.component("facility", {
 						Description
 					</th>
 					<th>
-						Duration
+						Duration (hours)
 					</th>
 					<th>
 						Trainer
 					</th>
+					<th></th>
 				</tr>
 				<tr v-for="(p, index) in trainings" class="tableRowBorder">
 					<td><img alt="fato" 
@@ -115,6 +116,14 @@ Vue.component("facility", {
 							-
 						</p>
 					</td>
+					<td>
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteTrainingType(p)"
+			    		  v-if="isAdmin()"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+	    		  		</a>
+					</td>
 				</tr>
 		    </table>    
 			<table>
@@ -144,6 +153,14 @@ Vue.component("facility", {
 		}))
     },
     methods: {
+		isAdmin() {
+			return this.loggedUser.role === 'Administrator'
+		},
+	
+		deleteTrainingType(training) {
+			
+		},
+		
 		getSelectedFacility() {
 			return axios.get('rest/facilities/getFacility/' + this.id);
 		},

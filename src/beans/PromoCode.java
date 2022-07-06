@@ -6,6 +6,8 @@ public class PromoCode {
 	private int useAmount;
 	private double discountPercentage;
 	
+	private Boolean isDeleted;
+	
 	public PromoCode() {
 		
 	}
@@ -16,8 +18,17 @@ public class PromoCode {
 		this.expiryDate = expiryDate;
 		this.useAmount = useAmount;
 		this.discountPercentage = discountPercentage;
+		this.isDeleted = false;
 	}
-
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	public String getCode() {
 		return code;
 	}

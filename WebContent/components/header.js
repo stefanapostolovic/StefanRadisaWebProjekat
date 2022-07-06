@@ -166,6 +166,7 @@ Vue.component("zaglavlje", {
 					this.showAdminButtons = false;
 					this.showManagerInfo = false;
 					this.showTrainerInfo = false;
+					this.promoCode = false;
 					
 					/*let profil = document.getElementsByName("pom")[0];
 					let p  =profil.getElementsByTagName("button")[0];
@@ -175,6 +176,10 @@ Vue.component("zaglavlje", {
 					//p1.hidden=true;
 					
 					this.loggedUser = null;
+					
+					if (this.$route.path === '/')
+						this.$router.go(0);
+						
 					router.push(`/`);
 				})
 		},

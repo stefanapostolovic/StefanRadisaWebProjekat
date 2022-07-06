@@ -108,6 +108,16 @@ public class LoginService {
 	}
 	
 	@GET
+	@Path("/removeManagerFromFacility/{facilityId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public User removeManagerFromFacility(@PathParam("facilityId") String facilityId) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.removeManagerFromFacility(facilityId);
+	}
+	
+	@GET
 	@Path("/search/{name: .*}/{surname: .*}/{username: .*}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

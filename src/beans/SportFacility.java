@@ -13,6 +13,8 @@ public class SportFacility {
 	private String startTime;
 	private String endTime;
 	
+	private Boolean isDeleted;
+	
 	public SportFacility() {
 		
 	}
@@ -29,7 +31,18 @@ public class SportFacility {
 		this.averageRating = averageRating;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		
+		this.isDeleted = false;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	public String getId() {			//dodao
 		return id;
 	}

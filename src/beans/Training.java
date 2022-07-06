@@ -11,6 +11,8 @@ public class Training {
 	private String image;
 	private Boolean isCanceled;
 	
+	private Boolean isDeleted;
+	
 	public Training() {
 		
 	}
@@ -27,7 +29,18 @@ public class Training {
 		this.description = description;
 		this.image = image;
 		this.isCanceled = isCanceled;
+		
+		this.isDeleted = false;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	public Boolean getIsCanceled() {
 		return isCanceled;
 	}

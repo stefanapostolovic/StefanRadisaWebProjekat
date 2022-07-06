@@ -154,6 +154,21 @@ public class UserDAO {
 		} 
 	}
 	
+	public User removeManagerFromFacility(String facilityId) {
+		User temp = new User();
+		for (User value : users.values()) {
+			if (value.getRole().equals(Role.Manager) && value.getSportFacility() != null) {
+				if (value.getSportFacility().getId().equals(facilityId)) {
+					value.setSportFacility(null);
+					temp = value;
+					update(value.getUsername(), value);
+					break;
+				}
+			}
+		}
+		return temp;
+	}
+	
 	//SEARCH VISEKRITERIJUMSKO
 	public Collection<User> GetByMultiSearch(
 			String name, String surname, String username) {

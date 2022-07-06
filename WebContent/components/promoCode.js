@@ -2,6 +2,7 @@ Vue.component("promoCode", {
 	data: function () {
 		return {
 			newCode: {},
+			allCodes: [],
 			
 			code: '',
 			expirationDate: '',
@@ -68,14 +69,56 @@ Vue.component("promoCode", {
 						</tr>
 					</table>
 				</form>
+				
+				<h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%; text-align:center">
+					Code list
+				</h3>
+				<table style="margin-bottom:10%">
+					<tr class="tableRowBorder">	
+						<th>Code</th>
+						<th>Expiration date</th>
+						<th>Uses</th>
+						<th>Discount (%)</th>
+						<th></th>
+					</tr>
+					
+					<tr v-for="(p, index) in allCodes" v-if="p.isDeleted == false"
+					class="tableRowBorderBoth">
+						<td>{{p.code}}</td>
+						<td>{{p.expiryDate}}</td>
+						<td>{{p.useAmount}}</td>
+						<td>{{p.discountPercentage}}</td>
+						<td>
+							<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+				    		  @click="deleteCode(p)"
+				    		  style="margin-right: 0; margin-left:auto; display:block;">
+				    		  <i class="material-icons">cancel</i>
+				    		</a>
+						</td>
+					</tr>
+				</table>
 			</div>
 		`,
 		
 		mounted () {
-			
+			axios
+				.get('rest/codes/getAllCodes')
+				.then(response => {
+					this.allCodes = response.data;
+				})
 		},
 		
 		methods: {
+			deleteCode(promoCode) {
+				promoCode.isDeleted = !promoCode.isDeleted;
+				axios
+					.get('rest/codes/deleteCode/' + promoCode.code)
+					.then(response => {
+						console.log(response.data);
+					})
+					
+			},
+			
 			createCode() {
 				if (this.code === '') {
 					this.isCode = true;
@@ -119,10 +162,12 @@ Vue.component("promoCode", {
 				}
 				else this.returnFlag = 1;
 				
+				this.newCode.isDeleted = false;
+				
 				axios
 					.post('rest/codes/createCode', this.newCode)
 					.then(response => {
-						router.push('/');
+						this.$router.go(0);
 					})
 					.catch(response => {
 						toast('That code already exists!');

@@ -10,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -57,6 +58,18 @@ public class PromoCodeService {
 			return Response.status(400).entity("Code already exists").build();
 		
 		return Response.status(200).build();
+	}
+	
+	@GET
+	@Path("/deleteCode/{code}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PromoCode deleteCode(@PathParam("code") String code) {
+		PromoCodeDAO dao = (PromoCodeDAO) ctx.getAttribute("codeDAO");
+		
+		PromoCode deletedCode = dao.deleteCode(code);
+		
+		return deletedCode;
 	}
 }
 
