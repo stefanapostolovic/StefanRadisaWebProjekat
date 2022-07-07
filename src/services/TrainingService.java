@@ -1,7 +1,6 @@
 package services;
 
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import beans.Training;
-import beans.TrainingHistory;
 import beans.User;
 import dao.TrainingDAO;
 
@@ -59,12 +57,32 @@ public class TrainingService {
 		return trainingList;
 	}
 	
+	@PUT
+	@Path("/deleteTrainingsForSelectedTrainer")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> deleteTrainingsForSelectedTrainer(User trainer) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		
+		return dao.deleteTrainingsForSelectedTrainer(trainer);
+	}
+	
 	@GET
 	@Path("/getTrainingsForSelectedFacility/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Training> getTrainingsForSelectedFacility(@PathParam("id") String id) {
 		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
 		return dao.getTrainingsForSelectedFacility(id);
+	}
+	
+	@GET
+	@Path("/removeTrainingsFromFacility/{facilityId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Training> removeTrainingsFromFacility(@PathParam("facilityId") String facilityId) {
+		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
+		
+		return dao.removeTrainingsFromFacility(facilityId);
 	}
 	
 	@GET

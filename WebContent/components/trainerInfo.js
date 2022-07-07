@@ -23,11 +23,12 @@ Vue.component("trainerInfo", {
 						<th>Facility</th>
 						<th>Name</th>
 						<th>Type</th>
-						<th>Duration</th>
+						<th>Duration (hours)</th>
 						<th>Description</th>
 						<th></th>
 					</tr>
 					<tr v-for="(p, index) in personalTrainings" class="tableRowBorder"
+					v-if="p.isDeleted == false"
 					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
 						<td>
 							<img alt="fato" 
@@ -78,10 +79,12 @@ Vue.component("trainerInfo", {
 						<th>Facility</th>
 						<th>Name</th>
 						<th>Type</th>
-						<th>Duration</th>
+						<th>Duration (hours)</th>
 						<th>Description</th>
 					</tr>
-					<tr v-for="(p, index) in groupTrainings" class="tableRowBorder">
+					<tr v-for="(p, index) in groupTrainings" 
+					v-if="p.isDeleted == false"
+					class="tableRowBorder">
 						<td>
 							<img alt="fato" 
 							:src="p.image" width="100px" height="100px">

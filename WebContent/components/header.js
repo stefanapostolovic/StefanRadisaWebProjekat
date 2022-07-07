@@ -11,6 +11,8 @@ Vue.component("zaglavlje", {
 			showAdminButtons: false,
 			showManagerInfo: false,
 			showTrainerInfo: false,
+			
+			promoCode: false
 	    }
 	},
 	    template: ` 
@@ -20,7 +22,11 @@ Vue.component("zaglavlje", {
     				  &nbsp;&nbsp;Fit Corp<i class="material-icons large">&nbsp;&nbsp;&nbsp;spa</i>
     			</a>
     			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
-    			
+    				
+    				<li><a v-if="promoCode" @click="createPromoCode" id="treneri">
+    					<font size="+2">Create promo code &nbsp;&nbsp;</font>
+    				</a>
+    				</li>
     				<li><a v-if="showAdminButtons" @click="dodavanjeOsoblja" id="treneri">
     					<font size="+2">Dodavanje osoblja &nbsp;&nbsp;</font>
     				</a>
@@ -86,9 +92,11 @@ Vue.component("zaglavlje", {
 				
 				if (this.loggedUser.role == "Administrator") {
 					this.showAdminButtons = true;
+					this.promoCode = true;
 				}
 				else {
 					this.showAdminButtons = false;
+					this.promoCode = false;
 				}
 				
 				if (this.loggedUser.role == "Manager") {
@@ -107,6 +115,10 @@ Vue.component("zaglavlje", {
 			})
     },
     methods: {
+		createPromoCode() {
+			router.push('/promoCode');
+		},
+	
 		viewTrainerInfo() {
 			router.push('/trainerInfo');
 		},
@@ -154,6 +166,7 @@ Vue.component("zaglavlje", {
 					this.showAdminButtons = false;
 					this.showManagerInfo = false;
 					this.showTrainerInfo = false;
+					this.promoCode = false;
 					
 					/*let profil = document.getElementsByName("pom")[0];
 					let p  =profil.getElementsByTagName("button")[0];
@@ -163,6 +176,10 @@ Vue.component("zaglavlje", {
 					//p1.hidden=true;
 					
 					this.loggedUser = null;
+					
+					if (this.$route.path === '/')
+						this.$router.go(0);
+						
 					router.push(`/`);
 				})
 		},

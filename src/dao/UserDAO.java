@@ -59,11 +59,30 @@ public class UserDAO {
 		if (!user.getPassword().equals(password)) {
 			return null;
 		}
+		else if (user.getIsDeleted() == null)
+			return user;
+		else if (user.getIsDeleted() == true)
+			return null;
+		
 		return user;
 	}
 	
 	public Collection<User> findAll() {
 		return users.values();
+	}
+	
+	public User getFacilityManager(String facilityId) {
+		User returnUser = null;
+		
+		for (User value : users.values()) {
+			if (value.getSportFacility() == null || value.getIsDeleted() == true)
+				continue;
+			else if (value.getSportFacility().getId().equals(facilityId)){
+				returnUser = value;
+				break;
+			}	
+		}
+		return returnUser;
 	}
 	
 	/**
@@ -83,6 +102,8 @@ public class UserDAO {
 		if (updatedUser.getSportFacility() != null) {
 			userToUpdate.setSportFacility(updatedUser.getSportFacility());
 		}
+		
+		userToUpdate.setIsDeleted(updatedUser.getIsDeleted());
 		
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
@@ -154,6 +175,21 @@ public class UserDAO {
 		} 
 	}
 	
+	public User removeManagerFromFacility(String facilityId) {
+		User temp = new User();
+		for (User value : users.values()) {
+			if (value.getRole().equals(Role.Manager) && value.getSportFacility() != null) {
+				if (value.getSportFacility().getId().equals(facilityId)) {
+					value.setSportFacility(null);
+					temp = value;
+					update(value.getUsername(), value);
+					break;
+				}
+			}
+		}
+		return temp;
+	}
+	
 	//SEARCH VISEKRITERIJUMSKO
 	public Collection<User> GetByMultiSearch(
 			String name, String surname, String username) {
@@ -173,7 +209,8 @@ public class UserDAO {
 	public Collection<User> GetValidManagers() {
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
-			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null) {
+			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null
+					&& user.getIsDeleted() == false) {
 				returnList.add(user);
 			}
 		}

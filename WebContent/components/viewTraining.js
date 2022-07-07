@@ -72,6 +72,7 @@ Vue.component("viewTraining", {
 								<select name="trainers" id="trainers" v-model="training.trainer"
 								class="displaySelect grey darken-4">
 									<option v-for="(p, index) in trainers"
+									v-if="p.isDeleted == false"
 									:value="p">
 										{{p.name + ' ' + p.surename}}
 									</option>

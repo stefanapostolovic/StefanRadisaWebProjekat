@@ -49,6 +49,14 @@ public class LoginService {
 		return dao.findAll();
 	}
 	
+	@GET
+	@Path("/getFacilityManager/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getFacilityManager(@PathParam("facilityId") String facilityId) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.getFacilityManager(facilityId);
+	}
+	
 	@PUT
 	@Path("/updateUser/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +64,15 @@ public class LoginService {
 			@Context HttpServletRequest request) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		request.getSession().setAttribute("user", dao.update(username, user));
+		return dao.update(username, user);
+	}
+	
+	@PUT
+	@Path("/updateUserKeepSession/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User updateUserKeepSession(@PathParam("username") String username, User user,
+			@Context HttpServletRequest request) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.update(username, user);
 	}
 	
@@ -105,6 +122,16 @@ public class LoginService {
 			return Response.status(400).entity("Username already taken!").build();
 		}
 		return Response.status(200).build();
+	}
+	
+	@GET
+	@Path("/removeManagerFromFacility/{facilityId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public User removeManagerFromFacility(@PathParam("facilityId") String facilityId) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.removeManagerFromFacility(facilityId);
 	}
 	
 	@GET

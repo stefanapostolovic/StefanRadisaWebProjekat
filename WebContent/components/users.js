@@ -21,7 +21,7 @@ Vue.component("users", {
     		
     						<!--SEARCH-->
     		
-    		<div class="col s3" style="margin-top:7%; margin-left:7%">
+    		<div class="col s3" style="margin-top:7%; margin-left:4%">
 				<div class="row">
 				    <div class="col s12 m6">
 				      <div class="card teal darken-2">
@@ -94,9 +94,12 @@ Vue.component("users", {
 					<th>Poeni</th>
 					<th>Uloga</th>
 					<th>Tip kupca</th>
+					<th></th>
 				</tr>
 	    			
-	    		<tr v-for="(p, index) in filteredUsers" class="tableRowBorder">
+	    		<tr v-for="(p, index) in filteredUsers"
+	    		v-if="p.isDeleted == false" 
+	    		class="tableRowBorder">
 	    			<td>
 	    				<p style="width:150px;height=150px">
 	    					{{p.name}}
@@ -132,6 +135,13 @@ Vue.component("users", {
 							{{p.customerType.name}}
 						</p>
 					</td>
+					<td>	
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteUser(p)"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+		    		  	</a>
+					</td>
 				</tr>
 	    	</table>
     		</div>
@@ -143,6 +153,44 @@ Vue.component("users", {
           .then(response => (this.users = response.data))
     },
     methods: {
+		deleteUser(user) {
+			user.isDeleted = true;
+			
+			if (user.role === 'Customer') {
+				axios
+					.put('rest/updateUserKeepSession/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
+			else if (user.role === 'Trainer') {
+				axios
+					/*.put('rest/trainings/deleteTrainingsForSelectedTrainer', user)
+					.then(response => {
+						console.log(response.data);
+						return axios.put('rest/updateUser/' + user.username, user);
+					})
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})*/
+					.put('rest/updateUserKeepSession/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
+			else if (user.role === 'Manager') {
+				axios
+					.put('rest/updateUserKeepSession/' + user.username, user)
+					.then(response => {
+						console.log(response.data);
+						router.push('/users');
+					})
+			}
+		},
+	
     	multiSearch() {
 			axios
 				.get('rest/search/' + this.srchname + '/' + this.srchsurname + '/' + this.srchusername)
