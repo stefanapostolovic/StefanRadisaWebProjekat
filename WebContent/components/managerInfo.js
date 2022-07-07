@@ -74,6 +74,9 @@ Vue.component("managerInfo", {
 						Description
 					</th>
 					<th>
+						Time
+					</th>
+					<th>
 						Duration (hours)
 					</th>
 					<th>
@@ -98,6 +101,11 @@ Vue.component("managerInfo", {
 					<td class="kolona">
 						<p style="width:150px;height=150px">
 							{{p.description}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainingTime}}
 						</p>
 					</td>
 					<td class="kolona">

@@ -11,8 +11,11 @@ import java.io.Reader;
 import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -116,6 +119,8 @@ public class TrainingDAO {
 			}
 		}
 		
+		if (!(isTrainerFree(training))) return null;
+		
 		Training trainingToUpdate = this.trainings.get(id);
 		trainingToUpdate.setImage(training.getImage());
 		trainingToUpdate.setName(training.getName());
@@ -123,6 +128,7 @@ public class TrainingDAO {
 		trainingToUpdate.setDuration(training.getDuration());
 		trainingToUpdate.setDescription(training.getDescription());
 		trainingToUpdate.setTrainer(training.getTrainer());
+		trainingToUpdate.setTrainingTime(training.getTrainingTime());
 		trainingToUpdate.setIsCanceled(training.getIsCanceled());
 		
 		trainingToUpdate.setIsDeleted(training.getIsDeleted());
@@ -265,22 +271,168 @@ public class TrainingDAO {
 		if (training != null) {
 			for (Training temp : trainings.values()) {
 				if (temp.getName().trim().toLowerCase().equals(
-						training.getName().trim().toLowerCase())) {
+						training.getName().trim().toLowerCase()) &&
+						temp.getSportFacility().getId().equals(training.getId())) {
 					return null;
 				}
 			}
 		}
 		
+		if (!(isTrainerFree(training))) return null;
+		
 		Training newlyCreatedTraining = new Training(
 				"-1", training.getName(), training.getTrainingType(), training.getSportFacility(),
 				training.getDuration(), training.getTrainer(), training.getDescription(),
-				training.getImage(), false);
+				training.getImage(), training.getTrainingTime(), false);
+		
 		
 		save(newlyCreatedTraining);
 		
 		return newlyCreatedTraining;
 	}
 	
+	private boolean isTrainerFree(Training training) {
+		// TODO Auto-generated method stub
+		/*int newTrainingDuration = Math.round(training.getDuration());
+		
+		HashMap<Integer, Integer> trainingTimes = new HashMap<Integer, Integer>();
+		
+		List<Training> trainerTrainings = getGroupTrainingsForSelectedTrainer(training.getTrainer().getUsername());
+		trainerTrainings.add(training);
+		
+		for (Training value : trainerTrainings) {
+			int hours = Integer.parseInt(value.getTrainingTime().split(":")[0]);
+			int minutes = Integer.parseInt(value.getTrainingTime().split(":")[1]);
+			trainingTimes.put(hours, minutes);
+		}
+		
+		List<Integer> sortedHours = new ArrayList<Integer>(trainingTimes.keySet());
+		
+		Collections.sort(sortedHours, new Comparator<Integer>() {
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2;
+			}	
+		});
+		
+		int idx = sortedHours.indexOf(Integer.parseInt(training.getTrainingTime().split(":")[0]));
+		
+		int newTrainingHours = sortedHours.get(idx);
+		int newTrainingMinutes = trainingTimes.get(newTrainingHours);
+		
+		if (idx + 1 == sortedHours.size()) {
+			int facEndHour = Integer.parseInt(
+					training.getSportFacility().getEndTime().split(":")[0]);
+			int facEndMinutes = Integer.parseInt(
+					training.getSportFacility().getEndTime().split(":")[1]);
+			
+			if ((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes > 
+			facEndHour * 60 + facEndMinutes)
+				return false;
+		}
+		else if (idx == 0) {
+			int nextHour = sortedHours.get(idx + 1);
+			int nextMinutes = trainingTimes.get(nextHour);
+			
+			if ((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes > 
+			nextHour * 60 + nextMinutes)
+				return false;
+		}
+		else {
+			int prevHour = sortedHours.get(idx - 1);
+			int prevMinutes = trainingTimes.get(prevHour);
+			
+			int nextHour = sortedHours.get(idx + 1);
+			int nextMinutes = trainingTimes.get(nextHour);
+			
+			if (((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes <= 
+			prevHour * 60 + prevMinutes) && (
+					(newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes >= 
+					nextHour * 60 + nextMinutes))
+				return false;
+		}*/
+		
+							//DRUGI POKUSAJ//
+		
+		/*List<Integer> trainingsWithoutDuration = new ArrayList<Integer>();
+		List<Integer> trainingsWithDuration = new ArrayList<Integer>();
+		
+		int hours = Integer.parseInt(training.getTrainingTime().split(":")[0]);
+		int minutes = Integer.parseInt(training.getTrainingTime().split(":")[1]);
+		int newTrainingDuration = Math.round(training.getDuration());
+		
+		int newTrainingWithoutDuration = hours * 60 + minutes;
+		int newTrainingWithDuration = (hours + newTrainingDuration) * 60 + minutes;
+		
+		for (Training value : trainings.values()) {
+			int valueHour = Integer.parseInt(value.getTrainingTime().split(":")[0]);
+			int valueMinutes = Integer.parseInt(value.getTrainingTime().split(":")[1]);
+			int valueDuration = Math.round(value.getDuration());
+			
+			trainingsWithoutDuration.add(valueHour * 60 + valueMinutes);
+			trainingsWithDuration.add((valueHour + valueDuration) * 60 + valueMinutes);
+		}
+		
+		List<Integer> sortedWithoutDuration = new ArrayList<Integer>(trainingsWithoutDuration);
+		Collections.sort(sortedWithoutDuration, new Comparator<Integer>() {
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2;
+			}	
+		});
+		
+		List<Integer> sortedWithDuration = new ArrayList<Integer>(trainingsWithDuration);
+		Collections.sort(sortedWithDuration, new Comparator<Integer>() {
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2;
+			}	
+		});
+		
+		//provera
+		for (int i = 0; i < sortedWithoutDuration.size(); i++) {
+			if (sortedWithoutDuration.get(1) > newTrainingWithoutDuration) {
+				if (sortedWithDuration.get(1) < newTrainingWithDuration)
+					return false;
+			}
+			
+			else if (sortedWithoutDuration.get(sortedWithoutDuration.size() - 2) < 
+					newTrainingWithoutDuration) {
+				if (sortedWithDuration.get(i))
+			}
+			
+			if (trainingsWithoutDuration.get(i) < newTrainingWithoutDuration &&
+					trainingsWithoutDuration.get(i + 1) < newTrainingWithoutDuration) {
+				
+			}
+		}*/
+		
+		//trajanje treninga kog zelim da napravim
+		int newTrainingDuration = Math.round(training.getDuration());
+		
+		//isparsirano vreme treninga sa i bez dodatog trajanja (trajanje je uvek ceo broj sati)
+		LocalTime newTrainingTimeWithoutDuration = LocalTime.parse(training.getTrainingTime());
+		LocalTime newTrainingTimeWithDuration = newTrainingTimeWithoutDuration.plusHours(newTrainingDuration);
+		
+		for (Training value : trainings.values()) {
+			//za svaki postojeci trening se racuna njegovo vreme sa i bez dodatog trajanja
+			LocalTime valueWithoutDuration = LocalTime.parse(value.getTrainingTime());
+			LocalTime valueWithDuration = valueWithoutDuration.plusHours(Math.round(value.getDuration()));;
+			
+			//ako novi trening bez trajanja pocinje pre tekuceg kog proveravamo,
+			//a sa dodatim trajanjem posle pocetka tekuceg
+			if (newTrainingTimeWithoutDuration.isBefore(valueWithoutDuration) &&
+					newTrainingTimeWithDuration.isAfter(valueWithoutDuration))
+				return false;
+			
+			//ako je tekuci trening bez dodatog trajanje pre novog,
+			//a sa dodatim posle
+			else if (valueWithoutDuration.isBefore(newTrainingTimeWithoutDuration) &&
+					valueWithDuration.isAfter(newTrainingTimeWithoutDuration)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
 	public void saveImage(InputStream uploadedInputStream, String fileName, Training training) {
 		try {
 			String absPath = "E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;

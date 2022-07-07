@@ -195,7 +195,9 @@ Vue.component("facility", {
 				</table>
 			</form>
 			
-			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training list:</h3>
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">
+				Training schedule (same for every day):
+			</h3>
 			<table>
 				<tr class="tableRowBorder">
 					<th>
@@ -209,6 +211,9 @@ Vue.component("facility", {
 					</th>
 					<th>
 						Description
+					</th>
+					<th>
+						Time
 					</th>
 					<th>
 						Duration (hours)
@@ -235,6 +240,11 @@ Vue.component("facility", {
 					<td class="kolona">
 						<p style="width:150px;height=150px">
 							{{p.description}}
+						</p>
+					</td>
+					<td class="kolona">
+						<p style="width:150px;height=150px">
+							{{p.trainingTime}}
 						</p>
 					</td>
 					<td class="kolona">

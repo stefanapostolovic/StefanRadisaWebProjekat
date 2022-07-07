@@ -267,10 +267,14 @@ public class FacilityDAO {
 		}
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		/*SportFacility newlyCreatedFacility = new SportFacility(
+				"-1", facility.getName(), facility.getObjectType(), 
+				false, facility.getLocation(), null, 0, 
+				formatter.format(LocalTime.now()), formatter.format(LocalTime.now()));*/
 		SportFacility newlyCreatedFacility = new SportFacility(
 				"-1", facility.getName(), facility.getObjectType(), 
 				false, facility.getLocation(), null, 0, 
-				formatter.format(LocalTime.now()), formatter.format(LocalTime.now()));
+				"06:00", "22:00");
 		
 		save(newlyCreatedFacility);
 		return newlyCreatedFacility;
