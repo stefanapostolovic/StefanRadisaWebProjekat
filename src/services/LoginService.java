@@ -67,6 +67,15 @@ public class LoginService {
 		return dao.update(username, user);
 	}
 	
+	@PUT
+	@Path("/updateUserKeepSession/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User updateUserKeepSession(@PathParam("username") String username, User user,
+			@Context HttpServletRequest request) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.update(username, user);
+	}
+	
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)

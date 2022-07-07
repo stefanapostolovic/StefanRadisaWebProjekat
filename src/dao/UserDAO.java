@@ -59,6 +59,11 @@ public class UserDAO {
 		if (!user.getPassword().equals(password)) {
 			return null;
 		}
+		else if (user.getIsDeleted() == null)
+			return user;
+		else if (user.getIsDeleted() == true)
+			return null;
+		
 		return user;
 	}
 	
@@ -67,10 +72,12 @@ public class UserDAO {
 	}
 	
 	public User getFacilityManager(String facilityId) {
-		User returnUser = new User();
+		User returnUser = null;
 		
 		for (User value : users.values()) {
-			if (value.getSportFacility().getId().equals(facilityId)){
+			if (value.getSportFacility() == null || value.getIsDeleted() == true)
+				continue;
+			else if (value.getSportFacility().getId().equals(facilityId)){
 				returnUser = value;
 				break;
 			}	
@@ -202,7 +209,8 @@ public class UserDAO {
 	public Collection<User> GetValidManagers() {
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
-			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null) {
+			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null
+					&& user.getIsDeleted() == false) {
 				returnList.add(user);
 			}
 		}

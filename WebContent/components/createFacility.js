@@ -175,7 +175,7 @@ Vue.component("createFacility", {
 						</form>
 						<br></br>
 						<br></br>
-						<!--CREATE MANAGER-->
+																<!--CREATE MANAGER-->
 					<div v-if="showManagerForm" style="margin-left:35%">
 						<form>
 							<table style="margin-bottom:5%">

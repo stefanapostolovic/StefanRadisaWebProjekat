@@ -158,7 +158,7 @@ Vue.component("users", {
 			
 			if (user.role === 'Customer') {
 				axios
-					.put('rest/updateUser/' + user.username, user)
+					.put('rest/updateUserKeepSession/' + user.username, user)
 					.then(response => {
 						console.log(response.data);
 						router.push('/users');
@@ -175,7 +175,7 @@ Vue.component("users", {
 						console.log(response.data);
 						router.push('/users');
 					})*/
-					.put('rest/updateUser/' + user.username, user)
+					.put('rest/updateUserKeepSession/' + user.username, user)
 					.then(response => {
 						console.log(response.data);
 						router.push('/users');
@@ -183,7 +183,7 @@ Vue.component("users", {
 			}
 			else if (user.role === 'Manager') {
 				axios
-					.put('rest/updateUser/' + user.username, user)
+					.put('rest/updateUserKeepSession/' + user.username, user)
 					.then(response => {
 						console.log(response.data);
 						router.push('/users');
