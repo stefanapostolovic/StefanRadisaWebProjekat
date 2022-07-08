@@ -221,8 +221,20 @@ public class FacilityDAO {
 	//LOCATION
 	public Collection<SportFacility> GetBySearchLocation(String input) {
 		List<SportFacility> returnList = new ArrayList<SportFacility>();
+		
 		for (SportFacility facility : facilities.values()) {
-			if (facility.getLocation().getAddress().getCity().contains(input)) {
+			if (facility.getLocation().getAddress().getCity().equals("-")) {
+				String street = facility.getLocation().getAddress().getStreet().split(",")[0].trim();
+				String city = facility.getLocation().getAddress().getStreet().split(",")[1].trim();
+				
+				if (street.toLowerCase().contains(input.toLowerCase()))
+					returnList.add(facility);
+				else if (city.toLowerCase().contains(input.toLowerCase()))
+					returnList.add(facility);
+			}
+			
+			else if (facility.getLocation().getAddress().getCity().trim().toLowerCase().contains(input)
+					|| facility.getLocation().getAddress().getStreet().trim().toLowerCase().contains(input)) {
 				returnList.add(facility);
 			}
 		}
@@ -240,6 +252,27 @@ public class FacilityDAO {
 		return returnList;
 	}
 	
+	private Boolean isContainLocation(SportFacility facility, String input) {
+		Boolean returnValue = false;
+		
+		if (facility.getLocation().getAddress().getCity().equals("-")) {
+			String street = facility.getLocation().getAddress().getStreet().split(",")[0].trim();
+			String city = facility.getLocation().getAddress().getStreet().split(",")[1].trim();
+			
+			if (street.toLowerCase().contains(input.toLowerCase()))
+				returnValue = true;
+			else if (city.toLowerCase().contains(input.toLowerCase()))
+				returnValue = true;
+		}
+		
+		else if (facility.getLocation().getAddress().getCity().trim().toLowerCase().contains(input)
+				|| facility.getLocation().getAddress().getStreet().trim().toLowerCase().contains(input)) {
+			returnValue = true;
+		}
+		
+		return returnValue;
+	}
+	
 	//SEARCH VISEKRITERIJUMSKO
 	public Collection<SportFacility> GetByMultiSearch(
 			String name, String type, String location, String rating) {
@@ -248,7 +281,7 @@ public class FacilityDAO {
 		for (SportFacility facility : facilities.values()) {
 			if ((facility.getName().toLowerCase().contains(name.toLowerCase())
 				&& (facility.getObjectType().toLowerCase().contains(type.toLowerCase())))
-				&& (facility.getLocation().getAddress().getCity().toLowerCase().contains(location.toLowerCase()))
+				&& (isContainLocation(facility, location))
 				&& (Double.toString(facility.getAverageRating()).toLowerCase().contains(rating.toLowerCase()))) {
 				returnList.add(facility);
 			}
