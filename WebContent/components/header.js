@@ -7,6 +7,7 @@ Vue.component("zaglavlje", {
 			showProfile: false,
 			showLogOut: true,
 			showHomeBtn: true,
+			showMembership:true,
 			
 			showAdminButtons: false,
 			showManagerInfo: false,
@@ -32,6 +33,9 @@ Vue.component("zaglavlje", {
     				
     				<li><a v-if="showProfile" v-on:click="prikaz" name="Profil">
     					<font size="+2">Prikaz profila &nbsp;&nbsp;</font>
+    				</a></li>
+					<li><a v-if="showMembership" v-on:click="showMembershipFunction" name="Clanarina">
+    					<font size="+2">Clanarina &nbsp;&nbsp;</font>
     				</a></li>
     				
     				<li><a v-if="showLogReg" v-on:click="aProduct">
@@ -75,6 +79,7 @@ Vue.component("zaglavlje", {
 				if (this.loggedUser == null || this.loggedUser === '') {
 					this.showLogReg = true;
 					this.showProfile = false;
+					this.showMembership =false;
 					
 					return;
 				}
@@ -104,6 +109,7 @@ Vue.component("zaglavlje", {
 				else {
 					this.showTrainerInfo = false;
 				}
+				showMembership=true;
 			})
     },
     methods: {
@@ -119,7 +125,9 @@ Vue.component("zaglavlje", {
 			//this.showHomeBtn = true;
 			router.push(`/profil`);	    
 		},
-		
+		showMembershipFunction(){
+			router.push('/membership')
+		},
     	aProduct : function() {
 			//this.showLogReg = false;
 			//this.showProfile = true;

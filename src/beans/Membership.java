@@ -8,6 +8,7 @@ public class Membership {
 	private double price;
 	private boolean status;
 	private int numberAppointments;
+	private int number;
 	private User user;
 	
 	public Membership() {
@@ -15,7 +16,7 @@ public class Membership {
 	}
 	
 	public Membership(String identifier, String membershipType, String paymentDate, String expirationDate,
-			double price, boolean status, int numberAppointments, User user) {
+			double price, boolean status, int numberAppointments, User user,int number) {
 		super();
 		this.identifier = identifier;
 		this.membershipType = membershipType;
@@ -25,7 +26,29 @@ public class Membership {
 		this.status = status;
 		this.numberAppointments = numberAppointments;
 		this.user = user;
+		this.number = number;
 	}
+	public Membership(Membership membership) {
+		this.identifier = membership.getIdentifier();
+		this.membershipType = membership.getMembershipType(); 
+		this.paymentDate = membership.getPaymentDate();
+		this.expirationDate = membership.getExpirationDate();
+		this.price = membership.getPrice();
+		this.status = membership.isStatus();
+		this.numberAppointments = membership.getNumberAppointments();
+		this.user = membership.getUser();
+		this.number = membership.getNumber(); 
+		
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public String getIdentifier() {
 		return identifier;
 	}

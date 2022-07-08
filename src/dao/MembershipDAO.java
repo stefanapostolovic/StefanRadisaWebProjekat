@@ -16,9 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Membership;
-import beans.Product;
-import beans.SportFacility;
-import beans.Training;
+
 
 public class MembershipDAO {
 	private HashMap<String, Membership> memberships = new HashMap<String, Membership>();
