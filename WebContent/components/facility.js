@@ -280,7 +280,7 @@ Vue.component("facility", {
 							{{p.duration}}
 						</p>
 					</td>
-					<td v-if="p.trainer.name !== null" class="kolona">
+					<td v-if="p.trainer !== null" class="kolona">
 						<p style="width:150px;height=150px">
 							{{p.trainer.name + ' ' + p.trainer.surename}}
 						</p>

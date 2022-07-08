@@ -113,7 +113,7 @@ Vue.component("managerInfo", {
 							{{p.duration}}
 						</p>
 					</td>
-					<td v-if="p.trainer.name !== null" class="kolona">
+					<td v-if="p.trainer !== null" class="kolona">
 						<p style="width:150px;height=150px">
 							{{p.trainer.name + ' ' + p.trainer.surename}}
 						</p>
@@ -193,7 +193,7 @@ Vue.component("managerInfo", {
 		methods: {
 			getTrainingTrainer(item, index) {
 				//DODAO//
-				if (item.isDeleted == true) return;
+				if (item.isDeleted == true || item.trainer == null) return;
 				
 				var obj = this.trainers.filter(function(elem) {
 					if(elem.name === item.trainer.name) {

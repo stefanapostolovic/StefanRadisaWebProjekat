@@ -43,22 +43,28 @@ Vue.component("viewTraining", {
 								<img alt="fato" v-bind:src="training.image" width="100px" height="100px">
 							</td>
 							<td>
-								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"/>
+								<span v-if="isTrainingFile" class="red-text">
+									Please upload a file
+								</span>
+								<input type="file" name="file" @change="onFileSelected"/>
 							</td>
 						</tr>
 						<tr>
 							<td>Name</td>
 							<td>
-								<input type="text" v-model="training.name"
-								:class="{ invalidField : isTrainingName}">
+								<span v-if="isTrainingName" class="red-text">
+									Please enter a name
+								</span>
+								<input type="text" v-model="training.name">
 							</td>
 						</tr>
 						<tr>
 							<td>Type</td>
 							<td>
-								<input type="text" v-model="training.trainingType"
-								:class="{ invalidField : isTrainingType}">
+								<span v-if="isTrainingType" class="red-text">
+									Please enter a type
+								</span>
+								<input type="text" v-model="training.trainingType">
 							</td>
 						</tr>
 						<tr>
@@ -147,6 +153,7 @@ Vue.component("viewTraining", {
 				return false;
 			}
 			
+			this.training.trainer = null;
 			return true;
 			//return this.type !== 'personal' || 	this.type !== 'group';
 		},

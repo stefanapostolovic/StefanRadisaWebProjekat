@@ -138,10 +138,11 @@ Vue.component("createTraining", {
 	
 	methods: {		
 		isPersonalOrGroup() {
-			if (this.type === 'personal' || this.type === 'group') {
+				if (this.type === 'personal' || this.type === 'group') {
 				return false;
 			}
 			
+			this.trainer = null;
 			return true;
 			//return this.type !== 'personal' || 	this.type !== 'group';
 		},
@@ -197,6 +198,9 @@ Vue.component("createTraining", {
 			}
 			
 			//DODAO
+			if (this.type === 'personal')
+				this.time = '';
+			
 			if (this.type !== 'personal' && this.time === '') {
 				this.isTrainingTime = true;
 				this.canCreateFlag = -1;
@@ -230,7 +234,11 @@ Vue.component("createTraining", {
 				this.isTrainingFile = false;
 			}
 			
-			if (this.trainer.username == null || this.trainer.username === '') {
+			if (this.trainer == null) {
+				this.isTrainer = false;
+			}
+			
+			else if (this.trainer.username == null || this.trainer.username === '') {
 				if (this.isPersonalOrGroup() == false) {
 					this.isTrainer = true;
 					this.canCreateFlag = -1;

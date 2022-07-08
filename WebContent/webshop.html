@@ -18,6 +18,8 @@
 	<script>
 			function initMap() {  
 				var nesto = document.getElementById("nesto");
+				var mapa = document.getElementById("mapa");
+				
 				//console.log(nesto);
 			    if (nesto != null) {
 			    	var map = new google.maps.Map(document.getElementById("nesto"), {
@@ -91,32 +93,31 @@
 		    
 		    //test prikaza kod facility
 		    
-		    console.log(document.getElementById("tabela"));
-		    
-		    //dobaljanje geo. duz. i sir.
-		    var tableDiv = document.getElementById("tabela");
-		    var table = tableDiv.children[0];
-		    var row = tableDiv.children[0].children[1];
-		    console.log(row)
-		    var td = row.children[3];
-		    console.log(td);
-		    var latLong = td.children[2].innerText;
-		    console.log(latLong);
-		    
-		    var lati = latLong.split(",")[1].trim();
-		    var longi = latLong.split(",")[0].trim();
-		    lati = parseFloat(lati);
-		    longi = parseFloat(longi);
-		    
-		    console.log(lati)
-		    console.log(longi)
-		    
-		    latLongJSObj = {lat: lati, lng: longi};
-		    console.log(latLongJSObj);
-		    
-	        var mapa = document.getElementById("mapa");
-			console.log(mapa);
-		    if (mapa != null) {
+		   
+		    else if (mapa != null) {
+		    	console.log(document.getElementById("tabela"));
+			    
+			    //dobaljanje geo. duz. i sir.
+			    var tableDiv = document.getElementById("tabela");
+			    var table = tableDiv.children[0];
+			    var row = tableDiv.children[0].children[1];
+			    console.log(row)
+			    var td = row.children[3];
+			    console.log(td);
+			    var latLong = td.children[2].innerText;
+			    console.log(latLong);
+			    
+			    var lati = latLong.split(",")[1].trim();
+			    var longi = latLong.split(",")[0].trim();
+			    lati = parseFloat(lati);
+			    longi = parseFloat(longi);
+			    
+			    console.log(lati)
+			    console.log(longi)
+			    
+			    latLongJSObj = {lat: lati, lng: longi};
+			    console.log(latLongJSObj);
+		    	
 		    	var map1 = new google.maps.Map(document.getElementById("mapa"), {
 				      center: {lat: lati, lng: longi},
 				      zoom: 13

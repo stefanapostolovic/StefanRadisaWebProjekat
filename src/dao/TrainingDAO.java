@@ -405,6 +405,12 @@ public class TrainingDAO {
 		}*/
 		
 		//trajanje treninga kog zelim da napravim
+		String test = training.getTrainingTime();
+		System.out.println(test);//
+		
+		if (training.getTrainingTime().equals(""))
+			return true;
+		
 		int newTrainingDuration = Math.round(training.getDuration());
 		
 		//isparsirano vreme treninga sa i bez dodatog trajanja (trajanje je uvek ceo broj sati)
