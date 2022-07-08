@@ -42,6 +42,14 @@ public class MembershipService {
 			return dao.findAll();
 		}
 		
+		@GET
+		@Path("/{id}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Membership getMemebrship(@PathParam("id") String idM) {
+			MembershipDAO dao = (MembershipDAO) ctx.getAttribute("membershipDAO");
+			return new Membership(dao.findMembership(idM));
+		}
+		
 		@POST
 		@Path("/")
 		@Produces(MediaType.APPLICATION_JSON)

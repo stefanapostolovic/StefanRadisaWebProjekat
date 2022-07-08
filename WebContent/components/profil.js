@@ -134,6 +134,8 @@ Vue.component("profil", {
 		}
 	},mounted () {
 		axios.get('rest/currentUser').
-				then(response => (this.user =  response.data));
+				then(response => {this.user =  response.data;console.log(this.user);});
+						
+
 				 }
 });

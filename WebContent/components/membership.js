@@ -19,7 +19,7 @@ Vue.component("membership", {
 						<th>Dnevni broj termina</th>
 						<th>Ukupan broj termina</th>
 					</tr>
-					<tr v-for="(p, index) in memberships" v-on:click="sentToChild(p) class="tableRowBorder"
+					<tr v-for="(p, index) in memberships" class="tableRowBorder"
 					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
 						<td>
 							{{p.membershipType}}
@@ -39,6 +39,7 @@ Vue.component("membership", {
 								{{p.number}}
 							</p>
 						</td>
+						<td><button v-on:click="sentToChild(p)">Pregled clanarine</button></td>
 					</tr>
 				</table>
 				
@@ -48,9 +49,11 @@ Vue.component("membership", {
 		axios.get('rest/membership/').then(response =>(this.memberships=response.data))
 		
     },
-    methods: {  sentToChild:function(p){
+    methods: {  
+	sentToChild:function(p){
 			localStorage.setItem("selectedMembership", p.identifier)
-			router.push(`/facility`);
+			console.log(p.identifier)
+			router.push(`/selectedMembership`);
 		},
 		
    }

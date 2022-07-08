@@ -12,7 +12,7 @@ const ViewTraining = { template: '<viewTraining></viewTraining>'}
 const ManagerInfo = { template: '<managerInfo></managerInfo>'}
 const TrainerInfo = { template: '<trainerInfo></trainerInfo>'}
 const Membership = {template:'<membership></membership>'}
-
+const SelectedMembership={template:'<selectedMembership></selectedMembership>'}
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
@@ -29,7 +29,9 @@ const router = new VueRouter({
 		{ path: '/viewTraining', component: ViewTraining},
 		{ path: '/managerInfo', component: ManagerInfo},
 		{ path: '/trainerInfo', component: TrainerInfo},
-		{ path: '/membership', component: Membership}
+		{ path: '/membership', component: Membership},
+		{ path: '/selectedMembership', component: SelectedMembership}
+
 	]
 });
 
