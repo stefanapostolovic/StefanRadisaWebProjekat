@@ -98,6 +98,8 @@ public class UserDAO {
 		userToUpdate.setPassword(updatedUser.getPassword());
 		userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
 		userToUpdate.setGender(updatedUser.getGender());
+		userToUpdate.setCustomerType(updatedUser.getCustomerType());
+		userToUpdate.setMembership(updatedUser.getMembership());
 		
 		if (updatedUser.getSportFacility() != null) {
 			userToUpdate.setSportFacility(updatedUser.getSportFacility());
