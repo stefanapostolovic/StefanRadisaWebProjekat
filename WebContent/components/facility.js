@@ -40,54 +40,82 @@ Vue.component("facility", {
 	    template: ` 
     	<div class="center">
 			<h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">{{facility.name}}</h3>
-			<table>
-				<tr class="tableRowBorder">
-					<th>Logo</th>
-					<th>Name</th>
-					<th>Type</th>
-					<th>Location</th>
-					<th>Rating</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-				<tr class="tableRowBorder">
-					<td><img alt="fato" v-bind:src="facility.image" 
-					width="100px" height="100px"></td>
-					<td class="kolona">
-						<p style="width:150px;height=150px">
-							{{facility.name}}
-						</p>
-					</td>
-					<td class="kolona">
-						<p style="width:150px;height=150px">
-							{{facility.objectType}}
-						</p>
-						
-					</td>
-					<td>
-						<p style="width:150px;height=150px">
-							{{facility.location.address.street+" "+facility.location.address.number}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{facility.location.address.city+"  "+facility.location.address.zipCode}}
-						</p>
-						<p style="width:150px;height=150px">
-							{{facility.location.longitude+",    "+ facility.location.latitude}}
-						</p>
-					</td>
-					<td>
-						<p style="width:150px;height=150px">{{facility.averageRating}}</p>
-					</td>
-					<td v-if="facility.status">Open</td>
-					<td v-else="facility.status">Closed</td>
-					<td class="red-text">
-						<span v-if="hasManager()">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No manager</span>
-					</td>
-				</tr>
-	    	</table>    
+			<div class="row">
+				<div id="tabela" class="col s9">
+					<table>
+						<tr class="tableRowBorder">
+							<th>Logo</th>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Location</th>
+							<th>Rating</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+						<tr class="tableRowBorder">
+							<td><img alt="fato" v-bind:src="facility.image" 
+							width="100px" height="100px"></td>
+							<td class="kolona">
+								<p style="width:150px;height=150px">
+									{{facility.name}}
+								</p>
+							</td>
+							<td class="kolona">
+								<p style="width:150px;height=150px">
+									{{facility.objectType}}
+								</p>
+								
+							</td>
+							<td>
+								<p style="width:150px;height=150px">
+									{{facility.location.address.street+" "+facility.location.address.number}}
+								</p>
+								<p style="width:150px;height=150px">
+									{{facility.location.address.city+"  "+facility.location.address.zipCode}}
+								</p>
+								<p style="width:150px;height=150px">
+									{{facility.location.longitude+",    "+ facility.location.latitude}}
+								</p>
+							</td>
+							<td>
+								<p style="width:150px;height=150px">{{facility.averageRating}}</p>
+							</td>
+							<td v-if="facility.status">Open</td>
+							<td v-else="facility.status">Closed</td>
+							<td class="red-text">
+								<span v-if="hasManager()">
+								Missing manager</span>
+							</td>
+						</tr>
+		    		</table>
+				</div>
+									<!-- GOOGLE MAPA -->
+				<div class="col s3">
+				
+					<!-- Search input -->
+					
+					<input id="searchFacility" hidden
+					class="controls white" type="text" 
+					style="margin-top:10%"
+					placeholder="Enter a location">
+					
+					<!-- Map -->
+					
+				    <div id="mapa" style="height: 300px; width: 100%; 
+						 margin-left:40%">
+		   			</div>
+		   			
+		   			<br></br>
+					<span>
+						<button @click="showMap" style="margin-left:50%"
+						class="btn">Show Map</button>
+						&nbsp;&nbsp;
+					</span>
+				</div>
+				
+			</div>
+			    
 								<!-- MANAGER -->
-			<br></br>
 			<button v-if="hasManager()" class="btn" 
 			@click.prevent="showManagerForm">
 				Assign a manager
@@ -281,8 +309,8 @@ Vue.component("facility", {
 						{{p.grade}}
 					</td>
 				</tr>
-		    </table>
-   		</div>		  
+		    </table>  
+   		</div>  
     	`,
     mounted () {
 		this.id = localStorage.getItem("selectedFacility");
@@ -320,6 +348,10 @@ Vue.component("facility", {
 			})
     },
     methods: {
+		showMap () {
+			location.reload();
+		},
+		
 		confirmCreateWithNewManager() {
 			event.preventDefault();
 			
