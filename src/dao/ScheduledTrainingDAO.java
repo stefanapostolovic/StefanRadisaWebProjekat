@@ -42,7 +42,7 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 		return trainings.containsKey(id) ? trainings.get(id) : null;
 	}
 	
-	public List<ScheduledTraining> save(ScheduledTraining facility) {	
+	public ScheduledTraining save(ScheduledTraining facility) {	
 		Integer maxId = -1;
 		for (String id : trainings.keySet()) {
 			int idNum =Integer.parseInt(id);
@@ -73,7 +73,7 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return facilityList;
+		return facility;
 	}
 	
 	public ScheduledTraining update(String id, ScheduledTraining facility) {
