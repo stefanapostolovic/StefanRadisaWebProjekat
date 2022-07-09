@@ -3,7 +3,8 @@ Vue.component("selectedMembership", {
 	    return {id: '',
 	    user:null,
 		membership:{"identifier":"00000003","membershipType":"Sedmicna","paymentDate":null,"expirationDate":null,"price":"300","status":"true","numberAppointments":"3","user":null,"number":"5"},
-	    code:'1',
+	    code:null,
+		stringCode:"",
 		isDate:false,
 		price:false
 		}
@@ -68,13 +69,13 @@ Vue.component("selectedMembership", {
 					<td>Unesite promo kod:</td>
 					<td><span v-if="isDate" class="red-text">
 	    				&nbsp;&nbsp;Nevalidan kod
-	    			</span><input type="text" name="type" v-model="code"></td>
+	    			</span><input type="text" name="type" v-model="stringCode"></td>
 					<td><button v-on:click="obracunaj">Obracunaj</button></td>
 					</tr>
 					<tr>
 					<td></td>
 					<a class="waves-effect waves-light btn-small teal darken-2" @click="dodajClanarinu">
-	    					<i class="material-icons left">business</i>Opened
+	    					<i class="material-icons left">business</i>Kupi
 	    				</a>
 					
 	    				
@@ -104,7 +105,6 @@ Vue.component("selectedMembership", {
 
 			this.membership=second_response.data
 			this.membership.status=true;
-								console.log(second_response.data);
 		this.membership.paymentDate=datm.toLocaleDateString ();
 		if(this.membership.membershipType == "Godisnja")
 			this.membership.expirationDate =addDays(datm,365)
@@ -144,12 +144,35 @@ Vue.component("selectedMembership", {
 		},
 		obracunaj:function(){
 			event.preventDefault();
-			this.isDate=false;
-			if(this.code=="1" && !this.price){
+			if( this.stringCode=="" ){
 				this.isDate=true;
-				this.price=true;
+				return;	
 			}
+			axios.get('rest/codes/findCode/'+this.stringCode).then(response=>{
+			this.isDate=false;
+			this.code=response.data;
 			
+			if( this.code ==null || this.code==""){
+				this.isDate=true;
+				return;	
+			}
+			let pomD = new Date();
+			let pomD1 = new Date(this.code.expiryDate);
+			if(pomD1.getTime()<pomD.getTime()){
+				this.isDate=true;
+				return;	
+			}
+			if( this.code.isDeleted || this.code.useAmount <=0){
+				console.log("da li ovde udje")
+				this.isDate=true;
+				return;	
+			}else{
+				if(!this.price){
+				this.price=true;
+					this.membership.price = this.membership.price * (1 - this.code.discountPercentage/100)
+				}
+			}
+			})
 		},
 		dodajClanarinu(){
 			event.preventDefault();
@@ -157,7 +180,6 @@ Vue.component("selectedMembership", {
 			axios.put('rest/updateUser/' + this.user.username, this.user).
 				then(response => {
 					this.user = response.data;
-					console.log(this.user)
 					router.push(`/`);
 				});		
 		

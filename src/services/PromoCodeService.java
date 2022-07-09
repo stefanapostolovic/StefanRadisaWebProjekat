@@ -45,6 +45,15 @@ public class PromoCodeService {
 		return codeList;
 	}
 	
+	@GET
+	@Path("/findCode/{code}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PromoCode findCode(@PathParam("code") String code) {
+		PromoCodeDAO dao = (PromoCodeDAO) ctx.getAttribute("codeDAO");
+		return dao.find(code);
+	}
+	
 	@POST
 	@Path("/createCode")
 	@Consumes(MediaType.APPLICATION_JSON)

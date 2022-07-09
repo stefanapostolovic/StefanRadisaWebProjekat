@@ -177,7 +177,6 @@ Vue.component("facilities", {
 		.then(axios.spread((first_response, second_response) => {
 			this.facilities = first_response.data;
 			this.facilitiesCopy = first_response.data;
-			
 			this.loggedUser = second_response.data;
 			const refresh = localStorage.getItem('test');
 			if (refresh === 'login') {
