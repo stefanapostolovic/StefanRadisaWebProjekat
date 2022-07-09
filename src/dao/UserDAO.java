@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.CustomerType;
+import beans.Membership;
 import beans.User;
 import enums.Role;
 
@@ -67,6 +68,10 @@ public class UserDAO {
 		return user;
 	}
 	
+	public User getUser(String username) {
+		return users.get(username);
+	}
+	
 	public Collection<User> findAll() {
 		return users.values();
 	}
@@ -101,6 +106,15 @@ public class UserDAO {
 		userToUpdate.setCustomerType(updatedUser.getCustomerType());
 		userToUpdate.setMembership(updatedUser.getMembership());
 		
+		//test
+		User test = new User();
+		test.setName(userToUpdate.getName());
+		test.setSurename(userToUpdate.getSurename());
+		test.setUsername(userToUpdate.getUsername());
+		
+		userToUpdate.getMembership().setUser(test);
+		//test
+		
 		if (updatedUser.getSportFacility() != null) {
 			userToUpdate.setSportFacility(updatedUser.getSportFacility());
 		}
@@ -129,9 +143,12 @@ public class UserDAO {
 		loadUsers(contextPath);		
 		if (users != null) {
 			if (users.containsKey(user.getUsername())) {
-				return null;
+				if (users.get(user.getUsername()).getIsDeleted() == false)
+					return null;
 			}
 		}
+		
+		user.setIsDeleted(false);
 		
 		User custTest = new User(
 				user.getUsername(), user.getPassword(), 
@@ -223,6 +240,18 @@ public class UserDAO {
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
 			if (user.getRole().equals(Role.Trainer)) returnList.add(user);
+		}
+		
+		return returnList;
+	}
+	
+	public Collection<Membership> getCustomerMemberships() {
+		List<Membership> returnList = new ArrayList<Membership>();
+		
+		for (User value : users.values()) {
+			if (value.getIsDeleted() == false && value.getMembership() != null && 
+				value.getMembership().getIsDeleted() == false)
+				returnList.add(value.getMembership());
 		}
 		
 		return returnList;

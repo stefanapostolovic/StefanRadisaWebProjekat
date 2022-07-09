@@ -88,6 +88,7 @@ public class MembershipDAO {
 		membershipToUpdate.setPrice(membership.getPrice());
 		membershipToUpdate.setStatus(membership.isStatus());
 		membershipToUpdate.setUser(membership.getUser());
+		membershipToUpdate.setIsDeleted(membership.getIsDeleted());
 		
 		System.out.println("DAO UPDATE TEST");
 		

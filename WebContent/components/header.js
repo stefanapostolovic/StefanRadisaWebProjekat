@@ -7,11 +7,12 @@ Vue.component("zaglavlje", {
 			showProfile: false,
 			showLogOut: true,
 			showHomeBtn: true,
-			showMembership:true,
 			
 			showAdminButtons: false,
 			showManagerInfo: false,
 			showTrainerInfo: false,
+			showMembership: false,	
+			showMembershipListAdmin: false,	
 			
 			promoCode: false
 	    }
@@ -24,6 +25,11 @@ Vue.component("zaglavlje", {
     			</a>
     			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
     				
+    				<li>
+    					<a v-if="showMembershipListAdmin" @click="adminViewMemberships" id="admin">
+    						<font size="+2">Memberships &nbsp;&nbsp;</font>
+    					</a>
+    				</li>
     				<li><a v-if="promoCode" @click="createPromoCode" id="treneri">
     					<font size="+2">Create promo code &nbsp;&nbsp;</font>
     				</a>
@@ -98,10 +104,12 @@ Vue.component("zaglavlje", {
 				if (this.loggedUser.role == "Administrator") {
 					this.showAdminButtons = true;
 					this.promoCode = true;
+					this.showMembershipListAdmin = true;
 				}
 				else {
 					this.showAdminButtons = false;
 					this.promoCode = false;
+					this.showMembershipListAdmin = false;
 				}
 				
 				if (this.loggedUser.role == "Manager") {
@@ -117,10 +125,21 @@ Vue.component("zaglavlje", {
 				else {
 					this.showTrainerInfo = false;
 				}
-				showMembership=true;
+				
+				if (this.loggedUser.role == "Customer") {
+					this.showMembership = true;	
+				}
+				else { 
+					this.showMembership= false;
+				}
+				
 			})
     },
     methods: {
+		adminViewMemberships () {
+			router.push('/listMembership');
+		},
+	
 		createPromoCode() {
 			router.push('/promoCode');
 		},
@@ -175,6 +194,8 @@ Vue.component("zaglavlje", {
 					this.showManagerInfo = false;
 					this.showTrainerInfo = false;
 					this.promoCode = false;
+					this.showMembership = false;
+					this.showMembershipListAdmin = false;
 					
 					/*let profil = document.getElementsByName("pom")[0];
 					let p  =profil.getElementsByTagName("button")[0];
