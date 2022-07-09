@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +20,9 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.CustomerType;
 import beans.Membership;
+import beans.SportFacility;
+import beans.Training;
+import beans.TrainingHistory;
 import beans.User;
 import enums.Role;
 
@@ -254,6 +259,37 @@ public class UserDAO {
 				returnList.add(value.getMembership());
 		}
 		
+		return returnList;
+	}
+	
+	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(String username) {
+		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
+		
+		for (User value: users.values()) {
+			if (value.getUsername().equals(username)) {
+				if (value.getTrainingHistory() == null) {
+					TrainingHistory test = new TrainingHistory(LocalDate.now().toString(), 
+							new Training(null, "test", "personal", new SportFacility(), 1, value, "", null, 
+									LocalTime.now().toString(), false), value, value);
+					TrainingHistory test1 = new TrainingHistory(LocalDate.now().toString(), 
+							new Training(null, "test1", "personal", new SportFacility(), 2, value, "", null, 
+									LocalTime.now().toString(), false), value, value);
+					TrainingHistory test2 = new TrainingHistory(LocalDate.now().toString(), 
+							new Training(null, "test2", "personal", new SportFacility(), 3, value, "", null, 
+									LocalTime.now().toString(), false), value, value);
+					
+					returnList.add(test);
+					returnList.add(test1);
+					returnList.add(test2);
+					break;
+				}
+					
+				else {
+					returnList = value.getTrainingHistory();
+					break;
+				}	
+			}
+		}
 		return returnList;
 	}
 }

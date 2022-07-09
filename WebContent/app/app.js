@@ -15,6 +15,7 @@ const PromoCode = { template: '<promoCode></promoCode>'}
 const Membership = {template:'<membership></membership>'}
 const SelectedMembership={template:'<selectedMembership></selectedMembership>'}
 const ListMembership = { template: '<listMembership></listMembership>'}
+const ListTrainings  = { template: '<listTrainings></listTrainings>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -35,7 +36,8 @@ const router = new VueRouter({
 		{ path: '/promoCode', component: PromoCode},
 		{ path: '/membership', component: Membership},
 		{ path: '/selectedMembership', component: SelectedMembership},
-		{ path: '/listMembership', component: ListMembership}
+		{ path: '/listMembership', component: ListMembership},
+		{ path: '/listTrainings', component: ListTrainings}
 	]
 });
 

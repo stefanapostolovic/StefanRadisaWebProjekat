@@ -14,6 +14,8 @@ Vue.component("zaglavlje", {
 			showMembership: false,	
 			showMembershipListAdmin: false,	
 			
+			showScheduledTrainingsAdmin: false,
+			
 			promoCode: false
 	    }
 	},
@@ -25,6 +27,11 @@ Vue.component("zaglavlje", {
     			</a>
     			<ul id="nav-mobile" class="right hide-on-med-and-down" name="list">
     				
+    				<li>
+    					<a v-if="showScheduledTrainingsAdmin" @click="adminViewTrainings" id="admin">
+    						<font size="+2">Scheduled trainings &nbsp;&nbsp;</font>
+    					</a>
+    				</li>
     				<li>
     					<a v-if="showMembershipListAdmin" @click="adminViewMemberships" id="admin">
     						<font size="+2">Memberships &nbsp;&nbsp;</font>
@@ -105,11 +112,13 @@ Vue.component("zaglavlje", {
 					this.showAdminButtons = true;
 					this.promoCode = true;
 					this.showMembershipListAdmin = true;
+					this.showScheduledTrainingsAdmin = true;
 				}
 				else {
 					this.showAdminButtons = false;
 					this.promoCode = false;
 					this.showMembershipListAdmin = false;
+					this.showScheduledTrainingsAdmin = false;
 				}
 				
 				if (this.loggedUser.role == "Manager") {
@@ -136,6 +145,10 @@ Vue.component("zaglavlje", {
 			})
     },
     methods: {
+		adminViewTrainings () {
+			router.push('/listTrainings');
+		},
+		
 		adminViewMemberships () {
 			router.push('/listMembership');
 		},
@@ -196,6 +209,7 @@ Vue.component("zaglavlje", {
 					this.promoCode = false;
 					this.showMembership = false;
 					this.showMembershipListAdmin = false;
+					this.showScheduledTrainingsAdmin = false;
 					
 					/*let profil = document.getElementsByName("pom")[0];
 					let p  =profil.getElementsByTagName("button")[0];

@@ -19,7 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Membership;
+import beans.TrainingHistory;
 import beans.User;
+import dao.TrainingDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -180,6 +182,17 @@ public class LoginService {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		
 		return dao.getCustomerMemberships();
+	}
+	
+	@GET
+	@Path("/getUpcomingTrainingsForSelectedTrainer/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(@PathParam("username")
+	 String username) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.getUpcomingTrainingsForSelectedTrainer(username);
 	}
 }
 
