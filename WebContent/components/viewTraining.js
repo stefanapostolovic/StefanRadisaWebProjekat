@@ -5,6 +5,7 @@ Vue.component("viewTraining", {
 			facilityId: '',
 			name: '',
 			type: '',
+			time: '',
 			description: '',
 			duration: '',
 			
@@ -20,7 +21,9 @@ Vue.component("viewTraining", {
 			//validation
 			isTrainingName: false,
 			isTrainingType: false,
+			isTrainingTime: false,
 			isTrainingFile: false,
+			isFacilityOpen: false,
 			
 			canCreateFlag:  1
 		}
@@ -29,6 +32,10 @@ Vue.component("viewTraining", {
 	template: `
 		<div class="container">
 			<h1 style="margin-top:7%; margin-bottom:7%">Change training</h1>
+			<p style="margin-top:5%; margin-bottom:5%; color: #00bfa5;">
+				To add a personal or group training, in the field "Type" type
+				 <b>"personal" </b>or<b>" group"</b> .
+			</p>
 			<form enctype="multipart/form-data">
 					<table>
 						<tr class="tableRowBorderBoth">
@@ -36,22 +43,28 @@ Vue.component("viewTraining", {
 								<img alt="fato" v-bind:src="training.image" width="100px" height="100px">
 							</td>
 							<td>
-								<input type="file" name="file" @change="onFileSelected"
-								:class="{ invalidField : isTrainingFile}"/>
+								<span v-if="isTrainingFile" class="red-text">
+									Please upload a file
+								</span>
+								<input type="file" name="file" @change="onFileSelected"/>
 							</td>
 						</tr>
 						<tr>
 							<td>Name</td>
 							<td>
-								<input type="text" v-model="training.name"
-								:class="{ invalidField : isTrainingName}">
+								<span v-if="isTrainingName" class="red-text">
+									Please enter a name
+								</span>
+								<input type="text" v-model="training.name">
 							</td>
 						</tr>
 						<tr>
 							<td>Type</td>
 							<td>
-								<input type="text" v-model="training.trainingType"
-								:class="{ invalidField : isTrainingType}">
+								<span v-if="isTrainingType" class="red-text">
+									Please enter a type
+								</span>
+								<input type="text" v-model="training.trainingType">
 							</td>
 						</tr>
 						<tr>
@@ -60,6 +73,22 @@ Vue.component("viewTraining", {
 								<input type="text" v-model="training.description">
 							</td>
 						</tr>
+						
+						<tr>
+							<td>Training time</td>
+							<td>
+								<span v-if="isTrainingTime" class="red-text">
+									Please enter the time
+								</span>
+								<span v-if="isFacilityOpen" class="red-text">
+									Facility is not open at that time
+								</span>
+								<input type="time" min="06:00" max="22:00" 
+								:disabled="training.trainingType === 'personal'" 
+								v-model="training.trainingTime">
+							</td>
+						</tr>
+						
 						<tr>
 							<td>Duration</td>
 							<td>
@@ -69,7 +98,9 @@ Vue.component("viewTraining", {
 						<tr>
 							<td>Trainer</td>
 							<td>
-								<select name="trainers" id="trainers" v-model="training.trainer"
+								<select name="trainers" id="trainers"
+								:disabled="isPersonalOrGroup()" 
+								v-model="training.trainer"
 								class="displaySelect grey darken-4">
 									<option v-for="(p, index) in trainers"
 									v-if="p.isDeleted == false"
@@ -117,6 +148,16 @@ Vue.component("viewTraining", {
     },
     
 	methods: {
+		isPersonalOrGroup() {
+			if (this.training.trainingType === 'personal' || this.training.trainingType === 'group') {
+				return false;
+			}
+			
+			this.training.trainer = null;
+			return true;
+			//return this.type !== 'personal' || 	this.type !== 'group';
+		},
+		
 		getLoggedUser() {
 			return axios.get('rest/currentUser')
 		},
@@ -172,6 +213,32 @@ Vue.component("viewTraining", {
 				this.isTrainingType = false;
 			}
 			
+			//DODAO
+			if (this.training.trainingType !== 'personal' && this.training.trainingTime === '') {
+				this.isTrainingTime = true;
+				this.canCreateFlag = -1;
+			}
+			else {
+				this.isTrainingTime = false;
+			}
+			
+			if (this.training.trainingType == 'personal')
+				this.training.trainingTime = '';
+			else {
+				let trHours = parseInt(this.training.trainingTime.split(':')[0]);
+				let facStart = parseInt(this.facility.startTime.split(':')[0]);
+				let facEnd = parseInt(this.facility.endTime.split(':')[0]);
+				
+				if (trHours < facStart || trHours > facEnd) {
+				this.isFacilityOpen = true;
+				this.canCreateFlag = -1;
+				}
+				else {
+					this.isFacilityOpen = false;
+				}
+			}
+			//DODAO
+			
 			if (this.file == null) {
 				this.isTrainingFile = true;
 				this.canCreateFlag = -1;	
@@ -194,7 +261,7 @@ Vue.component("viewTraining", {
 				router.push('/managerInfo');
 			}))
 			.catch(axios.spread((first_response) => {
-				toast('That name is already taken!');
+				toast('That name is already taken or the trainer is not available at that time!');
 			}))
 		},
 		updateTraining() {

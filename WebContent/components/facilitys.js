@@ -301,8 +301,10 @@ Vue.component("facilities", {
 					{
 							let copiedFacilities = Object.assign([], this.facilities);
 							copiedFacilities.sort((a, b) => {
-								let fa = a.location.address.city.toLowerCase();
-								let fb = b.location.address.city.toLowerCase();
+								//let fa = a.location.address.city.toLowerCase();
+								//let fb = b.location.address.city.toLowerCase();
+								let fa = a.location.address.street.trim().toLowerCase();
+								let fb = b.location.address.street.trim().toLowerCase();
 								
 								if (this.sortDirectionLocation === 'ASC') {
 									if (fa < fb) {

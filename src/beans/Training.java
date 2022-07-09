@@ -9,6 +9,7 @@ public class Training {
 	private User trainer;
 	private String description;
 	private String image;
+	private String trainingTime;
 	private Boolean isCanceled;
 	
 	private Boolean isDeleted;
@@ -18,7 +19,7 @@ public class Training {
 	}
 	
 	public Training(String id, String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
-			String description, String image, Boolean isCanceled) {
+			String description, String image, String trainingTime, Boolean isCanceled) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -28,9 +29,17 @@ public class Training {
 		this.trainer = trainer;
 		this.description = description;
 		this.image = image;
+		this.trainingTime = trainingTime;
 		this.isCanceled = isCanceled;
 		
 		this.isDeleted = false;
+	}
+	public String getTrainingTime() {
+		return trainingTime;
+	}
+	
+	public void setTrainingTime(String trainingTime) {
+		this.trainingTime = trainingTime;
 	}
 	
 	public Boolean getIsDeleted() {

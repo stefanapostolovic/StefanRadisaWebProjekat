@@ -8,6 +8,7 @@ Vue.component("createTraining", {
 			facility: {},
 			name: '',
 			type: '',
+			time: '',
 			description: '',
 			duration: '',
 			
@@ -21,8 +22,11 @@ Vue.component("createTraining", {
 			//validation
 			isTrainingName: false,
 			isTrainingType: false,
+			isTrainingTime: false,
 			isTrainingFile: false,
 			isTrainer: false,
+			
+			isFacilityOpen: false,
 			
 			canCreateFlag:  1
 		}
@@ -63,6 +67,20 @@ Vue.component("createTraining", {
 								<input type="text" v-model="type">
 							</td>
 						</tr>
+						<tr>						<!-- TIME -->
+							<td>Training time</td>
+							<td>
+								<span v-if="isTrainingTime" class="red-text">
+									Please enter the time
+								</span>
+								<span v-if="isFacilityOpen" class="red-text">
+									Facility is not open at that time
+								</span>
+								<input type="time" min="06:00" max="22:00" 
+								:disabled="type === 'personal'" 
+								v-model="time">
+							</td>
+						</tr>
 						<tr>
 							<td>Description</td>
 							<td>
@@ -92,9 +110,8 @@ Vue.component("createTraining", {
 						</tr>
 						<tr>
 							<td colspan="2">
-								<button class="btn" @click.prevent="confirmCreate">
-									Confirm
-								</button>
+								<input type="submit" value="Confirm"  
+								class="btn" @click.prevent="confirmCreate"/>
 								<td></td>
 							</td>
 						</tr>
@@ -119,12 +136,13 @@ Vue.component("createTraining", {
 		}))
 	},
 	
-	methods: {
+	methods: {		
 		isPersonalOrGroup() {
-			if (this.type === 'personal' || this.type === 'group') {
+				if (this.type === 'personal' || this.type === 'group') {
 				return false;
 			}
 			
+			this.trainer = null;
 			return true;
 			//return this.type !== 'personal' || 	this.type !== 'group';
 		},
@@ -179,6 +197,35 @@ Vue.component("createTraining", {
 				this.newTraining.trainingType = this.type;
 			}
 			
+			//DODAO
+			if (this.type === 'personal')
+				this.time = '';
+			
+			if (this.type !== 'personal' && this.time === '') {
+				this.isTrainingTime = true;
+				this.canCreateFlag = -1;
+			}
+			else {
+				this.isTrainingTime = false;
+				this.newTraining.trainingTime = this.time;
+			}
+			
+			let trHours = this.time.split(':')[0];
+			trHours = parseInt(trHours);
+			let trDuration = parseInt(this.duration);
+			
+			let facStart = parseInt(this.facility.startTime.split(':')[0]);
+			let facEnd = parseInt(this.facility.endTime.split(':')[0]);
+			
+			if (trHours < facStart || trHours > facEnd || (trHours + trDuration) > facEnd) {
+				this.isFacilityOpen = true;
+				this.canCreateFlag = -1;
+			}
+			else {
+				this.isFacilityOpen = false;
+			}
+			//DODAO
+			
 			if (this.file == null) {
 				this.isTrainingFile = true;
 				this.canCreateFlag = -1;	
@@ -187,7 +234,11 @@ Vue.component("createTraining", {
 				this.isTrainingFile = false;
 			}
 			
-			if (this.trainer.username == null || this.trainer.username === '') {
+			if (this.trainer == null) {
+				this.isTrainer = false;
+			}
+			
+			else if (this.trainer.username == null || this.trainer.username === '') {
 				if (this.isPersonalOrGroup() == false) {
 					this.isTrainer = true;
 					this.canCreateFlag = -1;
@@ -216,7 +267,7 @@ Vue.component("createTraining", {
 				router.push('/managerInfo');
 			}))
 			.catch(axios.spread((first_response) => {
-				toast('That name is already taken!');
+				toast('That name is already taken or the trainer is not available at that time!');
 			}))
 		},
 		

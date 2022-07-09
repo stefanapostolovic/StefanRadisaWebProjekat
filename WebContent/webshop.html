@@ -16,77 +16,174 @@
 		<router-view></router-view>	
 </div>
 	<script>
-			function initMap() {
+			function initMap() {  
 				var nesto = document.getElementById("nesto");
-				console.log(nesto);
-			    var map = new google.maps.Map(document.getElementById("nesto"), {
-			      center: {lat: 43.320926, lng: 21.8954069},
-			      zoom: 13
-			    });
-			    var input = document.getElementById('searchInput');
-			    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+				var mapa = document.getElementById("mapa");
+				
+				//console.log(nesto);
+			    if (nesto != null) {
+			    	var map = new google.maps.Map(document.getElementById("nesto"), {
+					      center: {lat: 43.320926, lng: 21.8954069},
+					      zoom: 13
+					    });
+				    var input = document.getElementById('searchInput');
+				    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+				
+				    var autocomplete = new google.maps.places.Autocomplete(input);
+				    autocomplete.bindTo('bounds', map);
+				
+				    var infowindow = new google.maps.InfoWindow();
+				    var marker = new google.maps.Marker({
+				        map: map,
+				        anchorPoint: new google.maps.Point(0, -29)
+				    });
+			
+				    autocomplete.addListener('place_changed', function() {
+				        infowindow.close();
+				        marker.setVisible(false);
+				        var place = autocomplete.getPlace();
+				        if (!place.geometry) {
+				            window.alert("Autocomplete's returned place contains no geometry");
+				            return;
+				        }
+				        
+				        // If the place has a geometry, then present it on a map.
+				        if (place.geometry.viewport) {
+				            map.fitBounds(place.geometry.viewport);
+				        } else {
+				            map.setCenter(place.geometry.location);
+				            map.setZoom(17);
+				        }
+				        marker.setIcon(({
+				            url: place.icon,
+				            size: new google.maps.Size(71, 71),
+				            origin: new google.maps.Point(0, 0),
+				            anchor: new google.maps.Point(17, 34),
+				            scaledSize: new google.maps.Size(35, 35)
+				        }));
+				        marker.setPosition(place.geometry.location);
+				        marker.setVisible(true);
+				    
+				        var address = '';
+				        if (place.address_components) {
+				            address = [
+				              (place.address_components[0] && place.address_components[0].short_name || ''),
+				              (place.address_components[1] && place.address_components[1].short_name || ''),
+				              (place.address_components[2] && place.address_components[2].short_name || '')
+				            ].join(' ');
+				        }
+				    
+				        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+				        infowindow.open(map, marker);
+				      
+				        // Location details
+				        for (var i = 0; i < place.address_components.length; i++) {
+				            if(place.address_components[i].types[0] == 'postal_code'){
+				                document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+				            }
+				            if(place.address_components[i].types[0] == 'country'){
+				                document.getElementById('country').innerHTML = place.address_components[i].long_name;
+				            }
+				        }
+			        document.getElementById('location').innerHTML = place.formatted_address;
+			        document.getElementById('lat').innerHTML = place.geometry.location.lat();
+			        document.getElementById('lon').innerHTML = place.geometry.location.lng(); 
+			   });
+			}
+		    
+		    //test prikaza kod facility
+		    
+		   
+		    else if (mapa != null) {
+		    	console.log(document.getElementById("tabela"));
+			    
+			    //dobaljanje geo. duz. i sir.
+			    var tableDiv = document.getElementById("tabela");
+			    var table = tableDiv.children[0];
+			    var row = tableDiv.children[0].children[1];
+			    console.log(row)
+			    var td = row.children[3];
+			    console.log(td);
+			    var latLong = td.children[2].innerText;
+			    console.log(latLong);
+			    
+			    var lati = latLong.split(",")[1].trim();
+			    var longi = latLong.split(",")[0].trim();
+			    lati = parseFloat(lati);
+			    longi = parseFloat(longi);
+			    
+			    console.log(lati)
+			    console.log(longi)
+			    
+			    latLongJSObj = {lat: lati, lng: longi};
+			    console.log(latLongJSObj);
+		    	
+		    	var map1 = new google.maps.Map(document.getElementById("mapa"), {
+				      center: {lat: lati, lng: longi},
+				      zoom: 13
+				}); 
+		    	var input = document.getElementById("searchFacility");
+			    map1.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 			
 			    var autocomplete = new google.maps.places.Autocomplete(input);
-			    autocomplete.bindTo('bounds', map);
+			    autocomplete.bindTo('bounds', map1);
 			
 			    var infowindow = new google.maps.InfoWindow();
 			    var marker = new google.maps.Marker({
-			        map: map,
-			        anchorPoint: new google.maps.Point(0, -29)
+			    	position: latLongJSObj,
+			        map: map1,
+			        //anchorPoint: new google.maps.Point(0, -29)
 			    });
-	
-		    autocomplete.addListener('place_changed', function() {
-		        infowindow.close();
-		        marker.setVisible(false);
-		        var place = autocomplete.getPlace();
-		        if (!place.geometry) {
-		            window.alert("Autocomplete's returned place contains no geometry");
-		            return;
-		        }
-		        
-		        // If the place has a geometry, then present it on a map.
-		        if (place.geometry.viewport) {
-		            map.fitBounds(place.geometry.viewport);
-		        } else {
-		            map.setCenter(place.geometry.location);
-		            map.setZoom(17);
-		        }
-		        marker.setIcon(({
-		            url: place.icon,
-		            size: new google.maps.Size(71, 71),
-		            origin: new google.maps.Point(0, 0),
-		            anchor: new google.maps.Point(17, 34),
-		            scaledSize: new google.maps.Size(35, 35)
-		        }));
-		        marker.setPosition(place.geometry.location);
-		        marker.setVisible(true);
-		    
-		        var address = '';
-		        if (place.address_components) {
-		            address = [
-		              (place.address_components[0] && place.address_components[0].short_name || ''),
-		              (place.address_components[1] && place.address_components[1].short_name || ''),
-		              (place.address_components[2] && place.address_components[2].short_name || '')
-		            ].join(' ');
-		        }
-		    
-		        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-		        infowindow.open(map, marker);
-		      
-		        // Location details
-		        for (var i = 0; i < place.address_components.length; i++) {
-		            if(place.address_components[i].types[0] == 'postal_code'){
-		                document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
-		            }
-		            if(place.address_components[i].types[0] == 'country'){
-		                document.getElementById('country').innerHTML = place.address_components[i].long_name;
-		            }
-		        }
-	        document.getElementById('location').innerHTML = place.formatted_address;
-	        document.getElementById('lat').innerHTML = place.geometry.location.lat();
-	        document.getElementById('lon').innerHTML = place.geometry.location.lng();
-	   });
+		
+			    autocomplete.addListener('place_changed', function() {
+			        infowindow.close();
+			        marker.setVisible(false);
+			        var place = autocomplete.getPlace();
+			        if (!place.geometry) {
+			            window.alert("Autocomplete's returned place contains no geometry");
+			            return;
+			        }
+			        
+			        // If the place has a geometry, then present it on a map.
+			        if (place.geometry.viewport) {
+			            map1.fitBounds(place.geometry.viewport);
+			        } else {
+			            map1.setCenter(place.geometry.location);
+			            map1.setZoom(17);
+			        }
+			        marker.setIcon(({
+			            url: place.icon,
+			            size: new google.maps.Size(71, 71),
+			            origin: new google.maps.Point(0, 0),
+			            anchor: new google.maps.Point(17, 34),
+			            scaledSize: new google.maps.Size(35, 35)
+			        }));
+			        marker.setPosition(place.geometry.location);
+			        marker.setVisible(true);
+			    
+			        var address = '';
+			        if (place.address_components) {
+			            address = [
+			              (place.address_components[0] && place.address_components[0].short_name || ''),
+			              (place.address_components[1] && place.address_components[1].short_name || ''),
+			              (place.address_components[2] && place.address_components[2].short_name || '')
+			            ].join(' ');
+			        }
+			    
+			        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+			        infowindow.open(map1, marker);
+		   });  
+				    //KRAJ TESTA
+		    }
 	}
+	
+		/*$(document).ready(function () {
+			google.maps.event.addDomListener(window, 'load', initMap);
+		});*/
+		window.addEventListener('load', () => {
+			initMap();
+		});
+		
 	</script>
 	
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB64j6uBRrDFUW8AqeYx_QQBR0_UDdhYlk&callback=initMap" async defer></script>

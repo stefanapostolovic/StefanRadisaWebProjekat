@@ -284,7 +284,7 @@ Vue.component("createFacility", {
 		</div>
 		`,
 	
-	mounted() {
+	mounted() {		
 		axios.all([
 			this.getAllValidManagers()
 		])
