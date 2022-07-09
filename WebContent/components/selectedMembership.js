@@ -2,7 +2,7 @@ Vue.component("selectedMembership", {
 	data: function () {
 	    return {id: '',
 	    user:null,
-		membership:{"identifier":"00000003","membershipType":"Sedmicna","paymentDate":null,"expirationDate":null,"price":"300","status":"true","numberAppointments":"3","user":null,"number":"5"},
+		membership:{"identifier":null,"membershipType":null,"paymentDate":null,"expirationDate":null,"price":null,"status":"true","numberAppointments":"3","user":null,"number":null},
 	    code:null,
 		stringCode:"",
 		isDate:false,

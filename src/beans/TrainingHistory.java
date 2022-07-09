@@ -1,6 +1,8 @@
 package beans;
 
 public class TrainingHistory {
+	private String id;
+	private String time;
 	private String applicationDateTime;
 	private Training training;
 	private User user;
@@ -12,16 +14,33 @@ public class TrainingHistory {
 		
 	}
 	
-	public TrainingHistory(String applicationDateTime, Training training, User user, User coach) {
+	public TrainingHistory(String applicationDateTime, Training training, User user, User coach,String id, String time) {
 		super();
 		this.applicationDateTime = applicationDateTime;
 		this.training = training;
 		this.user = user;
 		this.coach = coach;
-		
+		this.time= time;
+		this.id=id;
 		this.isDeleted = false;
 	}
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}

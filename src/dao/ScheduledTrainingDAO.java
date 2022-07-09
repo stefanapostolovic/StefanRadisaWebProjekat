@@ -17,9 +17,10 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.ScheduledTraining;
 import beans.SportFacility;
+import beans.TrainingHistory;
 
 public class ScheduledTrainingDAO {
-private HashMap<String, ScheduledTraining> trainings = new HashMap<String, ScheduledTraining>();
+private HashMap<String, TrainingHistory> trainings = new HashMap<String, TrainingHistory>();
 	
 	public ScheduledTrainingDAO() {
 	}
@@ -30,19 +31,19 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 		loadFacilities(contextPath);
 	}
 	
-	public Collection<ScheduledTraining> findAll() {
+	public Collection<TrainingHistory> findAll() {
 		return trainings.values();
 	}
 	
-	public HashMap<String, ScheduledTraining> GetFacilityMap() {
+	public HashMap<String, TrainingHistory> GetFacilityMap() {
 		return trainings;
 	}
 	
-	public ScheduledTraining findFacility(String id) {
+	public TrainingHistory findFacility(String id) {
 		return trainings.containsKey(id) ? trainings.get(id) : null;
 	}
 	
-	public ScheduledTraining save(ScheduledTraining facility) {	
+	public TrainingHistory save(TrainingHistory facility) {	
 		Integer maxId = -1;
 		for (String id : trainings.keySet()) {
 			int idNum =Integer.parseInt(id);
@@ -55,15 +56,15 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 		facility.setId(maxId.toString());
 		trainings.put(facility.getId(), facility);
 		
-		List<ScheduledTraining> facilityList = new ArrayList<ScheduledTraining>();
+		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
 		
-		for (ScheduledTraining temp : trainings.values()) {
+		for (TrainingHistory temp : trainings.values()) {
 			facilityList.add(temp);
 		}
 		
 		try {				
 		
-			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/strainings.json"));
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/historyTrainings.json"));
 			String json = new Gson().toJson(facilityList);
 			System.out.println(json);
 			writer.write(json);
@@ -76,18 +77,18 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 		return facility;
 	}
 	
-	public ScheduledTraining update(String id, ScheduledTraining facility) {
-		ScheduledTraining facilityToUpdate = this.trainings.get(id);
+	public TrainingHistory update(String id, TrainingHistory facility) {
+		TrainingHistory facilityToUpdate = this.trainings.get(id);
 		facilityToUpdate.setApplicationDateTime(facility.getApplicationDateTime());
-		facilityToUpdate.setDelate(facility.isDelate());
 		facilityToUpdate.setCoach(facility.getCoach());
 		facilityToUpdate.setUser(facility.getUser());
-		facilityToUpdate.setEndDataTime(facility.getEndDataTime());
+		facilityToUpdate.setTime(facility.getTime());
 		facilityToUpdate.setId(facility.getId());
 		facilityToUpdate.setTraining(facility.getTraining());
+		facilityToUpdate.setIsDeleted(facility.getIsDeleted());
 				
 		try {
-			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/strainings.json"));
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/historyTrainings.json"));
 			Gson gson = new GsonBuilder().serializeNulls().create();
 			String json = gson.toJson(trainings.values());
 			System.out.println(json);
@@ -104,17 +105,17 @@ private HashMap<String, ScheduledTraining> trainings = new HashMap<String, Sched
 	private void loadFacilities(String contextPath) {	
 		try {
 			
-			Reader reader = new BufferedReader(new FileReader(contextPath + "/strainings.json"));
+			Reader reader = new BufferedReader(new FileReader(contextPath + "/historyTrainings.json"));
 		
 			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<ScheduledTraining>>() {}.getType();
-			List<ScheduledTraining> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
+			List<TrainingHistory> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
 			reader.close();
 			
 			if (facilityList == null) {
-				facilityList = new ArrayList<ScheduledTraining>();
+				facilityList = new ArrayList<TrainingHistory>();
 			}
 			
-			for (ScheduledTraining facility : facilityList) {
+			for (TrainingHistory facility : facilityList) {
 				trainings.put(facility.getId(), facility);
 			}
 			

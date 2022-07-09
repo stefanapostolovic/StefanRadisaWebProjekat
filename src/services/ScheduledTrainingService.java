@@ -14,9 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Product;
 import beans.ScheduledTraining;
-import dao.ProductDAO;
+import beans.TrainingHistory;
 import dao.ScheduledTrainingDAO;
 
 @Path("/newTraining")
@@ -37,7 +36,7 @@ public class ScheduledTrainingService {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<ScheduledTraining> getProducts() {
+	public Collection<TrainingHistory> getProducts() {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.findAll();
 	}
@@ -48,7 +47,7 @@ public class ScheduledTrainingService {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining newProduct(ScheduledTraining product) {
+	public TrainingHistory newProduct(TrainingHistory product) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.save(product);
 	}
@@ -57,7 +56,7 @@ public class ScheduledTrainingService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining updateProduct(@PathParam("id") String productId, ScheduledTraining editedProduct) {
+	public TrainingHistory updateProduct(@PathParam("id") String productId, TrainingHistory editedProduct) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.update(productId, editedProduct);
 	}
@@ -66,7 +65,7 @@ public class ScheduledTrainingService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining deleteProduct(@PathParam("id") String productId) {
+	public TrainingHistory deleteProduct(@PathParam("id") String productId) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.update(productId,dao.findFacility(productId));
 	}
