@@ -19,6 +19,11 @@ Vue.component("trainerInfo", {
 			//filtriranje
 			searchFacilityType: '',
 			searchTrainingType: '',
+			
+			//sortiranje
+			sortDirectionFacName: 'ASC',
+			sortDirectionPrice: 'ASC',
+			sortDirectionDate: 'ASC'
 		}
 	},
 	
@@ -145,11 +150,11 @@ Vue.component("trainerInfo", {
 								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchDateStart" placeholder="search by start date"
+								<input type="date" v-model="srchDateStart" placeholder="search by start date"
 								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchDateEnd" placeholder="search by end date"
+								<input type="date" v-model="srchDateEnd" placeholder="search by end date"
 								class="white-text"/>
 					          </p>
 					        </div>
@@ -298,10 +303,99 @@ Vue.component("trainerInfo", {
 		methods: {
 			changeSort(columnName) {
 				
+				
+				switch(columnName) {
+					case ('FacilityName'): {
+						let copiedUpcomingTrainings = Object.assign([], this.upcomingTrainings);
+						copiedUpcomingTrainings.sort((a, b) => {
+							let fa = a.training.sportFacility.name.toLowerCase();
+							let fb = b.training.sportFacility.name.toLowerCase();
+							
+							if (this.sortDirectionFacName === 'ASC') {
+								if (fa < fb) {
+        								return -1;
+								}
+							    if (fa > fb) {
+							        return 1;
+							    }
+							    return 0;
+							}
+							else {
+								if (fa < fb) {
+									return 1;
+								}
+						    	if (fa > fb) {
+						        	return -1;
+						    	}
+						    	return 0;
+							}
+						})
+						
+						if (this.sortDirectionFacName === 'ASC') {
+							this.sortDirectionFacName = 'DESC';
+							this.sortDirectionPrice = 'DESC';
+							this.sortDirectionDate = 'DESC';
+						}
+						else {
+							this.sortDirectionFacName = 'ASC';
+							this.sortDirectionPrice = 'ASC';
+							this.sortDirectionDate = 'ASC';
+						}
+						
+						this.upcomingTrainings = copiedUpcomingTrainings;
+					}
+					break;
+					case ('Date'): {
+						let copiedUpcomingTrainings = Object.assign([], this.upcomingTrainings);
+						
+						copiedUpcomingTrainings.sort((a, b) => {
+							let fa = a.applicationDateTime;
+							let fb = b.applicationDateTime;
+							
+							if (this.sortDirectionDate === 'ASC') {
+								if (fa < fb) {
+        								return -1;
+								}
+							    if (fa > fb) {
+							        return 1;
+							    }
+							    return 0;
+							}
+							else {
+								if (fa < fb) {
+									return 1;
+								}
+						    	if (fa > fb) {
+						        	return -1;
+						    	}
+						    	return 0;
+							}
+						})
+						
+						if (this.sortDirectionDate === 'ASC') {
+							this.sortDirectionFacName = 'DESC';
+							this.sortDirectionPrice = 'DESC';
+							this.sortDirectionDate = 'DESC';
+						}
+						else {
+							this.sortDirectionFacName = 'ASC';
+							this.sortDirectionPrice = 'ASC';
+							this.sortDirectionDate = 'ASC';
+						}
+						
+						this.upcomingTrainings = copiedUpcomingTrainings;
+					}
+					break;
+				}
 			},
 			
 			multiSearch () {
-				
+				axios
+					.get('rest/newTraining/search/' + this.srchFacName + '/' +
+					this.srchFrom + '/' + this.srchTo + '/' + this.srchDateStart + '/' + this.srchDateEnd)
+					.then(response => {
+						this.upcomingTrainings = response.data;
+					})
 			},
 			
 			canCancel (trainingHistory) {
