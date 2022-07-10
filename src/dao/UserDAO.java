@@ -250,6 +250,11 @@ public class UserDAO {
 		return returnList;
 	}
 	
+	public Membership getCustomerMembership(String username) {
+		User user = users.get(username);	
+		return user.getMembership();
+	}
+	
 	public Collection<Membership> getCustomerMemberships() {
 		List<Membership> returnList = new ArrayList<Membership>();
 		

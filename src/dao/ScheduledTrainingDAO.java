@@ -88,7 +88,8 @@ public class ScheduledTrainingDAO {
 		List<User> returnList = new ArrayList<User>();
 		
 		for (TrainingHistory value: trainingsHistory.values()) {
-			if (value.getTraining().getSportFacility().getId().equals(facilityId))
+			if (value.getIsDeleted() == true) continue;
+			else if (value.getTraining().getSportFacility().getId().equals(facilityId))
 				returnList.add(value.getUser());
 		}
 		

@@ -157,8 +157,18 @@ Vue.component("users", {
 			user.isDeleted = true;
 			
 			if (user.role === 'Customer') {
+				if (user.membership != null)
+					user.membership.isDeleted = true;
+				
 				axios
-					.put('rest/updateUserKeepSession/' + user.username, user)
+					.get('rest/newTraining/allForCustomer/' + user.username)
+					.then(response => {
+						let customerTrainingHistory = response.data;
+						customerTrainingHistory.forEach(this.deleteTrainingHistory);
+						
+						return axios.put('rest/updateUserKeepSession/' + user.username, user)
+					})
+					
 					.then(response => {
 						console.log(response.data);
 						router.push('/users');
@@ -166,15 +176,6 @@ Vue.component("users", {
 			}
 			else if (user.role === 'Trainer') {
 				axios
-					/*.put('rest/trainings/deleteTrainingsForSelectedTrainer', user)
-					.then(response => {
-						console.log(response.data);
-						return axios.put('rest/updateUser/' + user.username, user);
-					})
-					.then(response => {
-						console.log(response.data);
-						router.push('/users');
-					})*/
 					.put('rest/updateUserKeepSession/' + user.username, user)
 					.then(response => {
 						console.log(response.data);
@@ -189,6 +190,11 @@ Vue.component("users", {
 						router.push('/users');
 					})
 			}
+		},
+	
+		deleteTrainingHistory(item, index) {
+			item.isDeleted = true;
+			axios.put('rest/newTraining/' + item.id, item);
 		},
 	
     	multiSearch() {
