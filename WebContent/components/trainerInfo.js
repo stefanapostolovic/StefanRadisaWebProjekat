@@ -42,8 +42,7 @@ Vue.component("trainerInfo", {
 						<th>Description</th>
 					</tr>
 					<tr v-for="(p, index) in personalTrainings" class="tableRowBorder"
-					v-if="p.isDeleted == false"
-					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
+					v-if="p.isDeleted == false">
 						<td>
 							<img alt="fato" 
 							:src="p.image" width="100px" height="100px">
@@ -202,7 +201,9 @@ Vue.component("trainerInfo", {
 									<th>Description</th>
 								</tr>
 								<tr v-for="(p, index) in upcomingTrainings"
-								v-if="p.isDeleted == false" class="tableRowBorder">
+								v-if="p.isDeleted == false && p.training.isDeleted == false" 
+								class="tableRowBorder"
+								:style="{background: p.training.isCanceled == true ? '#4a148c' : '#212121'}">
 									<td>
 										<img alt="fato" 
 										:src="p.training.image" width="100px" height="100px">
@@ -236,9 +237,9 @@ Vue.component("trainerInfo", {
 										</p>
 									</td>
 									<td>
-										<a v-if="canCancel(p.training)" 
+										<a v-if="canCancel(p)" 
 										class="btn-floating btn-large waves-effect waves-light teal darken-2"
-							    		  @click="cancelTraining(p.training)"
+							    		  @click="cancelTraining(p)"
 							    		  style="margin-right: 0; margin-left:auto; display:block;">
 							    		  <i class="material-icons">cancel</i>
 					    		  		</a>
@@ -270,7 +271,7 @@ Vue.component("trainerInfo", {
 				})
 				.then(response => {
 					this.groupTrainings = response.data;
-					return axios.get('rest/getUpcomingTrainingsForSelectedTrainer/' + 
+					return axios.get('rest/newTraining/allForTrainer/' + 
 					this.trainer.username)
 				})
 				.then(response => {
@@ -303,15 +304,34 @@ Vue.component("trainerInfo", {
 				
 			},
 			
-			canCancel (training) {
-				if (training.trainingType === 'personal') //DODAO OVDE ZA DATUM PROVERU 
-					return true;
-				return false;
+			canCancel (trainingHistory) {
+				let returnValue = false;
+				
+				let trainingDate = new Date(trainingHistory.applicationDateTime);
+				let trainingYear = trainingDate.getFullYear();
+				let trainingMonth = trainingDate.getMonth() + 1;
+				let trainingDay = trainingDate.getDate();
+				
+				let currentDate = new Date();
+				let currentYear = currentDate.getFullYear();
+				let currentMonth = currentDate.getMonth() + 1;
+				let currentDay = currentDate.getDate();
+				
+				if (trainingYear >= currentYear &&
+					trainingMonth >= currentMonth && (currentDay + 2) <= trainingDay && 
+				trainingHistory.training.trainingType === 'personal')
+					returnValue = true;
+
+				return returnValue;
 			},
 			
-			cancelTraining(training) {
-				training.isCanceled = !training.isCanceled;
-				//axios.put('rest/trainings/updateTraining', training);
+			cancelTraining(trainingHistory) {
+				trainingHistory.training.isCanceled = !trainingHistory.training.isCanceled;
+				axios
+					.put('rest/newTraining/' + trainingHistory.id, trainingHistory)
+					.then(response => {
+						console.log(response);
+					})
 			}
 		}
 });

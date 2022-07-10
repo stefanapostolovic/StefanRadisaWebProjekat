@@ -13,31 +13,31 @@ Vue.component("selectedTraining", {
 	},
 	    template: ` 
     			<div class="container shrink" style="margin-top:-3%">
-    			<h1>Prijavi se na trening</h1>
+    			<h1>Schedule a training</h1>
     			<br></br>
 				
 				
 				<form>
 				<table>
 					<tr>
-					<td>Unesite zeljeni datum:</td>
-					<td><input type="date"  name="type" v-model="history.applicationDateTime"></td>
+						<td>Date</td>
+						<td><input type="date"  name="type" v-model="history.applicationDateTime"></td>
 					</tr>
 					<tr v-if="personalni">
-					<td>Unesite zeljeno vreme:</td>
-					<td><span v-if="isTime" class="red-text">
+						<td>Time:</td>
+						<td><span v-if="isTime" class="red-text">
 	    				&nbsp;&nbsp;Zauzet termin
-	    			</span><input type="time" name="type" v-model="history.time"></td>
+	    				</span><input type="time" name="type" v-model="history.time"></td>
 					</tr>
 					<tr>
 					
 					<span v-if="isDate" class="red-text">
 	    				&nbsp;&nbsp;{{poruka}}
 	    			</span>
+	    			
 					<a class="waves-effect waves-light btn-small teal darken-2" @click="dodajTrening">
-	    					<i class="material-icons left">business</i>Prijavi
-	    				</a>
-					
+	    				<i class="material-icons left">business</i>Confirm
+	    			</a>	
 	    				
 					</td>
 					</tr>
@@ -73,7 +73,7 @@ Vue.component("selectedTraining", {
 						console.log(this.history)
 			
 			
-			if(this.training.trainingType =="Personalni"){
+			if(this.training.trainingType =="personal"){
 				this.personalni=true;
 			}
 			if(this.user.membership == null)	
@@ -146,6 +146,7 @@ Vue.component("selectedTraining", {
 			if(!this.isDate){
 			axios.post('rest/newTraining/addTraining', this.history)
 				.then(response => {
+					console.log(response.data);
 					router.push(`/`)
 				})
 			}

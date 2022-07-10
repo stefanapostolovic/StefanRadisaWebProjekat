@@ -28,6 +28,7 @@ Vue.component("listTrainings", {
 							<th>Description</th>
 						</tr>
 						<tr v-for="(p, index) in upcomingTrainings"
+						:style="{background: p.training.isCanceled == true ? '#4a148c' : '#212121'}"
 						v-if="p.isDeleted == false" class="tableRowBorder">
 							<td>
 								<img alt="fato" 
@@ -62,9 +63,8 @@ Vue.component("listTrainings", {
 								</p>
 							</td>
 							<td>
-								<a v-if="canCancel(p.training)" 
-								class="btn-floating btn-large waves-effect waves-light teal darken-2"
-					    		  @click="cancelTraining(p.training)"
+								<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+					    		  @click="deleteTraining(p)"
 					    		  style="margin-right: 0; margin-left:auto; display:block;">
 					    		  <i class="material-icons">cancel</i>
 			    		  		</a>
@@ -80,10 +80,26 @@ Vue.component("listTrainings", {
 		`,
 	
 	mounted() {
+		axios
+			.get('rest/newTraining/')
+			.then(response => {
+				this.upcomingTrainings = response.data;
+				console.log(response.data);
+			})
 	},
 	
 	methods: {
-		
+		deleteTraining(trainingHistory) {
+			trainingHistory.isDeleted = true;
+			
+			axios
+				.put('rest/newTraining/deleteTrainingHistory/' + trainingHistory.id, 
+				trainingHistory)
+				.then(response => {
+					console.log(response.data);
+					router.push('/listTrainings');
+				})
+		}
 	}
 		 
 });

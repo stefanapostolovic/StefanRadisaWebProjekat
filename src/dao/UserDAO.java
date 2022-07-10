@@ -262,34 +262,17 @@ public class UserDAO {
 		return returnList;
 	}
 	
-	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(String username) {
+	public Collection<TrainingHistory> getAllTrainingHistory() {
 		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
 		
-		for (User value: users.values()) {
-			if (value.getUsername().equals(username)) {
-				if (value.getTrainingHistory() == null) {
-					TrainingHistory test = new TrainingHistory(LocalDate.now().toString(), 
-							new Training(null, "test", "personal", new SportFacility(), 1, value, "", null, 
-									LocalTime.now().toString(), false), value, value);
-					TrainingHistory test1 = new TrainingHistory(LocalDate.now().toString(), 
-							new Training(null, "test1", "personal", new SportFacility(), 2, value, "", null, 
-									LocalTime.now().toString(), false), value, value);
-					TrainingHistory test2 = new TrainingHistory(LocalDate.now().toString(), 
-							new Training(null, "test2", "personal", new SportFacility(), 3, value, "", null, 
-									LocalTime.now().toString(), false), value, value);
-					
-					returnList.add(test);
-					returnList.add(test1);
-					returnList.add(test2);
-					break;
+		for (User value : users.values()) {
+			if (value.getTrainingHistory() != null) {
+				for (TrainingHistory temp : value.getTrainingHistory()) {
+					returnList.add(temp);
 				}
-					
-				else {
-					returnList = value.getTrainingHistory();
-					break;
-				}	
-			}
+			}	
 		}
+		
 		return returnList;
 	}
 }

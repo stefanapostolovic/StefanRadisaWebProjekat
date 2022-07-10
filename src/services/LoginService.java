@@ -185,14 +185,13 @@ public class LoginService {
 	}
 	
 	@GET
-	@Path("/getUpcomingTrainingsForSelectedTrainer/{username}")
+	@Path("/getAllTrainingHistory")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(@PathParam("username")
-	 String username) {
+	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(){
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		
-		return dao.getUpcomingTrainingsForSelectedTrainer(username);
+		return dao.getAllTrainingHistory();
 	}
 }
 

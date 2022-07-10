@@ -77,12 +77,21 @@ public class ScheduledTrainingService {
 		return dao.update(productId, editedProduct);
 	}
 	
-	@DELETE
-	@Path("/{id}")
+	@PUT
+	@Path("/deleteTrainingHistory/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public TrainingHistory deleteProduct(@PathParam("id") String productId) {
+	public TrainingHistory deleteProduct(@PathParam("id") String trainingHistoryId, TrainingHistory trainingHistory) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
-		return dao.update(productId,dao.findFacility(productId));
+		
+		return dao.update(trainingHistoryId, trainingHistory);
 	}
 }
+
+
+
+
+
+
+
+
