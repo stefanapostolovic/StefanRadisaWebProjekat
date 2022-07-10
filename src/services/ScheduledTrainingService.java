@@ -42,7 +42,21 @@ public class ScheduledTrainingService {
 		return dao.findAll();
 	}
 	
+	@GET
+	@Path("/allForTrainer/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getHistory(@PathParam("username") String username) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.findAllByTrainer(username);
+	}
 	
+	@GET
+	@Path("/allForCustomer/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getUserHistory(@PathParam("username") String username) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.findAllByUser(username);
+	}
 	
 	@POST
 	@Path("/addTraining")

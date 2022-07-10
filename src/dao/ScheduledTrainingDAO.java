@@ -6,16 +6,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import beans.Membership;
 import beans.TrainingHistory;
 
 public class ScheduledTrainingDAO {
@@ -43,6 +46,8 @@ public class ScheduledTrainingDAO {
 	}
 	
 	public TrainingHistory save(TrainingHistory facility) {	
+		LocalDate ld = LocalDate.parse(facility.getApplicationDateTime());
+		System.out.println(ld);
 		Integer maxId = -1;
 		for (String id : trainingsHistory.keySet()) {
 			int idNum =Integer.parseInt(id);
@@ -81,6 +86,7 @@ public class ScheduledTrainingDAO {
 		for(TrainingHistory th: trainingsHistory.values()){
 			if(th.getCoach().getUsername().equals(username)) {
 				facilityList.add(th);
+				
 			}
 			
 		}
