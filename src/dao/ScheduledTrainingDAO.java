@@ -13,15 +13,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.xml.crypto.Data;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.TrainingHistory;
+import beans.User;
 
 public class ScheduledTrainingDAO {
 	private HashMap<String, TrainingHistory> trainingsHistory = new HashMap<String, TrainingHistory>();
@@ -81,6 +82,21 @@ public class ScheduledTrainingDAO {
 			e.printStackTrace();
 		}
 		return facility;
+	}
+	
+	public Collection<User> getCustomerForSelectedFacility(String facilityId) {
+		List<User> returnList = new ArrayList<User>();
+		
+		for (TrainingHistory value: trainingsHistory.values()) {
+			if (value.getTraining().getSportFacility().getId().equals(facilityId))
+				returnList.add(value.getUser());
+		}
+		
+		Set<User> userSet = new HashSet<User>();
+		userSet.addAll(returnList);
+		returnList = new ArrayList<User>(userSet);
+		
+		return returnList;
 	}
 	
 	public Collection<TrainingHistory> findAllByTrainer(String username) {

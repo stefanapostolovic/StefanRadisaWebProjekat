@@ -29,7 +29,10 @@ Vue.component("managerInfo", {
 			//sortiranje
 			sortDirectionFacName: 'ASC',
 			sortDirectionPrice: 'ASC',
-			sortDirectionDate: 'ASC'
+			sortDirectionDate: 'ASC',
+			
+			//kupci
+			customers: []
 		}
 	},
 	
@@ -177,6 +180,52 @@ Vue.component("managerInfo", {
 		    		</td>
 		    	</tr>
 		    </table>
+		    						<!-- CUSTOMERS -->
+		    	<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Customers</h3>	
+		    	
+		    	<table>
+		    		<tr class="tableRowBorder">
+		    			<th>Name</th>
+		    			<th>Surname</th>
+		    			<th>Gender</th>
+		    			<th>Date of birth</th>
+		    			<th>Membership</th>
+		    			<th>Points</th>
+		    			<th>Customer type</th>
+		    		</tr>
+		    		
+		    		<tr class="tableRowBorder" 
+		    		v-for="(p, index) in customers"
+		    		v-if="p.isDeleted == false">
+		    			<td>
+		    				{{p.name}}
+		    			</td>
+		    			
+		    			<td>
+		    				{{p.surename}}
+		    			</td>
+		    				
+		    			<td>
+		    				{{p.gender}}
+		    			</td>
+		    				
+		    			<td>
+		    				{{p.dateOfBirth}}
+		    			</td>
+		    				
+		    			<td>
+		    				{{p.membership.membershipType}}
+		    			</td>
+		    				
+		    			<td>
+		    				{{p.points}}
+		    			</td>
+		    				
+		    			<td>
+		    				{{p.customerType.name}}
+		    			</td>
+		    		</tr>
+		    	</table>
 		    
 		    						<!-- UPCOMING TRAININGS -->
 		    
@@ -313,6 +362,12 @@ Vue.component("managerInfo", {
 				.then(response => {
 					this.upcomingTrainings = response.data;
 					console.log(this.upcomingTrainings);
+					return axios.get('rest/newTraining/getCustomerForSelectedFacility/'
+					+ this.facility.id);
+				})
+				.then(response => {
+					this.customers = response.data;
+					console.log(response.data);
 				})
 		},
 		

@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -17,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.TrainingHistory;
+import beans.User;
 import dao.ScheduledTrainingDAO;
 
 @Path("/newTraining")
@@ -51,6 +51,15 @@ public class ScheduledTrainingService {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		
 		return dao.getTrainingHistoryForSelectedFacility(facilityId);
+	}
+	
+	@GET
+	@Path("/getCustomerForSelectedFacility/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getCustomerForSelectedFacility(@PathParam("facilityId") String facilityId) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
+		return dao.getCustomerForSelectedFacility(facilityId);
 	}
 	
 	@GET
