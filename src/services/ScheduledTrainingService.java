@@ -2,6 +2,7 @@ package services;
 
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -14,9 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Product;
-import beans.ScheduledTraining;
-import dao.ProductDAO;
+import beans.TrainingHistory;
 import dao.ScheduledTrainingDAO;
 
 @Path("/newTraining")
@@ -25,6 +24,7 @@ public class ScheduledTrainingService {
 	ServletContext ctx;
 
 	public ScheduledTrainingService() {}
+	@PostConstruct
 	public void init() {
 		// Ovaj objekat se instancira vi�e puta u toku rada aplikacije
 		// Inicijalizacija treba da se obavi samo jednom
@@ -37,19 +37,34 @@ public class ScheduledTrainingService {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<ScheduledTraining> getProducts() {
+	public Collection<TrainingHistory> getProducts() {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.findAll();
 	}
 	
+	@GET
+	@Path("/allForTrainer/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getHistory(@PathParam("username") String username) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.findAllByTrainer(username);
+	}
 	
+	@GET
+	@Path("/allForCustomer/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getUserHistory(@PathParam("username") String username) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.findAllByUser(username);
+	}
 	
 	@POST
-	@Path("/")
+	@Path("/addTraining")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining newProduct(ScheduledTraining product) {
+	public TrainingHistory newProduct(TrainingHistory product) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
 		return dao.save(product);
 	}
 	
@@ -57,7 +72,7 @@ public class ScheduledTrainingService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining updateProduct(@PathParam("id") String productId, ScheduledTraining editedProduct) {
+	public TrainingHistory updateProduct(@PathParam("id") String productId, TrainingHistory editedProduct) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.update(productId, editedProduct);
 	}
@@ -66,7 +81,7 @@ public class ScheduledTrainingService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ScheduledTraining deleteProduct(@PathParam("id") String productId) {
+	public TrainingHistory deleteProduct(@PathParam("id") String productId) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.update(productId,dao.findFacility(productId));
 	}
