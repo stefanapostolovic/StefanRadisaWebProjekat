@@ -252,7 +252,7 @@ Vue.component("facility", {
 					<th></th>
 				</tr>
 				<tr v-for="(p, index) in trainings" class="tableRowBorder"
-				v-if="p.isDeleted == false">
+				v-if="p.isDeleted == false" v-on:click="sentToChild(p)">
 					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -350,6 +350,12 @@ Vue.component("facility", {
     methods: {
 		showMap () {
 			location.reload();
+		},
+		sentToChild:function(p){
+			if(this.loggedUser.role == "Customer"){
+			localStorage.setItem("selectedTraining", p.id)
+			router.push(`/scheduledTraining`);
+			}
 		},
 		
 		confirmCreateWithNewManager() {
