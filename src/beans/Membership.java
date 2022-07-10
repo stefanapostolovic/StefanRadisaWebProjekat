@@ -11,12 +11,14 @@ public class Membership {
 	private int number;
 	private User user;
 	
+	private Boolean isDeleted;
+	
 	public Membership() {
 		
 	}
 	
 	public Membership(String identifier, String membershipType, String paymentDate, String expirationDate,
-			double price, boolean status, int numberAppointments, User user,int number) {
+			double price, boolean status, int numberAppointments, User user,int number, Boolean isDeleted) {
 		super();
 		this.identifier = identifier;
 		this.membershipType = membershipType;
@@ -27,6 +29,7 @@ public class Membership {
 		this.numberAppointments = numberAppointments;
 		this.user = user;
 		this.number = number;
+		this.isDeleted = isDeleted;
 	}
 	public Membership(Membership membership) {
 		this.identifier = membership.getIdentifier();
@@ -39,6 +42,14 @@ public class Membership {
 		this.user = membership.getUser();
 		this.number = membership.getNumber(); 
 		
+	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	public int getNumber() {

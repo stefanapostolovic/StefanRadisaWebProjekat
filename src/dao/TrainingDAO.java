@@ -193,7 +193,7 @@ public class TrainingDAO {
 	public List<Training> getPersonalTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {
-			if (temp.getTrainer().getUsername() == null) continue;
+			if (temp.getTrainer() == null) continue;
 			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
 					username.toLowerCase().trim()) &&
 					temp.getTrainingType().equals("personal")) {
@@ -232,7 +232,7 @@ public class TrainingDAO {
 	public List<Training> getGroupTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {
-			if (temp.getTrainer().getUsername() == null) continue;
+			if (temp.getTrainer() == null) continue;
 			if (temp.getTrainer().getUsername().trim().toLowerCase().equals(
 					username.toLowerCase().trim()) &&
 					temp.getTrainingType().equals("group")) {
@@ -419,6 +419,9 @@ public class TrainingDAO {
 		
 		for (Training value : trainings.values()) {
 			//za svaki postojeci trening se racuna njegovo vreme sa i bez dodatog trajanja
+			if (value.getTrainingTime().equals(""))
+				continue;
+			
 			LocalTime valueWithoutDuration = LocalTime.parse(value.getTrainingTime());
 			LocalTime valueWithDuration = valueWithoutDuration.plusHours(Math.round(value.getDuration()));;
 			

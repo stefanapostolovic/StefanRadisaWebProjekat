@@ -85,8 +85,7 @@ public class ScheduledTrainingDAO {
 		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
 		for(TrainingHistory th: trainingsHistory.values()){
 			if(th.getCoach().getUsername().equals(username)) {
-				facilityList.add(th);
-				
+				facilityList.add(th);	
 			}
 			
 		}

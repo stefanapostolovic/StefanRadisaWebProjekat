@@ -176,7 +176,9 @@ Vue.component("selectedMembership", {
 		},
 		dodajClanarinu(){
 			event.preventDefault();
+			this.membership.isDeleted = false;
 			this.user.membership=this.membership;
+			
 			axios.put('rest/updateUser/' + this.user.username, this.user).
 				then(response => {
 					this.user = response.data;

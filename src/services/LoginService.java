@@ -1,6 +1,8 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -16,7 +18,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Membership;
+import beans.TrainingHistory;
 import beans.User;
+import dao.TrainingDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -47,6 +52,14 @@ public class LoginService {
 	public Collection<User> getAllRegisteredUsers() {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.findAll();
+	}
+	
+	@GET
+	@Path("getUser/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getUser(@PathParam("username") String username) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.getUser(username);
 	}
 	
 	@GET
@@ -160,6 +173,25 @@ public class LoginService {
 	public Collection<User> GetTrainers() {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.GetTrainers();
+	}
+	
+	@GET
+	@Path("/getCustomerMemberships")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Membership> getCustomerMemberships() {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.getCustomerMemberships();
+	}
+	
+	@GET
+	@Path("/getAllTrainingHistory")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getUpcomingTrainingsForSelectedTrainer(){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		return dao.getAllTrainingHistory();
 	}
 }
 

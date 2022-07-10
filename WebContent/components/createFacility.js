@@ -56,10 +56,10 @@ Vue.component("createFacility", {
 	},
 		template: `
 			<div class="shrink">
-				<h1 style="margin-top:-0.5%">Create a new facility</h1>
+				<h1>Create a new facility</h1>
 				<br></br>
 				<div class="row">
-					<div class="col s4" style="margin-left:5%; margin-right:5%">
+					<div class="col s6 shrink" style="margin-left:5%; margin-right:5%">
 						<form enctype="multipart/form-data" >
 							<table>
 								<tr>
@@ -254,7 +254,7 @@ Vue.component("createFacility", {
 					</div>	
 									<!-- GOOGLE MAPA -->
 									
-					<div class="col s4" style="text-align: center;">
+					<div class="col s3 shrink" style="text-align: center;">
 						<!-- Search input -->
 						<input id="searchInput"
 						class="controls white" type="text" placeholder="Enter a location">

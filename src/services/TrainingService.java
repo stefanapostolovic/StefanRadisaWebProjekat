@@ -23,6 +23,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import beans.Training;
+import beans.TrainingHistory;
 import beans.User;
 import dao.TrainingDAO;
 
@@ -172,7 +173,7 @@ public class TrainingService {
 		TrainingDAO dao = (TrainingDAO) ctx.getAttribute("trainingDAO");
 		return dao.getGroupTrainingsForSelectedTrainer(username);
 	}
-	
+
 	/*@GET
 	@Path("/getPersonalTrainingHistoryForSelectedTrainer/{trainer}")
 	@Consumes(MediaType.APPLICATION_JSON)

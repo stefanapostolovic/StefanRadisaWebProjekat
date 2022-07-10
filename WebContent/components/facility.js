@@ -299,7 +299,10 @@ Vue.component("facility", {
 	    		  		</a>
 					</td>
 				</tr>
-		    </table>    
+		    </table>
+		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">
+				Comments:
+			</h3>    
 			<table>
 				<tr v-for="(p, index) in comments">
 					<td class="kolona">
@@ -308,23 +311,20 @@ Vue.component("facility", {
 					<td class="kolona">
 						{{p.grade}}
 					</td>
+					<td>
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteComment(p)"
+			    		  v-if="isAdmin()"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+	    		  		</a>
+					</td>
 				</tr>
 		    </table>  
    		</div>  
     	`,
     mounted () {
 		this.id = localStorage.getItem("selectedFacility");
-		
-		/*axios.all([
-			this.getLoggedUser(),
-			this.getSelectedFacility(),
-			this.getAllTrainingsForCurrentFacility()
-		])
-		.then(axios.spread((first_response, second_response, third_response) => {
-			this.loggedUser = first_response.data;
-			this.facility = second_response.data;
-			this.trainings = third_response.data;
-		}))*/
 		axios
 			.get('rest/currentUser')
 			.then(response => {
@@ -348,6 +348,10 @@ Vue.component("facility", {
 			})
     },
     methods: {
+		deleteComment(comment) {
+			
+		},
+	
 		showMap () {
 			location.reload();
 		},
