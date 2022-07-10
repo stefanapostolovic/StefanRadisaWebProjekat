@@ -152,6 +152,16 @@ public class ScheduledTrainingDAO {
 		}
 	}
 	
+	public Collection<TrainingHistory> getTrainingHistoryForSelectedFacility(String facilityId) {
+		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
+		
+		for(TrainingHistory value : trainingsHistory.values()) {
+			if (value.getTraining().getSportFacility().getId().equals(facilityId))
+				returnList.add(value);
+		}
+		
+		return returnList;
+	}
 	
 	public Collection<TrainingHistory> getMultiSearchedTrainingHistories(
 			String name, String startPrice, String endPrice, String startDate, String endDate) 

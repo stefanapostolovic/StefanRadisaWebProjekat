@@ -44,6 +44,16 @@ public class ScheduledTrainingService {
 	}
 	
 	@GET
+	@Path("/getTrainingHistoryForSelectedFacility/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getTrainingHistoryForSelectedFacility(
+			@PathParam("facilityId") String facilityId) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
+		return dao.getTrainingHistoryForSelectedFacility(facilityId);
+	}
+	
+	@GET
 	@Path("/search/{name: .*}/{startPrice: .*}/{endPrice: .*}/{startDate: .*}/{endDate: .*}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

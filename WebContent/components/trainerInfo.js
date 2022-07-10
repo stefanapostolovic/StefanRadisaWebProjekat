@@ -205,7 +205,7 @@ Vue.component("trainerInfo", {
 									<th>Duration (hours)</th>
 									<th>Description</th>
 								</tr>
-								<tr v-for="(p, index) in upcomingTrainings"
+								<tr v-for="(p, index) in filteredTrainingHistories"
 								v-if="p.isDeleted == false && p.training.isDeleted == false" 
 								class="tableRowBorder"
 								:style="{background: p.training.isCanceled == true ? '#4a148c' : '#212121'}">
@@ -283,21 +283,6 @@ Vue.component("trainerInfo", {
 					this.upcomingTrainings = response.data;
 					console.log(response.data);
 				})
-				
-				/*.get('rest/currentUser')
-				.then(response => {
-					this.trainer = response.data;
-					return axios.get('rest/trainings/getPersonalTrainingHistoryForSelectedTrainer/'
-					+ this.trainer);
-				})
-				.then(response => {
-					this.personalTrainings = response.data;
-					return axios.get('rest/trainings/getGroupTrainingHistoryForSelectedTrainer/'
-					+ this.trainer)
-				})
-				.then(response => {
-					this.groupTrainings = response.data;
-				})*/
 		},
 		
 		methods: {
@@ -427,5 +412,39 @@ Vue.component("trainerInfo", {
 						console.log(response);
 					})
 			}
+		},
+		
+		computed: {
+			filteredTrainingHistories: function() {
+				return this.upcomingTrainings.filter((p) => {
+					if (this.searchFacilityType === '' && this.searchTrainingType == '')
+						return true;
+					else if (p.training.sportFacility.objectType.toLowerCase().match(this.searchFacilityType)
+					&& this.searchTrainingType === '') {
+						return true;
+					}
+					else if (this.searchFacilityType === '' && 
+					p.training.trainingType.toLowerCase().match(this.searchTrainingType)) {
+						return true;
+					}
+					else if (p.training.sportFacility.objectType.toLowerCase().match(this.searchFacilityType) &&
+					p.training.trainingType.toLowerCase().match(this.searchTrainingType))
+						return true;
+						
+					else
+						return false; 
+				})
+			}
 		}
 });
+
+
+
+
+
+
+
+
+
+
+

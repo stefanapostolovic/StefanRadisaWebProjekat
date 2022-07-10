@@ -10,7 +10,26 @@ Vue.component("managerInfo", {
 	        trainings: [],
 	        trainers: [],
 		
-		    loggedUser: null
+		    loggedUser: null, 
+		    
+		    //zakazani treninzi
+		    upcomingTrainings: [],
+		    
+		    //search
+			srchFacName: '',
+			srchFrom: '',
+			srchTo: '',
+			srchDateStart: '',
+			srchDateEnd: '',
+			
+			//filtriranje
+			searchFacilityType: '',
+			searchTrainingType: '',
+			
+			//sortiranje
+			sortDirectionFacName: 'ASC',
+			sortDirectionPrice: 'ASC',
+			sortDirectionDate: 'ASC'
 		}
 	},
 	
@@ -58,7 +77,7 @@ Vue.component("managerInfo", {
 					</tr>
 		    	</table>    
 	
-			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training list:</h3>
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Training types:</h3>
 			<table>
 				<tr class="tableRowBorder">
 					<th>
@@ -133,7 +152,7 @@ Vue.component("managerInfo", {
 		    		  	<i class="material-icons">add</i>
 		    		</a>
 			    </p>
-		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Trainer list</h3>
+		    <h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">Trainer list</h3>
 		    <table>
 		    	<tr class="tableRowBorder">	
 		    		<th>Ime</th>
@@ -158,17 +177,118 @@ Vue.component("managerInfo", {
 		    		</td>
 		    	</tr>
 		    </table>
-		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Customer list</h3>
-		    <table>
-		    	<tr class="tableRowBorder">	
-		    		<th>Ime</th>
-		    		<th>Prezime</th>
-		    		<th>Pol</th>
-		    		<th>Datum rodjenja</th>
-		    		<th>Poeni</th>
-		    		<th>Tip kupca</th>
-		    	</tr>
-		    </table>
+		    
+		    						<!-- UPCOMING TRAININGS -->
+		    
+		    							<!-- SEARCH -->
+		    							
+				<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Scheduled trainings</h3>	
+									
+				<div style="margin-top:7%;">
+					<div class="row">
+						<div class="col s3">
+							<div class="card teal darken-2">
+					        <div class="card-content white-text">
+					          <span class="card-title">Search</span>
+					          <p>
+								<input type="text" v-model="srchFrom" placeholder="search by starting price"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="text" v-model="srchTo" placeholder="search by end price"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="date" v-model="srchDateStart" placeholder="search by start date"
+								class="white-text"/>
+					          </p>
+					          <p>
+								<input type="date" v-model="srchDateEnd" placeholder="search by end date"
+								class="white-text"/>
+					          </p>
+					        </div>
+					        <div class="card-action">
+					          <a @click="multiSearch">search</a>
+					        </div>
+					      </div>
+						</div>
+												<!-- FILTER SORT -->
+												
+						<div class="col s9" style="text-align: center;">
+							<table style="margin-bottom:10%">
+								<tr style=" border-bottom: thin solid;">
+									<th></th>
+									<td>
+									</td>
+									<td>
+									</td>
+									<td></td>
+									<td>
+										<input type="text" v-model="searchTrainingType" placeholder="filter type"/>
+									</td>
+									<td>
+										<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+				  						@click="changeSort('Date')">
+				  							<i class="material-icons">arrow_drop_down</i>
+				  						</a>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>				
+												<!-- TABLE -->
+						
+								<tr class="tableRowBorder">
+									<th>Icon</th>
+									<th>Facility name</th>
+									<th>Facility type</th>
+									<th>Name</th>
+									<th>Type</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>Duration (hours)</th>
+									<th>Description</th>
+								</tr>
+								<tr v-for="(p, index) in filteredTrainingHistories"
+								v-if="p.isDeleted == false && p.training.isDeleted == false" 
+								class="tableRowBorder">
+									<td>
+										<img alt="fato" 
+										:src="p.training.image" width="100px" height="100px">
+									</td>
+									<td>
+										{{p.training.sportFacility.name}}
+									</td>
+									<td>
+										{{p.training.sportFacility.objectType}}
+									</td>
+									<td>
+										<p clas="tableRow">
+											{{p.training.name}}
+										</p>
+									</td>
+									<td>
+										<p clas="tableRow">
+											{{p.training.trainingType}}
+										</p>
+									</td>
+									<td>{{p.applicationDateTime}}</td>
+									<td>{{p.training.trainingTime}}</td>
+									<td>
+										<p clas="tableRow">
+											{{p.training.duration}}
+										</p>
+									</td>
+									<td>
+										<p clas="tableRow">
+											{{p.training.description}}
+										</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+    			</div>			
 			</div>
 		`,
 		
@@ -187,10 +307,73 @@ Vue.component("managerInfo", {
 				.then(response => {
 					this.trainings = response.data;
 					this.trainings.forEach(this.getTrainingTrainer);
+					return axios.get('rest/newTraining/getTrainingHistoryForSelectedFacility/'
+					+ this.facility.id);
+				})
+				.then(response => {
+					this.upcomingTrainings = response.data;
+					console.log(this.upcomingTrainings);
 				})
 		},
 		
 		methods: {
+			changeSort(columnName) {
+				
+				
+				switch(columnName) {
+					case ('Date'): {
+						let copiedUpcomingTrainings = Object.assign([], this.upcomingTrainings);
+						
+						copiedUpcomingTrainings.sort((a, b) => {
+							let fa = a.applicationDateTime;
+							let fb = b.applicationDateTime;
+							
+							if (this.sortDirectionDate === 'ASC') {
+								if (fa < fb) {
+        								return -1;
+								}
+							    if (fa > fb) {
+							        return 1;
+							    }
+							    return 0;
+							}
+							else {
+								if (fa < fb) {
+									return 1;
+								}
+						    	if (fa > fb) {
+						        	return -1;
+						    	}
+						    	return 0;
+							}
+						})
+						
+						if (this.sortDirectionDate === 'ASC') {
+							this.sortDirectionFacName = 'DESC';
+							this.sortDirectionPrice = 'DESC';
+							this.sortDirectionDate = 'DESC';
+						}
+						else {
+							this.sortDirectionFacName = 'ASC';
+							this.sortDirectionPrice = 'ASC';
+							this.sortDirectionDate = 'ASC';
+						}
+						
+						this.upcomingTrainings = copiedUpcomingTrainings;
+					}
+					break;
+				}
+			},
+			
+			multiSearch () {
+				axios
+					.get('rest/newTraining/search/' + this.srchFacName + '/' +
+					this.srchFrom + '/' + this.srchTo + '/' + this.srchDateStart + '/' + this.srchDateEnd)
+					.then(response => {
+						this.upcomingTrainings = response.data;
+					})
+			},
+			
 			getTrainingTrainer(item, index) {
 				//DODAO//
 				if (item.isDeleted == true || item.trainer == null) return;
@@ -220,6 +403,20 @@ Vue.component("managerInfo", {
 				localStorage.setItem("selectedFacility", this.id)
 				router.push('/createTraining');	
 			},
+		},
+		
+		computed: {
+			filteredTrainingHistories: function() {
+				return this.upcomingTrainings.filter((p) => {
+					if (this.searchTrainingType === '')
+						return true;
+					else if (this.searchTrainingType !== '' && 
+					p.training.trainingType.toLowerCase().match(this.searchTrainingType)) {
+						return true;
+					}
+					return false; 
+				})
+			}
 		},
 		
 		filters: {
