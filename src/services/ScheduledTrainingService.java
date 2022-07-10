@@ -2,6 +2,7 @@ package services;
 
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -14,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.ScheduledTraining;
 import beans.TrainingHistory;
 import dao.ScheduledTrainingDAO;
 
@@ -24,6 +24,7 @@ public class ScheduledTrainingService {
 	ServletContext ctx;
 
 	public ScheduledTrainingService() {}
+	@PostConstruct
 	public void init() {
 		// Ovaj objekat se instancira vi�e puta u toku rada aplikacije
 		// Inicijalizacija treba da se obavi samo jednom
@@ -44,11 +45,12 @@ public class ScheduledTrainingService {
 	
 	
 	@POST
-	@Path("/")
+	@Path("/addTraining")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public TrainingHistory newProduct(TrainingHistory product) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
 		return dao.save(product);
 	}
 	

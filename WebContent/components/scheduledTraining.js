@@ -21,7 +21,7 @@ Vue.component("selectedTraining", {
 				<table>
 					<tr>
 					<td>Unesite zeljeni datum:</td>
-					<td><input type="date"  name="type" v-model="history.appliacationDateTime"></td>
+					<td><input type="date"  name="type" v-model="history.applicationDateTime"></td>
 					</tr>
 					<tr v-if="personalni">
 					<td>Unesite zeljeno vreme:</td>
@@ -59,7 +59,20 @@ Vue.component("selectedTraining", {
 		.then(axios.spread((first_response, second_response) => {
 			this.user = first_response.data;
 			this.training = second_response.data;	
-			console.log(this.training)
+			let date = new Date();
+
+			let day = ("0" + date.getDate()).slice(-2);
+			let month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			let today = date.getFullYear() + "-" + (month) + "-" + (day);
+			let hours = ("0" + date.getHours()).slice(-2);
+			let minutes = ("0" + (date.getMinutes() + 1)).slice(-2);
+
+			this.history.time = (hours) + ":" + (minutes)
+			this.history.applicationDateTime=today
+						console.log(this.history)
+			
+			
 			if(this.training.trainingType =="Personalni"){
 				this.personalni=true;
 			}
@@ -116,15 +129,25 @@ Vue.component("selectedTraining", {
 		},
 		dodajTrening(){
 			event.preventDefault();
+			this.isTime= false;
 			this.history.user = this.user
 			this.history.training = this.training; 
 			this.history.coach = this.training.trainer;
+			let trHours = this.history.time.split(':')[0]
+			trHours = parseInt(trHours);
+			let trDuration =parseInt(this.training.duration);
+			let facStart = parseInt(this.training.sportFacility.startTime.split(':')[0]);
+			let facEnd = parseInt(this.training.sportFacility.endTime.split(':')[0]);
+			if(trHours<facStart || trHours > facEnd || (trHours + trDuration) >facEnd){
+				this.isTime = true;
+				return;
+			}
+			
 			if(!this.isDate){
-			axios.put('rest/newTraining/', this.history).
-				then(response => {
-					//this.user = response.data;
-					router.push(`/`);
-				});		
+			axios.post('rest/newTraining/addTraining', this.history)
+				.then(response => {
+					router.push(`/`)
+				})
 			}
 		
 		}

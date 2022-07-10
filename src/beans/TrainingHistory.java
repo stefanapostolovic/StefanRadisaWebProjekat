@@ -14,7 +14,7 @@ public class TrainingHistory {
 		
 	}
 	
-	public TrainingHistory(String applicationDateTime, Training training, User user, User coach,String id, String time) {
+	public TrainingHistory(String applicationDateTime, Training training, User user, User coach,String id,Boolean isDeleted, String time) {
 		super();
 		this.applicationDateTime = applicationDateTime;
 		this.training = training;

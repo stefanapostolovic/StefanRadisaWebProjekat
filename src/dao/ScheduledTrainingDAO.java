@@ -15,16 +15,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import beans.ScheduledTraining;
-import beans.SportFacility;
+import beans.Membership;
 import beans.TrainingHistory;
 
 public class ScheduledTrainingDAO {
-private HashMap<String, TrainingHistory> trainings = new HashMap<String, TrainingHistory>();
+	private HashMap<String, TrainingHistory> trainingsHistory = new HashMap<String, TrainingHistory>();
+	String contextPath;
 	
 	public ScheduledTrainingDAO() {
 	}
-	String contextPath;
 	
 	public ScheduledTrainingDAO(String contextPath) {
 		this.contextPath = contextPath;
@@ -32,20 +31,20 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 	}
 	
 	public Collection<TrainingHistory> findAll() {
-		return trainings.values();
+		return trainingsHistory.values();
 	}
 	
 	public HashMap<String, TrainingHistory> GetFacilityMap() {
-		return trainings;
+		return trainingsHistory;
 	}
 	
 	public TrainingHistory findFacility(String id) {
-		return trainings.containsKey(id) ? trainings.get(id) : null;
+		return trainingsHistory.containsKey(id) ? trainingsHistory.get(id) : null;
 	}
 	
 	public TrainingHistory save(TrainingHistory facility) {	
 		Integer maxId = -1;
-		for (String id : trainings.keySet()) {
+		for (String id : trainingsHistory.keySet()) {
 			int idNum =Integer.parseInt(id);
 			if (idNum > maxId) {
 				maxId = idNum;
@@ -54,11 +53,11 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 		maxId++;
 		
 		facility.setId(maxId.toString());
-		trainings.put(facility.getId(), facility);
+		trainingsHistory.put(facility.getId(), facility);
 		
 		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
 		
-		for (TrainingHistory temp : trainings.values()) {
+		for (TrainingHistory temp : trainingsHistory.values()) {
 			facilityList.add(temp);
 		}
 		
@@ -77,8 +76,30 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 		return facility;
 	}
 	
+	public Collection<TrainingHistory> findAllByTrainer(String username) {
+		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
+		for(TrainingHistory th: trainingsHistory.values()){
+			if(th.getCoach().getUsername().equals(username)) {
+				facilityList.add(th);
+			}
+			
+		}
+		
+		return facilityList;
+	} 
+	
+	public Collection<TrainingHistory> findAllByUser(String username) {
+		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
+		for(TrainingHistory th: trainingsHistory.values()){
+			if(th.getUser().getUsername().equals(username)) {
+				facilityList.add(th);
+			}
+		}
+		return facilityList;
+	}
+	
 	public TrainingHistory update(String id, TrainingHistory facility) {
-		TrainingHistory facilityToUpdate = this.trainings.get(id);
+		TrainingHistory facilityToUpdate = this.trainingsHistory.get(id);
 		facilityToUpdate.setApplicationDateTime(facility.getApplicationDateTime());
 		facilityToUpdate.setCoach(facility.getCoach());
 		facilityToUpdate.setUser(facility.getUser());
@@ -90,7 +111,7 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 		try {
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/historyTrainings.json"));
 			Gson gson = new GsonBuilder().serializeNulls().create();
-			String json = gson.toJson(trainings.values());
+			String json = gson.toJson(trainingsHistory.values());
 			System.out.println(json);
 			writer.write(json);
 			
@@ -107,7 +128,7 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 			
 			Reader reader = new BufferedReader(new FileReader(contextPath + "/historyTrainings.json"));
 		
-			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<ScheduledTraining>>() {}.getType();
+			java.lang.reflect.Type facilityListType = new TypeToken<ArrayList<TrainingHistory>>() {}.getType();
 			List<TrainingHistory> facilityList = new Gson().fromJson(reader, (java.lang.reflect.Type) facilityListType);
 			reader.close();
 			
@@ -116,7 +137,7 @@ private HashMap<String, TrainingHistory> trainings = new HashMap<String, Trainin
 			}
 			
 			for (TrainingHistory facility : facilityList) {
-				trainings.put(facility.getId(), facility);
+				trainingsHistory.put(facility.getId(), facility);
 			}
 			
 		} catch (Exception e) {
