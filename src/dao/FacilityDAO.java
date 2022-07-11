@@ -279,7 +279,8 @@ public class FacilityDAO {
 		
 		List<SportFacility> returnList = new ArrayList<SportFacility>();
 		for (SportFacility facility : facilities.values()) {
-			if ((facility.getName().toLowerCase().contains(name.toLowerCase())
+			if (facility.getIsDeleted() == false &&
+					(facility.getName().toLowerCase().contains(name.toLowerCase())
 				&& (facility.getObjectType().toLowerCase().contains(type.toLowerCase())))
 				&& (isContainLocation(facility, location))
 				&& (Double.toString(facility.getAverageRating()).toLowerCase().contains(rating.toLowerCase()))) {

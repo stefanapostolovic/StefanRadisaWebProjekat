@@ -26,7 +26,8 @@ Vue.component("profil", {
 			//sortiranje
 			sortDirectionFacName: 'ASC',
 			sortDirectionPrice: 'ASC',
-			sortDirectionDate: 'ASC'
+			sortDirectionDate: 'ASC',
+			sortDirectionAdd: 'ASC'
 		    }
 	},
 	template: ` 
@@ -102,12 +103,12 @@ Vue.component("profil", {
 								class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchFrom" placeholder="search by starting price"
-								class="white-text"/>
+								<input type="number" v-model="srchFrom" placeholder="search by starting price"
+								value="0" class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchTo" placeholder="search by end price"
-								class="white-text"/>
+								<input type="number" v-model="srchTo" placeholder="search by end price"
+								value="0" class="white-text"/>
 					          </p>
 					          <p>
 								<input type="date" v-model="srchDateStart" placeholder="search by start date"
@@ -149,6 +150,12 @@ Vue.component("profil", {
 			  							<i class="material-icons">arrow_drop_down</i>
 			  						</a>
 								</td>
+								<td>
+									<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			  						@click="changeSort('Add')">
+			  							<i class="material-icons">arrow_drop_down</i>
+			  						</a>
+								</td>
 							</tr>
 							
 							<tr class="tableRowBorder">
@@ -157,6 +164,7 @@ Vue.component("profil", {
 								<th>Facility name</th>
 								<th>Facility type</th>
 								<th>Training date</th>
+								<th>Additional payment (in dinars)</th>
 							</tr>
 							
 							<tr v-for="(p, index) in filteredTrainingHistories" class="tableRowBorder"
@@ -183,7 +191,11 @@ Vue.component("profil", {
 										{{p.applicationDateTime}}
 									</p>
 								</td>
-								
+								<td>
+									<p clas="tableRow">
+										{{p.training.additionalPayment}}
+									</p>
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -296,11 +308,13 @@ Vue.component("profil", {
 						this.sortDirectionFacName = 'DESC';
 						this.sortDirectionPrice = 'DESC';
 						this.sortDirectionDate = 'DESC';
+						this.sortDirectionAdd = 'DESC';
 					}
 					else {
 						this.sortDirectionFacName = 'ASC';
 						this.sortDirectionPrice = 'ASC';
 						this.sortDirectionDate = 'ASC';
+						this.sortDirectionAdd = 'ASC';
 					}
 					
 					this.history = copiedUpcomingTrainings;
@@ -337,11 +351,56 @@ Vue.component("profil", {
 						this.sortDirectionFacName = 'DESC';
 						this.sortDirectionPrice = 'DESC';
 						this.sortDirectionDate = 'DESC';
+						this.sortDirectionAdd = 'DESC';
 					}
 					else {
 						this.sortDirectionFacName = 'ASC';
 						this.sortDirectionPrice = 'ASC';
 						this.sortDirectionDate = 'ASC';
+						this.sortDirectionAdd = 'ASC';
+					}
+					
+					this.history = copiedUpcomingTrainings;
+				}
+				break;
+				case ('Add'): {
+					let copiedUpcomingTrainings = Object.assign([], this.history);
+					
+					copiedUpcomingTrainings.sort((a, b) => {
+						let fa = a.applicationDateTime;
+						let fb = b.applicationDateTime;
+						
+						if (this.sortDirectionAdd === 'ASC') {
+							if (fa < fb) {
+    								return -1;
+							}
+						    if (fa > fb) {
+						        return 1;
+						    }
+						    return 0;
+						}
+						else {
+							if (fa < fb) {
+								return 1;
+							}
+					    	if (fa > fb) {
+					        	return -1;
+					    	}
+					    	return 0;
+						}
+					})
+					
+					if (this.sortDirectionAdd === 'ASC') {
+						this.sortDirectionFacName = 'DESC';
+						this.sortDirectionPrice = 'DESC';
+						this.sortDirectionDate = 'DESC';
+						this.sortDirectionAdd = 'DESC';
+					}
+					else {
+						this.sortDirectionFacName = 'ASC';
+						this.sortDirectionPrice = 'ASC';
+						this.sortDirectionDate = 'ASC';
+						this.sortDirectionAdd = 'ASC';
 					}
 					
 					this.history = copiedUpcomingTrainings;
@@ -351,6 +410,10 @@ Vue.component("profil", {
 		},
 		
 		multiSearch () {
+			
+			if (this.srchFrom === '') this.srchFrom = '0';
+			if (this.srchTo === '') this.srchTo = '0';
+			
 			axios
 				.get('rest/newTraining/search/' + this.srchFacName + '/' +
 				this.srchFrom + '/' + this.srchTo + '/' + this.srchDateStart + '/' + this.srchDateEnd)

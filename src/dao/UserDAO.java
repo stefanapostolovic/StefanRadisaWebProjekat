@@ -223,7 +223,8 @@ public class UserDAO {
 		
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
-			if ((user.getName().toLowerCase().contains(name.toLowerCase())) &&
+			if (user.getIsDeleted() == false &&
+					(user.getName().toLowerCase().contains(name.toLowerCase())) &&
 					user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
 					user.getUsername().toLowerCase().contains(username.toLowerCase())) {
 				returnList.add(user);

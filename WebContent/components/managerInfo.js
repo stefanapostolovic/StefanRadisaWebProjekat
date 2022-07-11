@@ -30,6 +30,7 @@ Vue.component("managerInfo", {
 			sortDirectionFacName: 'ASC',
 			sortDirectionPrice: 'ASC',
 			sortDirectionDate: 'ASC',
+			sortDirectionAdd: 'ASC',
 			
 			//kupci
 			customers: []
@@ -104,6 +105,9 @@ Vue.component("managerInfo", {
 					<th>
 						Trainer
 					</th>
+					<th>
+						Additional payment
+					</th>
 				</tr>
 				<tr v-for="(p, index) in trainings" 
 				v-if="p.isDeleted == false"
@@ -144,6 +148,9 @@ Vue.component("managerInfo", {
 						<p style="width:150px;height=150px">
 							-
 						</p>
+					</td>
+					<td>
+						{{p.additionalPayment}}
 					</td>
 				</tr>
 		    </table>
@@ -240,12 +247,12 @@ Vue.component("managerInfo", {
 					        <div class="card-content white-text">
 					          <span class="card-title">Search</span>
 					          <p>
-								<input type="text" v-model="srchFrom" placeholder="search by starting price"
-								class="white-text"/>
+								<input type="number" v-model="srchFrom" placeholder="search by starting price"
+								value="0" class="white-text"/>
 					          </p>
 					          <p>
-								<input type="text" v-model="srchTo" placeholder="search by end price"
-								class="white-text"/>
+								<input type="number" v-model="srchTo" placeholder="search by end price"
+								value="0" class="white-text"/>
 					          </p>
 					          <p>
 								<input type="date" v-model="srchDateStart" placeholder="search by start date"
@@ -284,6 +291,12 @@ Vue.component("managerInfo", {
 									<td></td>
 									<td></td>
 									<td></td>
+									<td>
+										<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+				  						@click="changeSort('Add')">
+				  							<i class="material-icons">arrow_drop_down</i>
+				  						</a>
+									</td>
 								</tr>				
 												<!-- TABLE -->
 						
@@ -297,6 +310,7 @@ Vue.component("managerInfo", {
 									<th>Time</th>
 									<th>Duration (hours)</th>
 									<th>Description</th>
+									<th>Additional payment</th>
 								</tr>
 								<tr v-for="(p, index) in filteredTrainingHistories"
 								v-if="p.isDeleted == false && p.training.isDeleted == false" 
@@ -331,6 +345,11 @@ Vue.component("managerInfo", {
 									<td>
 										<p clas="tableRow">
 											{{p.training.description}}
+										</p>
+									</td>
+									<td>
+										<p clas="tableRow">
+											{{p.training.additionalPayment}}
 										</p>
 									</td>
 								</tr>
@@ -407,11 +426,57 @@ Vue.component("managerInfo", {
 							this.sortDirectionFacName = 'DESC';
 							this.sortDirectionPrice = 'DESC';
 							this.sortDirectionDate = 'DESC';
+							this.sortDirectionAdd = 'DESC';
 						}
 						else {
 							this.sortDirectionFacName = 'ASC';
 							this.sortDirectionPrice = 'ASC';
 							this.sortDirectionDate = 'ASC';
+							this.sortDirectionAdd = 'ASC';
+						}
+						
+						this.upcomingTrainings = copiedUpcomingTrainings;
+					}
+					break;
+					
+					case ('Add'): {
+						let copiedUpcomingTrainings = Object.assign([], this.upcomingTrainings);
+						
+						copiedUpcomingTrainings.sort((a, b) => {
+							let fa = a.training.additionalPayment;
+							let fb = b.training.additionalPayment;
+							
+							if (this.sortDirectionAdd === 'ASC') {
+								if (fa < fb) {
+        								return -1;
+								}
+							    if (fa > fb) {
+							        return 1;
+							    }
+							    return 0;
+							}
+							else {
+								if (fa < fb) {
+									return 1;
+								}
+						    	if (fa > fb) {
+						        	return -1;
+						    	}
+						    	return 0;
+							}
+						})
+						
+						if (this.sortDirectionAdd === 'ASC') {
+							this.sortDirectionFacName = 'DESC';
+							this.sortDirectionPrice = 'DESC';
+							this.sortDirectionDate = 'DESC';
+							this.sortDirectionAdd = 'DESC';
+						}
+						else {
+							this.sortDirectionFacName = 'ASC';
+							this.sortDirectionPrice = 'ASC';
+							this.sortDirectionDate = 'ASC';
+							this.sortDirectionAdd = 'ASC';
 						}
 						
 						this.upcomingTrainings = copiedUpcomingTrainings;
@@ -421,6 +486,9 @@ Vue.component("managerInfo", {
 			},
 			
 			multiSearch () {
+				if (this.srchFrom === '') this.srchFrom = '0';
+				if (this.srchTo === '') this.srchTo = '0';
+				
 				axios
 					.get('rest/newTraining/search/' + this.srchFacName + '/' +
 					this.srchFrom + '/' + this.srchTo + '/' + this.srchDateStart + '/' + this.srchDateEnd)

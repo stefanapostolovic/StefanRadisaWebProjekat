@@ -254,6 +254,9 @@ Vue.component("facility", {
 					<th>
 						Trainer
 					</th>
+					<th>
+						Additional payment (in dinars)
+					</th>
 					<th></th>
 				</tr>
 				
@@ -295,6 +298,9 @@ Vue.component("facility", {
 						<p style="width:150px;height=150px">
 							-
 						</p>
+					</td>
+					<td>
+						{{p.additionalPayment}}
 					</td>
 					<td>
 						<button v-on:click="prijava(p)">Schedule</button>

@@ -12,6 +12,8 @@ public class Training {
 	private String trainingTime;
 	private Boolean isCanceled;
 	
+	private double additionalPayment;
+	
 	private Boolean isDeleted;
 	
 	public Training() {
@@ -19,7 +21,7 @@ public class Training {
 	}
 	
 	public Training(String id, String name, String trainingType, SportFacility sportFacility, float duration, User trainer,
-			String description, String image, String trainingTime, Boolean isCanceled) {
+			String description, String image, String trainingTime, double additionalPayment, Boolean isCanceled) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -30,10 +32,22 @@ public class Training {
 		this.description = description;
 		this.image = image;
 		this.trainingTime = trainingTime;
+		
+		this.additionalPayment = additionalPayment;
+		
 		this.isCanceled = isCanceled;
 		
 		this.isDeleted = false;
 	}
+	
+	public double getAdditionalPayment () {
+		return additionalPayment;
+	}
+	
+	public void setAdditionalPayment(double additionalPayment) {
+		this.additionalPayment = additionalPayment;
+	}
+	
 	public String getTrainingTime() {
 		return trainingTime;
 	}

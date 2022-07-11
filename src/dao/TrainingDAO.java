@@ -129,6 +129,9 @@ public class TrainingDAO {
 		trainingToUpdate.setDescription(training.getDescription());
 		trainingToUpdate.setTrainer(training.getTrainer());
 		trainingToUpdate.setTrainingTime(training.getTrainingTime());
+		
+		trainingToUpdate.setAdditionalPayment(training.getAdditionalPayment());
+		
 		trainingToUpdate.setIsCanceled(training.getIsCanceled());
 		
 		trainingToUpdate.setIsDeleted(training.getIsDeleted());
@@ -206,32 +209,6 @@ public class TrainingDAO {
 		return returnList;
 	}
 	
-	/*public List<TrainingHistory> getPersonalTrainingHistoryForSelectedTrainer(User user) throws ParseException {
-		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");  
-		
-		for (TrainingHistory temp : user.getTrainingHistory()) {
-			if (temp.getTraining().getTrainingType().equals("personal") && 
-					formatter.parse(temp.getApplicationDateTime()).compareTo(
-							formatter.parse(formatter.format(new Date()))) > 0)
-				returnList.add(temp);
-		}
-		return returnList;
-	}
-	
-	public List<TrainingHistory> getGroupTrainingHistoryForSelectedTrainer(User user) throws ParseException {
-		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");  
-		
-		for (TrainingHistory temp : user.getTrainingHistory()) {
-			if (temp.getTraining().getTrainingType().equals("group") && 
-					formatter.parse(temp.getApplicationDateTime()).compareTo(
-							formatter.parse(formatter.format(new Date()))) > 0)
-				returnList.add(temp);
-		}
-		return returnList;
-	}*/
-	
 	public List<Training> getGroupTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
 		for (Training temp : trainings.values()) {
@@ -286,7 +263,7 @@ public class TrainingDAO {
 		Training newlyCreatedTraining = new Training(
 				"-1", training.getName(), training.getTrainingType(), training.getSportFacility(),
 				training.getDuration(), training.getTrainer(), training.getDescription(),
-				training.getImage(), training.getTrainingTime(), false);
+				training.getImage(), training.getTrainingTime(), training.getAdditionalPayment(), false);
 		
 		
 		save(newlyCreatedTraining);

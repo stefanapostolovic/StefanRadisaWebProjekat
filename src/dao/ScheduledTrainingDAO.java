@@ -239,7 +239,10 @@ public class ScheduledTrainingDAO {
 		SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		for (TrainingHistory value : trainingsHistory.values()) {
-			if ((value.getTraining().getSportFacility().getName().trim().toLowerCase().contains(name))) {			
+			if (value.getIsDeleted() == false && (value.getTraining().getSportFacility().getName().
+					trim().toLowerCase().contains(name))
+					&& (value.getTraining().getAdditionalPayment() >= Double.parseDouble(startPrice)  
+					&&	value.getTraining().getAdditionalPayment() <= Double.parseDouble(endPrice))) {			
 				
 				if (value.getApplicationDateTime().equals("")) {
 					returnList.add(value);
