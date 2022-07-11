@@ -60,11 +60,11 @@ public class ScheduledTrainingService {
 		return dao.findAllByUser(username);
 	}
 	
-	@GET
-	@Path("/numberInOneDay/{id}")
+	@PUT
+	@Path("/numberInOneDay")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public int updateProduct(@PathParam("id") User user) {
+	public int updateProduct(User user) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.countForOneDay(user);
 	}

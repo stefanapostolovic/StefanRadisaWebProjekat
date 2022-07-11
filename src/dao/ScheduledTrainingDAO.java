@@ -43,7 +43,6 @@ public class ScheduledTrainingDAO {
 	public TrainingHistory findFacility(String id) {
 		return trainingsHistory.containsKey(id) ? trainingsHistory.get(id) : null;
 	}
-	
 	public int countForOneDay(User user) {
 		int count = 0 ;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -56,8 +55,9 @@ public class ScheduledTrainingDAO {
 		return count;
 	}
 	
-	
 	public TrainingHistory save(TrainingHistory facility) {	
+		LocalDate ld = LocalDate.parse(facility.getApplicationDateTime());
+		System.out.println(ld);
 		Integer maxId = -1;
 		for (String id : trainingsHistory.keySet()) {
 			int idNum =Integer.parseInt(id);

@@ -410,9 +410,8 @@ Vue.component("facility", {
 			axios.all([
 			this.getNumberTraining(),
 			this.addHistory(),
-			]).then(axios.spread((first_response, second_response) => {
-				let pom = first_response.data;
-				if(parseInt(pom)>=parseInt(this.loggedUser.membership.numberAppointments)){
+			]).then(axios.spread((response1, response2) => {
+				if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
 					this.clanarina=true;
 					
 					this.poruka1 = "Prekoracen dnevni broj poseta"
@@ -424,10 +423,10 @@ Vue.component("facility", {
 					}
 				}))
 		},getNumberTraining(){
-			axios.get('rest/newTraining/numberInOneDay/'+this.loggedUser)
+			return axios.put('rest/newTraining/numberInOneDay',this.loggedUser)
 		},
 		addHistory(){
-			axios.post('rest/newTraining/addTraining', this.history)
+			return axios.post('rest/newTraining/addTraining', this.history)
 		},
 		
 		confirmCreateWithNewManager() {
