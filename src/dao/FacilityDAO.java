@@ -293,7 +293,7 @@ public class FacilityDAO {
 	public SportFacility CreateFacility(SportFacility facility) {
 		if (facility != null) {
 			for (SportFacility temp : facilities.values()) {
-				if (temp.getName().trim().toLowerCase().equals(
+				if (temp.getIsDeleted() == false && temp.getName().trim().toLowerCase().equals(
 						facility.getName().trim().toLowerCase())) {
 					return null;
 				}

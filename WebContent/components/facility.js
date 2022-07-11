@@ -307,7 +307,7 @@ Vue.component("facility", {
 					<td>
 						{{p.additionalPayment}}
 					</td>
-					<td>
+					<td v-if="loggedUser.role === 'Customer'">
 						<button v-on:click="prijava(p)">Schedule</button>
 					</td>
 					<td>
@@ -321,24 +321,16 @@ Vue.component("facility", {
 				</tr>
 		    </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
+										<!-- KOMENTARI -->
 
 			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="noviKomentari">Novi Komentari:</h3> 
 		<table name="tabelaNovi">
 					<tr class="tableRowBorder">
 						<th>Komentar</th>
 					<th>Ocena</th>
+					<th></th>
+					<th></th>
+					<th></th>
 				</tr>
 				<tr class="tableRowBorder" v-for="(p, index) in newComment" v-if="p.isDeleted == false">
 					<td class="kolona">
@@ -347,15 +339,32 @@ Vue.component("facility", {
 					<td class="kolona">
 						{{p.grade}}
 					</td>
-					<td><button v-on:click="Odobri(p,index)">Odobri</button> </td>
-					<td><button v-on:click="Odbi(p,index)">Odbi</button> </td>
+					<td>
+						<button v-on:click="Odobri(p,index)" v-if="isAdmin()"> 
+							Odobri
+						</button> 
+					</td>
+					<td>
+						<button v-on:click="Odbi(p,index)" v-if="isAdmin()">
+							Odbi
+						</button> 
+					</td>
+					<td>
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteComment(p)"
+			    		  v-if="isAdmin()"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+	    		  		</a>
+					</td>
 				</tr>
 	    	</table>
 		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Komentari:</h3> 
-		<table name="coment" hidden>
+		<table name="coment" hidden style="margin-bottom:15%">
 				<tr class="tableRowBorder">
-							<th>Komentar</th>
-					<th>Ocena</th>
+					<th>Comment</th>
+					<th>Grade</th>
+					<th>State</th>
 				</tr>
 				<tr class="tableRowBorder" v-for="(p, index) in comments" v-if="p.isDeleted == false">
 					<td class="kolona">
@@ -365,6 +374,14 @@ Vue.component("facility", {
 						{{p.grade}}
 					</td>
 					<td id="state" name="state" >{{status(p.state)}}</td>
+					<td>
+						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+			    		  @click="deleteComment(p)"
+			    		  v-if="isAdmin()"
+			    		  style="margin-right: 0; margin-left:auto; display:block;">
+			    		  <i class="material-icons">cancel</i>
+	    		  		</a>
+					</td>
 				</tr>
 	    	</table>
 		<table name="coment1" hidden>
@@ -383,7 +400,7 @@ Vue.component("facility", {
 	    	</table>
 		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="naslov" hidden>Dodaj komentar:</h3> 
 		<form name="komentar" hidden>
-		<table >
+		<table style="margin-bottom:15%">
 		
 			<tr class="tableRowBorder">
 					<th>Komentar:</th>
@@ -492,14 +509,12 @@ Vue.component("facility", {
 							p2.hidden=false;
 							p3.hidden=false;
 						}
-						return;	
 					}
 				else{
 						n1.hidden=false;
 						p.hidden=false;
 						p1.hidden=false;
 						this.comment.user=this.loggedUser;
-						return;
 				}
 				}
 				return axios.get('rest/getFacilityManager/' + this.id);
@@ -514,8 +529,15 @@ Vue.component("facility", {
 			})
     },
      methods: {
-		deleteComment(comment) {
+		deleteComment(c) {
+			c.isDeleted = true;
+			c.active = false;
 			
+			axios
+				.put('rest/comment/update/' + c.id, c)
+				.then(response => {
+					console.log(response.data);
+				})
 		},
 	
 		showMap () {

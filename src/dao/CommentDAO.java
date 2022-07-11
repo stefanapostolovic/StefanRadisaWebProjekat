@@ -76,6 +76,8 @@ public class CommentDAO {
 		c.setText(comment.getText());
 		c.setUser(comment.getUser());
 		
+		c.setIsDeleted(comment.getIsDeleted());
+		
 		try {					
 			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/comments.json"));
 			System.out.println(contextPath + "/comments.json");
@@ -109,6 +111,8 @@ public class CommentDAO {
 		
 		maxId++;
 		newComment.setId(maxId.toString());
+		newComment.setIsDeleted(false);
+		
 		comments.put(newComment.getId(), newComment);
 	
 				
