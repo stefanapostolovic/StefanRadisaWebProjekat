@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import beans.Membership;
 import beans.PromoCode;
 
 public class PromoCodeDAO {
@@ -86,6 +87,35 @@ public class PromoCodeDAO {
 		}
 		return codeToDelete;
 	}
+	
+	public PromoCode update(PromoCode promoCode) {
+		/*for (PromoCode temp : codes.values()) {
+			if (temp.getCode().equals(
+					promoCode.getCode())) {
+				return null;
+			}
+		}*/
+	
+	PromoCode codeToUpdate = this.codes.get(promoCode.getCode());
+	codeToUpdate.setCode(promoCode.getCode());
+	codeToUpdate.setExpiryDate(promoCode.getExpiryDate());
+	codeToUpdate.setUseAmount(promoCode.getUseAmount());
+	codeToUpdate.setDiscountPercentage(promoCode.getDiscountPercentage());
+	codeToUpdate.setIsDeleted(promoCode.getIsDeleted());	
+	try {
+		Writer writer = new BufferedWriter(new FileWriter(contextPath + "/codes.json"));
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String json = gson.toJson(codes.values());
+		System.out.println(json);
+		writer.write(json);
+		
+		writer.close();
+		
+	}catch(Exception e) {
+		e.printStackTrace();
+	}
+	return codeToUpdate;
+}
 	
 	private void loadCodes(String contextPath) {
 		// TODO Auto-generated method stub

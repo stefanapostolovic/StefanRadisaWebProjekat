@@ -10,7 +10,8 @@ Vue.component("profil", {
 		      name:'',
 		      surename:'',
 		      gender:'',
-		      dateOfBirth:''
+		      dateOfBirth:'',
+			  personalni:false
 		    }
 	},
 	template: ` 
@@ -66,10 +67,10 @@ Vue.component("profil", {
 <br>
 <br>
 <br>
-<h3 class="teal darken-2" style="margin-bottom:5%">
+<h3 v-if="personalni" class="teal darken-2" style="margin-bottom:5%">
 					Treninzi
 				</h3>
-<table>
+<table v-if="personalni">
 					<tr class="tableRowBorder">
 						<th>Naziv treninga</th>
 						<th>Naziv objekta</th>
@@ -165,8 +166,12 @@ Vue.component("profil", {
 			l.hidden=true;
 		}
 	},mounted () {
+		this.personalni=false;
 		axios.get('rest/currentUser').
-				then(response => {this.user =  response.data;console.log(this.user);
+				then(response => {this.user =  response.data;
+				if(this.user.role=="Customer"){
+					this.personalni=true;
+				}
 				return axios.get('rest/newTraining/allForCustomer/'+this.user.username)
 				}).then(response=>(this.history = response.data))
 						

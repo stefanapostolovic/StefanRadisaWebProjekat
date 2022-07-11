@@ -73,12 +73,12 @@ public class MembershipDAO {
 	}
 	
 	public Membership update(String id, Membership membership) {
-			for (Membership temp : memberships.values()) {
+			/*for (Membership temp : memberships.values()) {
 				if (temp.getIdentifier().equals(
 						membership.getIdentifier())) {
 					return null;
 				}
-			}
+			}*/
 		
 		Membership membershipToUpdate = this.memberships.get(id);
 		membershipToUpdate.setIdentifier(membership.getIdentifier());
