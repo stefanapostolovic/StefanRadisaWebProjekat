@@ -42,16 +42,16 @@ Vue.component("zaglavlje", {
     				</a>
     				</li>
     				<li><a v-if="showAdminButtons" @click="dodavanjeOsoblja" id="treneri">
-    					<font size="+2">Dodavanje osoblja &nbsp;&nbsp;</font>
+    					<font size="+2">Register an employee &nbsp;&nbsp;</font>
     				</a>
     				</li>
     				
     				<li><a v-if="showAdminButtons" @click="prikazKorisnika" id="korisnici">
-    					<font size="+2">Pregled korisnika &nbsp;&nbsp;</font></a>
+    					<font size="+2">View users &nbsp;&nbsp;</font></a>
     				</li>
     				
     				<li><a v-if="showProfile" v-on:click="prikaz" name="Profil">
-    					<font size="+2">Prikaz profila &nbsp;&nbsp;</font>
+    					<font size="+2">Show profile &nbsp;&nbsp;</font>
     				</a></li>
 					<li><a v-if="showMembership" v-on:click="showMembershipFunction" name="Clanarina">
     					<font size="+2">Clanarina &nbsp;&nbsp;</font>

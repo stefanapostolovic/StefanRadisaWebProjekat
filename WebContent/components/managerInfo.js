@@ -165,10 +165,10 @@ Vue.component("managerInfo", {
 		    <h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">Trainer list</h3>
 		    <table>
 		    	<tr class="tableRowBorder">	
-		    		<th>Ime</th>
-		    		<th>Prezime</th>
-		    		<th>Pol</th>
-		    		<th>Datum rodjenja</th>
+		    		<th>Name</th>
+		    		<th>Surname</th>
+		    		<th>Gender</th>
+		    		<th>Date of birth</th>
 		    	</tr>
 		    	<tr v-for="(p, index) in trainers"
 		    	v-if="p.isDeleted == false" 

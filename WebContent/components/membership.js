@@ -6,18 +6,19 @@ Vue.component("membership", {
 	},
 	    template: ` 
     			<div class="container shrink" style="margin-top:-3%">
-    			<h1>Membership</h1>
+    			<h1>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    			Membership</h1>
     			<br></br>
 				
-				<h3 class="teal darken-2" style="margin-bottom:5%">
-					Types of membership
+				<h3 class="teal darken-2" style="margin-bottom:5%; text-align:center">
+					Membership types
 				</h3>
 				<table>
 					<tr class="tableRowBorder">
-						<th>Tip članarine</th>
-						<th>Cena</th>
-						<th>Dnevni broj termina</th>
-						<th>Ukupan broj termina</th>
+						<th>Type</th>
+						<th>Price</th>
+						<th>Daily ammount of uses</th>
+						<th>Total ammount of uses</th>
 					</tr>
 					<tr v-for="(p, index) in memberships" class="tableRowBorder"
 					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
@@ -39,7 +40,7 @@ Vue.component("membership", {
 								{{p.number}}
 							</p>
 						</td>
-						<td><button v-on:click="sentToChild(p)">Pregled clanarine</button></td>
+						<td><button v-on:click="sentToChild(p)">Show details</button></td>
 					</tr>
 				</table>
 				

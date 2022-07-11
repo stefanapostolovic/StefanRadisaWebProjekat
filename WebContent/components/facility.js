@@ -159,7 +159,7 @@ Vue.component("facility", {
 			<form v-if="isCreateManager">
 				<table>
 					<tr>
-						<td>Korisnicko ime:</td>
+						<td>Username:</td>
 						<td>	
 							<span v-if="isManagerUsername" class="red-text">
 								Please enter the username
@@ -169,7 +169,7 @@ Vue.component("facility", {
 						</td>
 					</tr>
 					<tr>
-						<td>Lozinka:</td>
+						<td>Password:</td>
 						<td>
 							<span v-if="isManagerPass" class="red-text">
 								Please enter the password
@@ -179,7 +179,7 @@ Vue.component("facility", {
 				
 					</tr>
 					<tr>
-						<td>Ime:</td>
+						<td>Name:</td>
 						<td>
 							<span v-if="isManagerName" class="red-text">
 								Please enter the name
@@ -188,7 +188,7 @@ Vue.component("facility", {
 					</td>	
 					</tr>
 					<tr>
-						<td>Prezime:</td>
+						<td>Surname:</td>
 						<td>
 							<span v-if="isManagerSurname" class="red-text">
 								Please enter the surname
@@ -197,7 +197,7 @@ Vue.component("facility", {
 					</td>
 					</tr>
 					<tr>
-						<td>Pol:</td>
+						<td>Gender:</td>
 						<td>
 							<span v-if="isManagerGender" class="red-text">
 								Please enter the gender
@@ -210,7 +210,7 @@ Vue.component("facility", {
 						</td>
 					</tr>
 					<tr>
-						<td>Datum rodjenja:</td>
+						<td>Date of birth:</td>
 						<td>
 							<span v-if="isManagerDate" class="red-text">
 								Please enter the date
@@ -222,8 +222,8 @@ Vue.component("facility", {
 					<tr>
 						<td >
 							<button  @click="confirmCreateWithNewManager" 
-							class="btn">Poslaji</button>
-							<input type="reset" value="Ponisti" class="btn">
+							class="btn">Confirm</button>
+							<input type="reset" value="Reset" class="btn">
 							<td></td>
 						</td>
 					</tr>
@@ -323,7 +323,9 @@ Vue.component("facility", {
 
 										<!-- KOMENTARI -->
 
-			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="noviKomentari">Novi Komentari:</h3> 
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="noviKomentari">
+				Comments waiting for approoval:
+			</h3> 
 		<table name="tabelaNovi">
 					<tr class="tableRowBorder">
 						<th>Komentar</th>
@@ -341,12 +343,12 @@ Vue.component("facility", {
 					</td>
 					<td>
 						<button v-on:click="Odobri(p,index)" v-if="isAdmin()"> 
-							Odobri
+							Approove
 						</button> 
 					</td>
 					<td>
 						<button v-on:click="Odbi(p,index)" v-if="isAdmin()">
-							Odbi
+							Reject
 						</button> 
 					</td>
 					<td>
@@ -359,7 +361,7 @@ Vue.component("facility", {
 					</td>
 				</tr>
 	    	</table>
-		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Komentari:</h3> 
+		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Comments:</h3> 
 		<table name="coment" hidden style="margin-bottom:15%">
 				<tr class="tableRowBorder">
 					<th>Comment</th>
@@ -386,8 +388,8 @@ Vue.component("facility", {
 	    	</table>
 		<table name="coment1" hidden>
 					<tr class="tableRowBorder">
-						<th>Komentar</th>
-					<th>Ocena</th>
+						<th>Comment</th>
+					<th>Grade</th>
 				</tr>
 				<tr class="tableRowBorder" v-for="(p, index) in comments" v-if="p.isDeleted == false">
 					<td class="kolona">
@@ -398,13 +400,15 @@ Vue.component("facility", {
 					</td>
 				</tr>
 	    	</table>
-		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="naslov" hidden>Dodaj komentar:</h3> 
+		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="naslov" hidden>
+			Add a comment:
+		</h3> 
 		<form name="komentar" hidden>
 		<table style="margin-bottom:15%">
 		
 			<tr class="tableRowBorder">
-					<th>Komentar:</th>
-		<th>Ocjena:</th>
+					<th>Comment:</th>
+		<th>Grade:</th>
 		</tr>
 				<tr class="tableRowBorder">
 							<td class="kolona">
@@ -424,7 +428,7 @@ Vue.component("facility", {
 					</td>
 				</tr>
 					<tr class="tableRowBorder">
-					<input type="submit" v-on:click="addCommentFunkcija" value="Dodaj komentar">
+					<input type="submit" v-on:click="addCommentFunkcija" value="Add comment">
 				</tr>
 	    	</table>
 	</form>			
