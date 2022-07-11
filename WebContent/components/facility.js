@@ -297,7 +297,7 @@ Vue.component("facility", {
 						</p>
 					</td>
 					<td>
-						<button v-on:click="prijava(p)">Prijava</button>
+						<button v-on:click="prijava(p)">Schedule</button>
 					</td>
 					<td>
 						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
@@ -403,7 +403,7 @@ Vue.component("facility", {
 			
 			if(this.loggedUser==null || this.loggedUser==""){
 				this.clanarina =true;	
-				this.poruka1 = "Morate se ulogovati"
+				this.poruka1 = "You need to be logged in"
 				return;
 				
 			}
@@ -411,18 +411,18 @@ Vue.component("facility", {
 			if(this.loggedUser.membership == null)	
 			{
 				this.clanarina =true;	//ako je korisnik nema
-				this.poruka1 = "Nemate clanarinu"
+				this.poruka1 = "You don't have a membership'"
 				return;
 			}else if(this.loggedUser.membership.status==false ||  parseInt(this.loggedUser.membership.counter)<=0){
 				this.clanarina =true; //ako je istekla
-				this.poruka1 = "Clanarina je istrkla"
+				this.poruka1 = "Your membership has expired"
 				return;
 			}
 			let pomD = new Date();
 			let datum1 = new Date(this.loggedUser.membership.expirationDate)
 			if(pomD.getTime()>datum1.getTime()){
 				this.clanarina=true;
-				this.poruka1 = "Clanarina je istrkla"
+				this.poruka1 = "Your membership has expired"
 				return;	
 			}
 			axios.all([
@@ -433,7 +433,7 @@ Vue.component("facility", {
 					if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
 						this.clanarina=true;
 					
-						this.poruka1 = "Prekoracen dnevni broj poseta"
+						this.poruka1 = "Daily check-in limit reached"
 					}	
 				}else{
 					router.push(`/`)

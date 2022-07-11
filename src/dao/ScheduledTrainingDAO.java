@@ -53,7 +53,9 @@ public class ScheduledTrainingDAO {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate ld= LocalDate.now();
 		for(TrainingHistory th: this.findAllByUser(user.getUsername())) {
-			if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))==0) {
+			if (th.getIsDeleted() == true) continue;
+			
+			else if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))==0) {
 				count += 1;
 			}
 		}
