@@ -103,7 +103,16 @@ public class ScheduledTrainingService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<TrainingHistory> getUserHistory(@PathParam("username") String username) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
-		return dao.findAllByUser(username);
+		return dao.trainingForUserHistory(username);
+	}
+	
+	@PUT
+	@Path("/trainingUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public int getForUser(User user) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.countForOneDay(user);
 	}
 	
 	@PUT

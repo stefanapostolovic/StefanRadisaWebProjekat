@@ -4,6 +4,7 @@ Vue.component("profil", {
 		      id : -1,
 			  users:{},
 			  user: {id: -1, username:null, password:null, name:null, surename:null, gender:null, dateOfBirth:null },
+			  history:[],
 		      username:'',
 		      password:'',
 		      name:'',
@@ -61,6 +62,37 @@ Vue.component("profil", {
 	</table>
 	</form>
 <label hidden name="lab">Postoji vec registrovan korisnik sa ovim korisnickim imenom.</label>
+
+<br>
+<br>
+<br>
+<h3 class="teal darken-2" style="margin-bottom:5%">
+					Treninzi
+				</h3>
+<table>
+					<tr class="tableRowBorder">
+						<th>Naziv treninga</th>
+						<th>Naziv objekta</th>
+						<th>Datum treniranja</th>
+					</tr>
+					<tr v-for="(p, index) in history" class="tableRowBorder"
+					:style="{background: p.isCanceled == true ? '#4a148c' : '#212121'}">
+						<td>
+							{{p.training.name}}
+						</td>
+						<td>
+							<p clas="tableRow">
+								{{p.training.sportFacility.name}}
+							</p>
+						</td>
+						<td>
+							<p clas="tableRow">
+								{{p.applicationDateTime}}
+							</p>
+						</td>
+						
+					</tr>
+				</table>
 </div>		  
 `
 	, 
@@ -134,8 +166,9 @@ Vue.component("profil", {
 		}
 	},mounted () {
 		axios.get('rest/currentUser').
-				then(response => {this.user =  response.data;console.log(this.user);});
+				then(response => {this.user =  response.data;console.log(this.user);
+				return axios.get('rest/newTraining/allForCustomer/'+this.user.username)
+				}).then(response=>(this.history = response.data))
 						
-
 				 }
 });
