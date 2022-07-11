@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Membership;
+import beans.User;
 
 
 public class MembershipDAO {
@@ -88,6 +89,7 @@ public class MembershipDAO {
 		membershipToUpdate.setPrice(membership.getPrice());
 		membershipToUpdate.setStatus(membership.isStatus());
 		membershipToUpdate.setUser(membership.getUser());
+		membershipToUpdate.setCounter(membership.getCounter());
 		
 		System.out.println("DAO UPDATE TEST");
 		
@@ -125,4 +127,5 @@ public class MembershipDAO {
 			e.printStackTrace();
 		}
 	}
+
 }

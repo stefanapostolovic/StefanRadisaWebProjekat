@@ -6,20 +6,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.crypto.Data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import beans.TrainingHistory;
+import beans.User;
 
 public class ScheduledTrainingDAO {
 	private HashMap<String, TrainingHistory> trainingsHistory = new HashMap<String, TrainingHistory>();
@@ -45,9 +44,20 @@ public class ScheduledTrainingDAO {
 		return trainingsHistory.containsKey(id) ? trainingsHistory.get(id) : null;
 	}
 	
+	public int countForOneDay(User user) {
+		int count = 0 ;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate ld= LocalDate.now();
+		for(TrainingHistory th: this.findAllByUser(user.getUsername())) {
+			if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))==0) {
+				count += 1;
+			}
+		}
+		return count;
+	}
+	
+	
 	public TrainingHistory save(TrainingHistory facility) {	
-		LocalDate ld = LocalDate.parse(facility.getApplicationDateTime());
-		System.out.println(ld);
 		Integer maxId = -1;
 		for (String id : trainingsHistory.keySet()) {
 			int idNum =Integer.parseInt(id);

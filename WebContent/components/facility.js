@@ -6,7 +6,8 @@ Vue.component("facility", {
 	      facility: {"id":null, "name":null, "objectType":null, "status":null,
 	      "location":{"longitude":null,"latitude":null,"address":{}}, 
 	      "image":null, "averageRating":null, "startTime":null, "endTime":null},
-	      
+          history:{"id":null,"time":null,"applicationDateTime":null,"training":null,"user":null,"coach":null,"isDeleted":false},
+	
 	      username:'',
 	      password:'',
 	      name:'',
@@ -23,7 +24,8 @@ Vue.component("facility", {
 		  
 		  isManagerForm: false,
 		  isCreateManager: false,
-		  
+		  clanarina:false,
+		  poruka1:"",
 		  //validacija
 		  isFacilityManager: false,
 		  isManagerUsername: false,
@@ -226,6 +228,9 @@ Vue.component("facility", {
 			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">
 				Training schedule (same for every day):
 			</h3>
+				<span v-if="clanarina" class="red-text">
+								{{poruka1}}
+				</span>
 			<table>
 				<tr class="tableRowBorder">
 					<th>
@@ -251,8 +256,9 @@ Vue.component("facility", {
 					</th>
 					<th></th>
 				</tr>
+				
 				<tr v-for="(p, index) in trainings" class="tableRowBorder"
-				v-if="p.isDeleted == false" v-on:click="sentToChild(p)">
+				v-if="p.isDeleted == false">
 					<td><img alt="fato" 
 					:src="p.image" width="100px" height="100px"></td>
 					<td class="kolona">
@@ -291,6 +297,9 @@ Vue.component("facility", {
 						</p>
 					</td>
 					<td>
+						<button v-on:click="prijava(p)">Prijava</button>
+					</td>
+					<td>
 						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
 			    		  @click="deleteTrainingType(p)"
 			    		  v-if="isAdmin()"
@@ -325,6 +334,18 @@ Vue.component("facility", {
 			this.facility = second_response.data;
 			this.trainings = third_response.data;
 		}))*/
+		
+			let date = new Date();
+
+			let day = ("0" + date.getDate()).slice(-2);
+			let month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			let today = date.getFullYear() + "-" + (month) + "-" + (day);
+			let hours = ("0" + date.getHours()).slice(-2);
+			let minutes = ("0" + (date.getMinutes() + 1)).slice(-2);
+
+			this.history.time = (hours) + ":" + (minutes)
+			this.history.applicationDateTime=today
 		axios
 			.get('rest/currentUser')
 			.then(response => {
@@ -356,6 +377,57 @@ Vue.component("facility", {
 			localStorage.setItem("selectedTraining", p.id)
 			router.push(`/scheduledTraining`);
 			}
+		},
+		prijava:function(p){
+			this.history.user = this.loggedUser
+			this.history.training = p; 
+			this.history.coach = p.trainer;
+			
+			if(this.loggedUser==null || this.loggedUser==""){
+				this.clanarina =true;	
+				this.poruka1 = "Morate se ulogovati"
+				return;
+				
+			}
+			
+			if(this.loggedUser.membership == null)	
+			{
+				this.clanarina =true;	//ako je korisnik nema
+				this.poruka1 = "Nemate clanarinu"
+				return;
+			}else if(this.loggedUser.membership.status==false ||  parseInt(this.loggedUser.membership.counter)<=0){
+				this.clanarina =true; //ako je istekla
+				this.poruka1 = "Clanarina je istrkla"
+				return;
+			}
+			let pomD = new Date();
+			let datum1 = new Date(this.loggedUser.membership.expirationDate)
+			if(pomD.getTime()>datum1.getTime()){
+				this.clanarina=true;
+				this.poruka1 = "Clanarina je istrkla"
+				return;	
+			}
+			axios.all([
+			this.getNumberTraining(),
+			this.addHistory(),
+			]).then(axios.spread((first_response, second_response) => {
+				let pom = first_response.data;
+				if(parseInt(pom)>=parseInt(this.loggedUser.membership.numberAppointments)){
+					this.clanarina=true;
+					
+					this.poruka1 = "Prekoracen dnevni broj poseta"
+					
+				}else{
+					router.push(`/`)
+					this.loggedUser.membership.counter = parseInt(this.loggedUser.membership.counter) - 1;
+					return axios.put('rest/updateUser/' + this.loggedUser.username,this.loggedUser);
+					}
+				}))
+		},getNumberTraining(){
+			axios.get('rest/newTraining/numberInOneDay/'+this.loggedUser)
+		},
+		addHistory(){
+			axios.post('rest/newTraining/addTraining', this.history)
 		},
 		
 		confirmCreateWithNewManager() {

@@ -2,7 +2,7 @@ Vue.component("selectedMembership", {
 	data: function () {
 	    return {id: '',
 	    user:null,
-		membership:{"identifier":null,"membershipType":null,"paymentDate":null,"expirationDate":null,"price":null,"status":"true","numberAppointments":"3","user":null,"number":null},
+		membership:{"identifier":null,"membershipType":null,"paymentDate":null,"expirationDate":null,"price":null,"status":"true","numberAppointments":"3","user":null,"number":null,"counter":null},
 	    code:null,
 		stringCode:"",
 		isDate:false,
@@ -102,7 +102,6 @@ Vue.component("selectedMembership", {
 			this.user = first_response.data;
 					
 			
-
 			this.membership=second_response.data
 			this.membership.status=true;
 		this.membership.paymentDate=datm.toLocaleDateString ();

@@ -16,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.TrainingHistory;
+import beans.User;
+import dao.MembershipDAO;
 import dao.ScheduledTrainingDAO;
 
 @Path("/newTraining")
@@ -56,6 +58,15 @@ public class ScheduledTrainingService {
 	public Collection<TrainingHistory> getUserHistory(@PathParam("username") String username) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.findAllByUser(username);
+	}
+	
+	@GET
+	@Path("/numberInOneDay/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public int updateProduct(@PathParam("id") User user) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.countForOneDay(user);
 	}
 	
 	@POST
