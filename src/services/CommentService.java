@@ -110,6 +110,7 @@ public class CommentService {
 				facilityList.add(com);
 			}
 		}
+		System.out.println(facilityList);
 		return facilityList;
 	}
 	

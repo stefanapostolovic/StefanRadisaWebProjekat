@@ -1,15 +1,9 @@
 Vue.component("login", { 
 	data: function () {
 	    return {
-	    user: {},
 
-	    user: {username:null, password:null, name:"", surename:null, gender:null, dateOfBirth:null,role:"" ,trainingHistory:null,
-	membership:null,
-	sportFacility:null,
-	visitedFacilities:null,
-	points:null,
-	customerType:{}
-},
+	     user: {},
+
 	     username : "",
 	     password : "",
 		 image:"",
@@ -99,7 +93,6 @@ Vue.component("login", {
 				this.returnFlag = -1;
 				return;
 			}
-
 			else this.returnFlag = -1;
 			
 			this.isPassword = false;
@@ -185,6 +178,7 @@ Vue.component("login", {
 					toast('Wrong username and/or password!')
 
 				})	    
+
 		}
    }
 });

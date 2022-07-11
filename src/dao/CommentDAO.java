@@ -28,6 +28,7 @@ public class CommentDAO {
 	public CommentDAO(String contextPath) {
 		this.contextPath = contextPath;
 		loadComments(contextPath);
+		System.out.println(comments.values());
 	}
 	
 	public Collection<Comment> findAll() {
