@@ -135,32 +135,32 @@ Vue.component("trainerInfo", {
 					<div class="row">
 						<div class="col s3">
 							<div class="card teal darken-2">
-					        <div class="card-content white-text">
-					          <span class="card-title">Search</span>
-					          <p>
-								<input type="text" v-model="srchFacName" placeholder="search by facility name"
-								class="white-text"/>
-					          </p>
-					          <p>
-								<input type="text" v-model="srchFrom" placeholder="search by starting price"
-								class="white-text"/>
-					          </p>
-					          <p>
-								<input type="text" v-model="srchTo" placeholder="search by end price"
-								class="white-text"/>
-					          </p>
-					          <p>
-								<input type="date" v-model="srchDateStart" placeholder="search by start date"
-								class="white-text"/>
-					          </p>
-					          <p>
-								<input type="date" v-model="srchDateEnd" placeholder="search by end date"
-								class="white-text"/>
-					          </p>
-					        </div>
-					        <div class="card-action">
-					          <a @click="multiSearch">search</a>
-					        </div>
+						        <div class="card-content white-text">
+						          <span class="card-title">Search</span>
+						          <p>
+									<input type="text" v-model="srchFacName" placeholder="search by facility name"
+									class="white-text"/>
+						          </p>
+						          <p>
+									<input type="text" v-model="srchFrom" placeholder="search by starting price"
+									class="white-text"/>
+						          </p>
+						          <p>
+									<input type="text" v-model="srchTo" placeholder="search by end price"
+									class="white-text"/>
+						          </p>
+						          <p>
+									<input type="date" v-model="srchDateStart" placeholder="search by start date"
+									class="white-text"/>
+						          </p>
+						          <p>
+									<input type="date" v-model="srchDateEnd" placeholder="search by end date"
+									class="white-text"/>
+						          </p>
+						        </div>
+						        <div class="card-action">
+						          <a @click="multiSearch">search</a>
+						        </div>
 					      </div>
 						</div>
 												<!-- FILTER SORT -->
