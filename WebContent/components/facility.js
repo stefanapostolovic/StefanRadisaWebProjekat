@@ -302,7 +302,7 @@ Vue.component("facility", {
 					<td>
 						{{p.additionalPayment}}
 					</td>
-					<td>
+					<td v-if="loggedUser.role === 'Customer'">
 						<button v-on:click="prijava(p)">Schedule</button>
 					</td>
 					<td>
