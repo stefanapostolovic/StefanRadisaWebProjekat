@@ -124,6 +124,16 @@ public class LoginService {
 		return Response.status(200).build();
 	}
 	
+	@POST
+	@Path("/ulogovani")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	//public Response login(User user, @Context HttpServletRequest request)
+	public User loginUser(User user, @Context HttpServletRequest request) {
+		//System.out.println("******************" + contextPath + "******************");
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		return userDao.find(user.getUsername(), user.getPassword());
+	}
 	
 	@POST
 	@Path("/logout")
