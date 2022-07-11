@@ -323,7 +323,6 @@ Vue.component("facility", {
     	`,
     mounted () {
 		this.id = localStorage.getItem("selectedFacility");
-		
 		/*axios.all([
 			this.getLoggedUser(),
 			this.getSelectedFacility(),
@@ -350,6 +349,8 @@ Vue.component("facility", {
 			.get('rest/currentUser')
 			.then(response => {
 				this.loggedUser = response.data;
+				console.log(this.loggedUser)
+		
 				return axios.get('rest/facilities/getFacility/' + this.id);
 			})
 			.then(response => {
@@ -411,11 +412,12 @@ Vue.component("facility", {
 			this.getNumberTraining(),
 			this.addHistory(),
 			]).then(axios.spread((response1, response2) => {
-				if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
-					this.clanarina=true;
+				if(response1.data !=null || response.data!=""){
+					if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
+						this.clanarina=true;
 					
-					this.poruka1 = "Prekoracen dnevni broj poseta"
-					
+						this.poruka1 = "Prekoracen dnevni broj poseta"
+					}	
 				}else{
 					router.push(`/`)
 					this.loggedUser.membership.counter = parseInt(this.loggedUser.membership.counter) - 1;
