@@ -1,11 +1,11 @@
 package services;
 
+import java.text.ParseException;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -42,6 +42,52 @@ public class ScheduledTrainingService {
 	public Collection<TrainingHistory> getProducts() {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.findAll();
+	}
+	
+	@GET
+	@Path("/getTrainingHistoryForSelectedTrainingType/{trainingTypeId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getTrainingHistoryForSelectedTrainingType(@PathParam("trainingTypeId") String trainingTypeId) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
+		return dao.getTrainingHistoryForSelectedTrainingType(trainingTypeId);
+	}
+	
+	@GET
+	@Path("/getTrainingHistoryForSelectedFacility/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getTrainingHistoryForSelectedFacility(
+			@PathParam("facilityId") String facilityId) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
+		return dao.getTrainingHistoryForSelectedFacility(facilityId);
+	}
+	
+	@GET
+	@Path("/getCustomerForSelectedFacility/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getCustomerForSelectedFacility(@PathParam("facilityId") String facilityId) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		
+		return dao.getCustomerForSelectedFacility(facilityId);
+	}
+	
+	@GET
+	@Path("/search/{name: .*}/{startPrice: .*}/{endPrice: .*}/{startDate: .*}/{endDate: .*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<TrainingHistory> getMultiSearchedTrainingHistories(
+			@PathParam("name") String name, 
+			@PathParam("startPrice") String startPrice, 
+			@PathParam("endPrice") String endPrice, 
+			@PathParam("startDate") String startDate, 
+			@PathParam("endDate") String endDate) throws ParseException {
+		
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.getMultiSearchedTrainingHistories(
+				name, startPrice, endPrice, startDate, endDate);
+		//return null;
+		
 	}
 	
 	@GET
@@ -106,6 +152,8 @@ public class ScheduledTrainingService {
 		
 		return dao.update(trainingHistoryId, trainingHistory);
 	}
+	
+	
 }
 
 

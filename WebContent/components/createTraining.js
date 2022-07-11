@@ -19,6 +19,8 @@ Vue.component("createTraining", {
 			
 			formData: null,
 			
+			additionalPayment: 0,
+			
 			//validation
 			isTrainingName: false,
 			isTrainingType: false,
@@ -106,6 +108,12 @@ Vue.component("createTraining", {
 										{{p.name + ' ' + p.surename}}
 									</option>
 								</select>				
+							</td>
+						</tr>
+						<tr>
+							<td>Additional payment</td>
+							<td>
+								<input type="number" v-model="additionalPayment" value="0">
 							</td>
 						</tr>
 						<tr>
@@ -252,6 +260,8 @@ Vue.component("createTraining", {
 			this.newTraining.duration = this.duration;
 			this.newTraining.trainer = this.trainer;
 			this.newTraining.description = this.description;
+			
+			this.newTraining.additionalPayment = this.additionalPayment;
 			
 			if (this.canCreateFlag == -1) {
 				this.canCreateFlag = 1;

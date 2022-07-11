@@ -14,7 +14,7 @@ Vue.component("selectedMembership", {
     			<h1>Membership</h1>
     			<br></br>
 				
-				<h3 class="teal darken-2" style="margin-bottom:5%">
+				<h3 class="teal darken-2" style="margin-bottom:5%; text-align:center">
 					Types of membership
 				</h3>
 				<table>
@@ -70,12 +70,12 @@ Vue.component("selectedMembership", {
 					<td><span v-if="isDate" class="red-text">
 	    				&nbsp;&nbsp;Nevalidan kod
 	    			</span><input type="text" name="type" v-model="stringCode"></td>
-					<td><button v-on:click="obracunaj">Obracunaj</button></td>
+					<td><button v-on:click="obracunaj">Calculate</button></td>
 					</tr>
 					<tr>
 					<td></td>
 					<a class="waves-effect waves-light btn-small teal darken-2" @click="dodajClanarinu">
-	    					<i class="material-icons left">business</i>Kupi
+	    					<i class="material-icons left">business</i>Confirm
 	    				</a>
 					
 	    				

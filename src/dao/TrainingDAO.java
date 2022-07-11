@@ -129,6 +129,9 @@ public class TrainingDAO {
 		trainingToUpdate.setDescription(training.getDescription());
 		trainingToUpdate.setTrainer(training.getTrainer());
 		trainingToUpdate.setTrainingTime(training.getTrainingTime());
+		
+		trainingToUpdate.setAdditionalPayment(training.getAdditionalPayment());
+		
 		trainingToUpdate.setIsCanceled(training.getIsCanceled());
 		
 		trainingToUpdate.setIsDeleted(training.getIsDeleted());
@@ -154,7 +157,9 @@ public class TrainingDAO {
 		List<Training> returnList = new ArrayList<Training>();
 		
 		for (Training value : trainings.values()) {
-			if (value.getSportFacility().getId().equals(facilityId)) {
+			if (value.getIsDeleted() == true) continue;
+			
+			else if (value.getSportFacility().getId().equals(facilityId)) {
 				value.setIsDeleted(true);
 				update(value.getId(), value);
 				returnList.add(value);
@@ -168,8 +173,9 @@ public class TrainingDAO {
 		List<Training> returnList = new ArrayList<Training>();
 		
 		for (Training value : trainings.values()) {
-			if (value.getTrainer().getUsername().equals(trainer.getUsername()) &&
-					value.getIsDeleted() == false) {
+			if (value.getTrainer() == null || value.getIsDeleted() == true || value.getTrainer().getIsDeleted() == true) continue;
+			
+			else if (value.getTrainer().getUsername().equals(trainer.getUsername())) {
 				value.setIsDeleted(true);
 				update(value.getId(), value);
 				returnList.add(value);
@@ -202,32 +208,6 @@ public class TrainingDAO {
 		}
 		return returnList;
 	}
-	
-	/*public List<TrainingHistory> getPersonalTrainingHistoryForSelectedTrainer(User user) throws ParseException {
-		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");  
-		
-		for (TrainingHistory temp : user.getTrainingHistory()) {
-			if (temp.getTraining().getTrainingType().equals("personal") && 
-					formatter.parse(temp.getApplicationDateTime()).compareTo(
-							formatter.parse(formatter.format(new Date()))) > 0)
-				returnList.add(temp);
-		}
-		return returnList;
-	}
-	
-	public List<TrainingHistory> getGroupTrainingHistoryForSelectedTrainer(User user) throws ParseException {
-		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");  
-		
-		for (TrainingHistory temp : user.getTrainingHistory()) {
-			if (temp.getTraining().getTrainingType().equals("group") && 
-					formatter.parse(temp.getApplicationDateTime()).compareTo(
-							formatter.parse(formatter.format(new Date()))) > 0)
-				returnList.add(temp);
-		}
-		return returnList;
-	}*/
 	
 	public List<Training> getGroupTrainingsForSelectedTrainer(String username) {
 		List<Training> returnList = new ArrayList<Training>();
@@ -283,7 +263,7 @@ public class TrainingDAO {
 		Training newlyCreatedTraining = new Training(
 				"-1", training.getName(), training.getTrainingType(), training.getSportFacility(),
 				training.getDuration(), training.getTrainer(), training.getDescription(),
-				training.getImage(), training.getTrainingTime(), false);
+				training.getImage(), training.getTrainingTime(), training.getAdditionalPayment(), false);
 		
 		
 		save(newlyCreatedTraining);
@@ -291,119 +271,7 @@ public class TrainingDAO {
 		return newlyCreatedTraining;
 	}
 	
-	private boolean isTrainerFree(Training training) {
-		// TODO Auto-generated method stub
-		/*int newTrainingDuration = Math.round(training.getDuration());
-		
-		HashMap<Integer, Integer> trainingTimes = new HashMap<Integer, Integer>();
-		
-		List<Training> trainerTrainings = getGroupTrainingsForSelectedTrainer(training.getTrainer().getUsername());
-		trainerTrainings.add(training);
-		
-		for (Training value : trainerTrainings) {
-			int hours = Integer.parseInt(value.getTrainingTime().split(":")[0]);
-			int minutes = Integer.parseInt(value.getTrainingTime().split(":")[1]);
-			trainingTimes.put(hours, minutes);
-		}
-		
-		List<Integer> sortedHours = new ArrayList<Integer>(trainingTimes.keySet());
-		
-		Collections.sort(sortedHours, new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				return o1 - o2;
-			}	
-		});
-		
-		int idx = sortedHours.indexOf(Integer.parseInt(training.getTrainingTime().split(":")[0]));
-		
-		int newTrainingHours = sortedHours.get(idx);
-		int newTrainingMinutes = trainingTimes.get(newTrainingHours);
-		
-		if (idx + 1 == sortedHours.size()) {
-			int facEndHour = Integer.parseInt(
-					training.getSportFacility().getEndTime().split(":")[0]);
-			int facEndMinutes = Integer.parseInt(
-					training.getSportFacility().getEndTime().split(":")[1]);
-			
-			if ((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes > 
-			facEndHour * 60 + facEndMinutes)
-				return false;
-		}
-		else if (idx == 0) {
-			int nextHour = sortedHours.get(idx + 1);
-			int nextMinutes = trainingTimes.get(nextHour);
-			
-			if ((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes > 
-			nextHour * 60 + nextMinutes)
-				return false;
-		}
-		else {
-			int prevHour = sortedHours.get(idx - 1);
-			int prevMinutes = trainingTimes.get(prevHour);
-			
-			int nextHour = sortedHours.get(idx + 1);
-			int nextMinutes = trainingTimes.get(nextHour);
-			
-			if (((newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes <= 
-			prevHour * 60 + prevMinutes) && (
-					(newTrainingHours + newTrainingDuration) * 60 + newTrainingMinutes >= 
-					nextHour * 60 + nextMinutes))
-				return false;
-		}*/
-		
-							//DRUGI POKUSAJ//
-		
-		/*List<Integer> trainingsWithoutDuration = new ArrayList<Integer>();
-		List<Integer> trainingsWithDuration = new ArrayList<Integer>();
-		
-		int hours = Integer.parseInt(training.getTrainingTime().split(":")[0]);
-		int minutes = Integer.parseInt(training.getTrainingTime().split(":")[1]);
-		int newTrainingDuration = Math.round(training.getDuration());
-		
-		int newTrainingWithoutDuration = hours * 60 + minutes;
-		int newTrainingWithDuration = (hours + newTrainingDuration) * 60 + minutes;
-		
-		for (Training value : trainings.values()) {
-			int valueHour = Integer.parseInt(value.getTrainingTime().split(":")[0]);
-			int valueMinutes = Integer.parseInt(value.getTrainingTime().split(":")[1]);
-			int valueDuration = Math.round(value.getDuration());
-			
-			trainingsWithoutDuration.add(valueHour * 60 + valueMinutes);
-			trainingsWithDuration.add((valueHour + valueDuration) * 60 + valueMinutes);
-		}
-		
-		List<Integer> sortedWithoutDuration = new ArrayList<Integer>(trainingsWithoutDuration);
-		Collections.sort(sortedWithoutDuration, new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				return o1 - o2;
-			}	
-		});
-		
-		List<Integer> sortedWithDuration = new ArrayList<Integer>(trainingsWithDuration);
-		Collections.sort(sortedWithDuration, new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				return o1 - o2;
-			}	
-		});
-		
-		//provera
-		for (int i = 0; i < sortedWithoutDuration.size(); i++) {
-			if (sortedWithoutDuration.get(1) > newTrainingWithoutDuration) {
-				if (sortedWithDuration.get(1) < newTrainingWithDuration)
-					return false;
-			}
-			
-			else if (sortedWithoutDuration.get(sortedWithoutDuration.size() - 2) < 
-					newTrainingWithoutDuration) {
-				if (sortedWithDuration.get(i))
-			}
-			
-			if (trainingsWithoutDuration.get(i) < newTrainingWithoutDuration &&
-					trainingsWithoutDuration.get(i + 1) < newTrainingWithoutDuration) {
-				
-			}
-		}*/
-		
+	private boolean isTrainerFree(Training training) {	
 		//trajanje treninga kog zelim da napravim
 		String test = training.getTrainingTime();
 		System.out.println(test);//
@@ -419,7 +287,7 @@ public class TrainingDAO {
 		
 		for (Training value : trainings.values()) {
 			//za svaki postojeci trening se racuna njegovo vreme sa i bez dodatog trajanja
-			if (value.getTrainingTime().equals(""))
+			if (value.getTrainingTime().equals("") || value.getIsDeleted() == true)
 				continue;
 			
 			LocalTime valueWithoutDuration = LocalTime.parse(value.getTrainingTime());

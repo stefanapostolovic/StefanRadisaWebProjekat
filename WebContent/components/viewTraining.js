@@ -9,6 +9,8 @@ Vue.component("viewTraining", {
 			description: '',
 			duration: '',
 			
+			additionalPayment: 0,
+			
 			trainer: {},
 			trainers:[],
 			training: {},
@@ -110,6 +112,12 @@ Vue.component("viewTraining", {
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<td>Additional payment</td>
+							<td>
+								<input type="number" v-model="training.additionalPayment">
+							</td>
+						</td>
 						<tr>
 							<td colspan="2">
 								<button class="btn" @click.prevent="confirmUpdate">

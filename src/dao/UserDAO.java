@@ -113,12 +113,14 @@ public class UserDAO {
 		userToUpdate.setPoints(updatedUser.getPoints());
 		
 		//test
-		User test = new User();
-		test.setName(userToUpdate.getName());
-		test.setSurename(userToUpdate.getSurename());
-		test.setUsername(userToUpdate.getUsername());
-		
-		userToUpdate.getMembership().setUser(test);
+		if (userToUpdate.getMembership() != null) {
+			User test = new User();
+			test.setName(userToUpdate.getName());
+			test.setSurename(userToUpdate.getSurename());
+			test.setUsername(userToUpdate.getUsername());
+			
+			userToUpdate.getMembership().setUser(test);
+		}
 		//test
 		
 		if (updatedUser.getSportFacility() != null) {
@@ -221,7 +223,8 @@ public class UserDAO {
 		
 		List<User> returnList = new ArrayList<User>();
 		for (User user : users.values()) {
-			if ((user.getName().toLowerCase().contains(name.toLowerCase())) &&
+			if (user.getIsDeleted() == false &&
+					(user.getName().toLowerCase().contains(name.toLowerCase())) &&
 					user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
 					user.getUsername().toLowerCase().contains(username.toLowerCase())) {
 				returnList.add(user);
@@ -249,6 +252,11 @@ public class UserDAO {
 		}
 		
 		return returnList;
+	}
+	
+	public Membership getCustomerMembership(String username) {
+		User user = users.get(username);	
+		return user.getMembership();
 	}
 	
 	public Collection<Membership> getCustomerMemberships() {
