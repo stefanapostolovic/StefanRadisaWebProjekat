@@ -1,6 +1,7 @@
 Vue.component("facility", { 
 	data: function () {
 	    return {
+
 		  id: '',
 		
 	      facility: {"id":null, "name":null, "objectType":null, "status":null,
@@ -15,7 +16,11 @@ Vue.component("facility", {
 	      gender:'',
 	      dateOfBirth:'',	
 	      
+
+	      comment:{"id":0,"active":true,"state":"New","sportFacility":{"id":null,"name":null,"objectType":null,"status":true,"location":{"id":null,"longitude":null,"latitude":null,"address":{"street":null,"number":null,"city":null,"zipCode":null}},"image":null,"averageRating":null,"startTime":null,"endTime":null},"text":"","grade":0,"user":{"username":null,"password":null,"name":null,"surename":null,"gender":null,"dateOfBirth":null,"role":null,"trainingHistory":null,"membership":null,"sportFacility":null,"visitedFacilities":null,"points":1.0,"customerType":{"name":null,"discount":0.0,"points":0.0}}},
+		  acceptedRejected:[],
 		  comments:[],
+		  newComment:[],
 		  trainings:[],
 		
 		  loggedUser: null,
@@ -315,27 +320,98 @@ Vue.component("facility", {
 					</td>
 				</tr>
 		    </table>
-		    <h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">
-				Comments:
-			</h3>    
-			<table>
-				<tr v-for="(p, index) in comments">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="noviKomentari">Novi Komentari:</h3> 
+		<table name="tabelaNovi">
+					<tr class="tableRowBorder">
+						<th>Komentar</th>
+					<th>Ocena</th>
+				</tr>
+				<tr class="tableRowBorder" v-for="(p, index) in newComment" v-if="p.isDeleted == false">
 					<td class="kolona">
 							{{p.text}}
 					</td>
 					<td class="kolona">
 						{{p.grade}}
 					</td>
-					<td>
-						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
-			    		  @click="deleteComment(p)"
-			    		  v-if="isAdmin()"
-			    		  style="margin-right: 0; margin-left:auto; display:block;">
-			    		  <i class="material-icons">cancel</i>
-	    		  		</a>
+					<td><button v-on:click="Odobri(p,index)">Odobri</button> </td>
+					<td><button v-on:click="Odbi(p,index)">Odbi</button> </td>
+				</tr>
+	    	</table>
+		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%">Komentari:</h3> 
+		<table name="coment" hidden>
+				<tr class="tableRowBorder">
+							<th>Komentar</th>
+					<th>Ocena</th>
+				</tr>
+				<tr class="tableRowBorder" v-for="(p, index) in comments" v-if="p.isDeleted == false">
+					<td class="kolona">
+							{{p.text}}
+					</td>
+					<td class="kolona">
+						{{p.grade}}
+					</td>
+					<td id="state" name="state" >{{status(p.state)}}</td>
+				</tr>
+	    	</table>
+		<table name="coment1" hidden>
+					<tr class="tableRowBorder">
+						<th>Komentar</th>
+					<th>Ocena</th>
+				</tr>
+				<tr class="tableRowBorder" v-for="(p, index) in comments" v-if="p.isDeleted == false">
+					<td class="kolona">
+							{{p.text}}
+					</td>
+					<td class="kolona">
+						{{p.grade}}
 					</td>
 				</tr>
-		    </table>  
+	    	</table>
+		<h3 class="teal darken-2" style="margin-top:15%; margin-bottom:5%" name="naslov" hidden>Dodaj komentar:</h3> 
+		<form name="komentar" hidden>
+		<table >
+		
+			<tr class="tableRowBorder">
+					<th>Komentar:</th>
+		<th>Ocjena:</th>
+		</tr>
+				<tr class="tableRowBorder">
+							<td class="kolona">
+						<textarea v-model="comment.text" width="100%"></textarea>
+					</td>
+					<td style="background-color:#FFFFFF">
+					<input type="radio" id="age1" name="ocena"  value="1">
+  					<label for="age1">1</label><br>
+					<input type="radio" id="age1" name="ocena" value="2">
+  					<label for="age1">2</label><br>
+					<input type="radio" id="age1" name="ocena" value="3">
+  					<label for="age1">3</label><br>
+					<input type="radio" id="age1" name="ocena" value="4">
+  					<label for="age1">4</label><br>
+					<input type="radio" id="age1" name="ocena" value="5" checked>
+  					<label for="age1">5</label><br>
+					</td>
+				</tr>
+					<tr class="tableRowBorder">
+					<input type="submit" v-on:click="addCommentFunkcija" value="Dodaj komentar">
+				</tr>
+	    	</table>
+	</form>			
+	
    		</div>  
     	`,
     mounted () {
@@ -351,7 +427,7 @@ Vue.component("facility", {
 			this.facility = second_response.data;
 			this.trainings = third_response.data;
 		}))*/
-		
+			
 			let date = new Date();
 
 			let day = ("0" + date.getDate()).slice(-2);
@@ -368,16 +444,64 @@ Vue.component("facility", {
 			.get('rest/currentUser')
 			.then(response => {
 				this.loggedUser = response.data;
-				console.log(this.loggedUser)
-		
 				return axios.get('rest/facilities/getFacility/' + this.id);
 			})
 			.then(response => {
 				this.facility = response.data;
+				this.comment.sportFacility = this.facility;
+								
 				return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + this.id);
 			})
 			.then(response => {
 				this.trainings = response.data;
+								
+				return 	axios.get('rest/comment/acceptedAndRejected/'+this.id);		
+			}).then(response=>{	
+				this.acceptedRejected = response.data;
+				console.log(this.acceptedRejected)
+				
+				return axios.get('rest/comment/odobreni/'+this.id);
+			}).then(response=>{	
+				this.comments =response.data;
+				console.log(this.comments)
+				
+				return axios.get('rest/comment/novi/'+this.id);
+			}).then(response=>{	
+				this.newComment = response.data;
+				console.log(this.newComment)
+				let p = document.getElementsByName("naslov")[0]
+				let p1= document.getElementsByName("komentar")[0]
+				let p2 = document.getElementsByName("noviKomentari")[0]
+				let p3= document.getElementsByName("tabelaNovi")[0]
+				let n = document.getElementsByName("coment")[0]
+				let n1 = document.getElementsByName("coment1")[0]
+				n.hidden = true;
+				n1.hidden= false;
+				p.hidden=true;	
+				p1.hidden=true;		
+				p2.hidden=true;
+				p3.hidden=true;
+	
+				if(this.loggedUser!=""){	
+					if(this.loggedUser.role =="Administrator" || this.loggedUser.role=="Manager"){
+						this.comments = this.acceptedRejected;
+						
+						n.hidden=false;
+						n1.hidden= true;		
+						if(this.newComment.length > 0){
+							p2.hidden=false;
+							p3.hidden=false;
+						}
+						return;	
+					}
+				else{
+						n1.hidden=false;
+						p.hidden=false;
+						p1.hidden=false;
+						this.comment.user=this.loggedUser;
+						return;
+				}
+				}
 				return axios.get('rest/getFacilityManager/' + this.id);
 			})
 			.then(response => {
@@ -386,9 +510,10 @@ Vue.component("facility", {
 			})
 			.then(response => {
 				this.validManagers = response.data;
+				
 			})
     },
-    methods: {
+     methods: {
 		deleteComment(comment) {
 			
 		},
@@ -633,6 +758,45 @@ Vue.component("facility", {
 		createTraining() {
 			router.push('/createTraining');	
 		},
+		addCommentFunkcija:function(){
+		event.preventDefault();
+		let n = document.getElementsByName("naslov")[0]
+		let n1= document.getElementsByName("komentar")[0]
+		n.hidden=true;
+		n1.hidden=true;		
+		let values = document.getElementsByName("ocena");
+		
+	for(let i = 0; i < values.length; i++) {
+   		if(values[i].checked == true) {
+       	this.comment.grade = values[i].value;
+   	}}
+
+		axios
+		.post('rest/comment/dodavanje',this.comment)
+		.then(response=>{}).catch(response=>{toast("Vec postoji komentar koji je dodat")})
+	},
+		
+		Odobri : function(p,index) {
+			p.state="Accepted"
+			
+				axios
+	            .put('rest/comment/update/'+p.id, p)
+	            .then(response => (this.newComment.splice(index, 1))).catch(response => {
+					toast('')
+	
+						})
+    	},
+		Odbi : function(p,index) {
+			p.state="Rejected"
+				axios
+	            .put('rest/comment/update/'+p.id, p)
+	            .then(response => {this.newComment.splice(index, 1);
+					comments.add(p);
+					}).catch(response => {
+					toast('')
+	
+						})
+    	},
 		
 		/*isCorrectManager() {
 			//return (this.loggedUser.role === 'Manager' && this.loggedUser.sportFacility.id
@@ -657,6 +821,12 @@ Vue.component("facility", {
     		}
     		else
 				return "Ne radi";
+    	},status : function(p) {
+    		if (p == "Accepted"){
+	    		return "Odobren";
+    		}
+    		else
+				return "Odbijen";
     	},
     	vreme: function(p) {
 			var d =p.toString();   
