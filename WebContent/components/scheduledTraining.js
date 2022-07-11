@@ -129,7 +129,6 @@ Vue.component("selectedTraining", {
 		},
 		dodajTrening(){
 			event.preventDefault();
-			this.isTime= false;
 			this.history.user = this.user
 			this.history.training = this.training; 
 			this.history.coach = this.training.trainer;
@@ -142,6 +141,15 @@ Vue.component("selectedTraining", {
 				this.isTime = true;
 				return;
 			}
+			
+			let pomD = new Date(this.history.applicationDateTime);
+			let datum1 = new Date(this.user.membership.expirationDate)
+			if(pomD.getTime()>datum1.getTime()){
+				this.isDate=true;
+				this.poruka = "Clanarina ne vazi"
+				return;	
+			}
+		
 			
 			if(!this.isDate){
 			axios.post('rest/newTraining/addTraining', this.history)

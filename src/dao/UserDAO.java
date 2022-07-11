@@ -110,6 +110,7 @@ public class UserDAO {
 		userToUpdate.setGender(updatedUser.getGender());
 		userToUpdate.setCustomerType(updatedUser.getCustomerType());
 		userToUpdate.setMembership(updatedUser.getMembership());
+		userToUpdate.setPoints(updatedUser.getPoints());
 		
 		//test
 		User test = new User();
