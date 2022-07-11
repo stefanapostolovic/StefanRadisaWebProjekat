@@ -55,6 +55,26 @@ public class ScheduledTrainingDAO {
 		return count;
 	}
 	
+	public Collection<TrainingHistory> trainingForUserHistory(String username) {
+		List<TrainingHistory> historyList = new ArrayList<TrainingHistory>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate ld= LocalDate.now();
+		for(TrainingHistory th: this.findAllByUser(username)) {
+			if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))>=0) {
+				LocalDate pom = LocalDate.parse(th.getApplicationDateTime(),formatter);
+				ld.minusDays(30);
+				
+				if(pom.compareTo(ld.minusDays(30))>=0) {
+					
+					historyList.add(th);
+				}
+		
+			}
+		}
+		return historyList;
+	}
+	
+	
 	public TrainingHistory save(TrainingHistory facility) {	
 		LocalDate ld = LocalDate.parse(facility.getApplicationDateTime());
 		System.out.println(ld);
