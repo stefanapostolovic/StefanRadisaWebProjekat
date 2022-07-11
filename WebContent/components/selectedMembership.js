@@ -103,6 +103,7 @@ Vue.component("selectedMembership", {
 					
 			
 			this.membership=second_response.data
+			this.membership.price = this.membership.price * (1 - this.user.customerType.discount /100)
 			this.membership.status=true;
 		this.membership.paymentDate=datm.toLocaleDateString ();
 		if(this.membership.membershipType == "Godisnja")
@@ -170,8 +171,14 @@ Vue.component("selectedMembership", {
 				this.price=true;
 					this.membership.price = this.membership.price * (1 - this.code.discountPercentage/100)
 				}
+				this.code.useAmount = parseInt(this.code.useAmount) - 1; 
+				if(this.code.useAmount <0){
+					this.code.useAmount = 0;
+				}
+				
 			}
-			})
+			return axios.put('rest/codes/update/'+this.code.code,this.code)
+			}).then(response=>{this.code=response.data;console.log(this.code)})
 		},
 		dodajClanarinu(){
 			event.preventDefault();
