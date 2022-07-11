@@ -137,6 +137,29 @@ Vue.component("login", {
 						else if (this.user.role == "Trainer") {
 							console.log(trainerInfoInfo)
 							trainerInfoInfo.hidden = false;
+						}else if(this.user.role =="Customer"){
+							if(this.user.membership != null || this.user.membership !=""){
+								let pomD = new Date();
+								let datum1 = new Date(this.user.membership.expirationDate)
+								console.log("Proradi} ti")
+									
+								if(pomD.getTime()>datum1.getTime() && this.user.membership.status == true ){
+									this.user.membership.status= false;
+									this.user.points = parseInt(this.user.points) + parseInt(this.user.membership.price)/1000 *(parseInt(this.user.membership.number)-parseInt(this.user.membership.counter))	
+									console.log(this.user.points)
+									
+									if(parseFloat(parseInt(this.user.membership.number)-parseInt(this.user.membership.counter))<parseFloat(parseInt(this.user.membership.number)/3)){
+										this.user.points=this.user.points-(this.user.membership.price/1000 *133*4)	
+									console.log(this.user.points)
+									}
+									if(parseInt(this.user.points)<0){
+										this.user.points = 0;
+									console.log(this.user.points)
+									}
+								console.log(this.user.points)
+									return axios.put('rest/updateUserPoint/' + this.user.username,this.user);
+								}
+							}
 						}
 					})	
 					//console.log(p)

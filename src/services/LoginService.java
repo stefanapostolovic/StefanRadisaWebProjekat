@@ -22,6 +22,8 @@ import beans.Membership;
 import beans.TrainingHistory;
 import beans.User;
 import dao.TrainingDAO;
+
+import dao.CustomerTypeDAO;
 import dao.UserDAO;
 
 @Path("")
@@ -46,8 +48,12 @@ public class LoginService {
 			contextPath = ctx.getRealPath("");
 			ctx.setAttribute("userDAO", new UserDAO(contextPath));
 		}
+		if (ctx.getAttribute("customerTypeDAO") == null) {
+	    	contextPath = ctx.getRealPath("");
+			ctx.setAttribute("customerTypeDAO", new CustomerTypeDAO(contextPath));
+		}
 	}
-
+	
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -90,6 +96,18 @@ public class LoginService {
 		return dao.update(username, user);
 	}
 
+	@PUT
+	@Path("/updateUserPoint/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User updateUser(@PathParam("username") String username, User user,
+			@Context HttpServletRequest request) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		CustomerTypeDAO cdao = (CustomerTypeDAO) ctx.getAttribute("customerTypeDAO");
+		user.setCustomerType(cdao.findByPoints(user.getPoints()));
+		request.getSession().setAttribute("user", dao.update(username, user));
+		return dao.update(username, user);
+	}
+	
 	@PUT
 	@Path("/updateUserKeepSession/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -139,8 +157,11 @@ public class LoginService {
 		// System.out.println("***********************************************************************");
 		// UserDAO dao = new UserDAO();
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		CustomerTypeDAO cdao = (CustomerTypeDAO) ctx.getAttribute("customerTypeDAO");
+		user.setCustomerType(cdao.findMembership("Bronzani"));
 		User registeredUser = userDao.register(user);
-
+		
+		
 		if (registeredUser == null) {
 			return Response.status(400).entity("Username already taken!").build();
 		}

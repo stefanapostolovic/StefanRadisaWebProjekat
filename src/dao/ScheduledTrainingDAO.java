@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -46,6 +47,17 @@ public class ScheduledTrainingDAO {
 	
 	public TrainingHistory findFacility(String id) {
 		return trainingsHistory.containsKey(id) ? trainingsHistory.get(id) : null;
+	}
+	public int countForOneDay(User user) {
+		int count = 0 ;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate ld= LocalDate.now();
+		for(TrainingHistory th: this.findAllByUser(user.getUsername())) {
+			if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))==0) {
+				count += 1;
+			}
+		}
+		return count;
 	}
 	
 	public TrainingHistory save(TrainingHistory facility) {	
