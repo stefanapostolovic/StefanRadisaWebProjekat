@@ -176,7 +176,18 @@ Vue.component("users", {
 			}
 			else if (user.role === 'Trainer') {
 				axios
-					.put('rest/updateUserKeepSession/' + user.username, user)
+					.get('rest/newTraining/allForTrainer/' + user.username)
+					.then(response => {
+						let trainerTrainingHistory = response.data;
+						trainerTrainingHistory.forEach(this.deleteTrainingHistory);
+						
+						return axios.put('rest/trainings/deleteTrainingsForSelectedTrainer', user);
+					})
+					.then(response => {
+						console.log(response);
+						
+						return axios.put('rest/updateUserKeepSession/' + user.username, user);
+					})
 					.then(response => {
 						console.log(response.data);
 						router.push('/users');

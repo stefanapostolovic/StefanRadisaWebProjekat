@@ -496,12 +496,25 @@ Vue.component("facility", {
 	
 		deleteTrainingType(training) {
 			training.isDeleted = true;
+			
 			axios
-				.put('rest/trainings/updateTraining', training)
+				.get('rest/newTraining/getTrainingHistoryForSelectedTrainingType/' + training.id)
+				.then(response => {
+					let trainingTrainingHistory = response.data;
+					trainingTrainingHistory.forEach(this.deleteTrainingHistory);
+					
+					return axios.put('rest/trainings/updateTraining', training)
+				})
+				
 				.then(response => {
 					console.log(response.data);
 					router.push('/facility');
 				})
+		},
+		
+		deleteTrainingHistory (item, index) {
+			item.isDeleted = true;
+			axios.put('rest/newTraining/' + item.id, item);
 		},
 		
 		getSelectedFacility() {

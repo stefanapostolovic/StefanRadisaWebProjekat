@@ -84,6 +84,18 @@ public class ScheduledTrainingDAO {
 		return facility;
 	}
 	
+	public Collection<TrainingHistory> getTrainingHistoryForSelectedTrainingType(String trainingTypeId) {
+		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
+		
+		for (TrainingHistory value : trainingsHistory.values()) {
+			if (value.getIsDeleted() == true || value.getTraining().getIsDeleted() == true) continue;
+			
+			else if (value.getTraining().getId().equals(trainingTypeId)) returnList.add(value);
+		}
+		
+		return returnList;
+	}
+	
 	public Collection<User> getCustomerForSelectedFacility(String facilityId) {
 		List<User> returnList = new ArrayList<User>();
 		
@@ -103,7 +115,9 @@ public class ScheduledTrainingDAO {
 	public Collection<TrainingHistory> findAllByTrainer(String username) {
 		List<TrainingHistory> facilityList = new ArrayList<TrainingHistory>();
 		for(TrainingHistory th: trainingsHistory.values()){
-			if(th.getCoach().getUsername().equals(username)) {
+			if (th.getCoach() == null || th.getIsDeleted() == true) continue;
+			
+			else if(th.getCoach().getUsername().equals(username)) {
 				facilityList.add(th);	
 			}
 			
@@ -173,7 +187,10 @@ public class ScheduledTrainingDAO {
 		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
 		
 		for(TrainingHistory value : trainingsHistory.values()) {
-			if (value.getTraining().getSportFacility().getId().equals(facilityId))
+			if (value.getIsDeleted() == true || value.getTraining().getIsDeleted() == true || value.getTraining().getSportFacility().getIsDeleted() == true)
+				continue;
+			
+			else if (value.getTraining().getSportFacility().getId().equals(facilityId))
 				returnList.add(value);
 		}
 		

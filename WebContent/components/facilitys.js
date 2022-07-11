@@ -195,6 +195,15 @@ Vue.component("facilities", {
 				.get('rest/removeManagerFromFacility/' + facility.id)
 				.then(response => {
 					console.log(response.data)
+					
+					return axios.get('rest/newTraining/getTrainingHistoryForSelectedFacility/' + facility.id);		
+				})
+				.then(response => {
+					console.log(response.data);
+					
+					let facilityTrainingHistory = response.data;
+					facilityTrainingHistory.forEach(this.deleteTrainingHistory) 
+					
 					return axios.get('rest/trainings/removeTrainingsFromFacility/' + facility.id);
 				})
 				.then(response => {
@@ -207,8 +216,9 @@ Vue.component("facilities", {
 				})
 		},
 		
-		getTrainingsForThisFacility() {
-			//return axios.get('rest/trainings/getTrainingsForSelectedFacility/' + )
+		deleteTrainingHistory(item, index) {
+			item.isDeleted = true;
+			axios.put('rest/newTraining/' + item.id, item);
 		},
 		
 		isAdmin() {

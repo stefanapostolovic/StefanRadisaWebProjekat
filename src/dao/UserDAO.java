@@ -112,12 +112,14 @@ public class UserDAO {
 		userToUpdate.setMembership(updatedUser.getMembership());
 		
 		//test
-		User test = new User();
-		test.setName(userToUpdate.getName());
-		test.setSurename(userToUpdate.getSurename());
-		test.setUsername(userToUpdate.getUsername());
-		
-		userToUpdate.getMembership().setUser(test);
+		if (userToUpdate.getMembership() != null) {
+			User test = new User();
+			test.setName(userToUpdate.getName());
+			test.setSurename(userToUpdate.getSurename());
+			test.setUsername(userToUpdate.getUsername());
+			
+			userToUpdate.getMembership().setUser(test);
+		}
 		//test
 		
 		if (updatedUser.getSportFacility() != null) {
