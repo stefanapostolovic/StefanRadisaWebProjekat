@@ -2,23 +2,29 @@ package dao;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import beans.Customer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import beans.CustomerType;
 import beans.Membership;
-import beans.Product;
 import beans.SportFacility;
+import beans.Training;
+import beans.TrainingHistory;
 import beans.User;
-import enums.Gender;
+import enums.Role;
 
 /***
  * <p>Klasa namenjena da u�ita korisnike iz fajla i pru�a operacije nad njima (poput pretrage).
@@ -59,11 +65,34 @@ public class UserDAO {
 		if (!user.getPassword().equals(password)) {
 			return null;
 		}
+		else if (user.getIsDeleted() == null)
+			return user;
+		else if (user.getIsDeleted() == true)
+			return null;
+		
 		return user;
+	}
+	
+	public User getUser(String username) {
+		return users.get(username);
 	}
 	
 	public Collection<User> findAll() {
 		return users.values();
+	}
+	
+	public User getFacilityManager(String facilityId) {
+		User returnUser = null;
+		
+		for (User value : users.values()) {
+			if (value.getSportFacility() == null || value.getIsDeleted() == true)
+				continue;
+			else if (value.getSportFacility().getId().equals(facilityId)){
+				returnUser = value;
+				break;
+			}	
+		}
+		return returnUser;
 	}
 	
 	/**
@@ -71,124 +100,198 @@ public class UserDAO {
 	 * Klju� je korisni�ko ime korisnika.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
-	public User update(String id, User user) {
-		User productToUpdate = this.find(id,user.getPassword());
-		if(productToUpdate == null) {
-			return this.register(user);
+	public User update(String username, User updatedUser) {
+		//User userToUpdate = this.find(username,updatedUser.getPassword());
+		User userToUpdate = this.users.get(username);
+		userToUpdate.setName(updatedUser.getName());
+		userToUpdate.setSurename(updatedUser.getSurename());
+		userToUpdate.setPassword(updatedUser.getPassword());
+		userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
+		userToUpdate.setGender(updatedUser.getGender());
+		userToUpdate.setCustomerType(updatedUser.getCustomerType());
+		userToUpdate.setMembership(updatedUser.getMembership());
+		userToUpdate.setPoints(updatedUser.getPoints());
+		
+		//test
+		if (userToUpdate.getMembership() != null) {
+			User test = new User();
+			test.setName(userToUpdate.getName());
+			test.setSurename(userToUpdate.getSurename());
+			test.setUsername(userToUpdate.getUsername());
+			
+			userToUpdate.getMembership().setUser(test);
 		}
-		productToUpdate.setName(user.getName());
-		productToUpdate.setSurename(user.getSurename());
-		productToUpdate.setPassword(user.getName());
-		productToUpdate.setUsername(user.getUsername());
-		productToUpdate.setDateOfBirth(user.getDateOfBirth());
-
-		productToUpdate.setGender(user.getGender());
+		//test
 		
+		if (updatedUser.getSportFacility() != null) {
+			userToUpdate.setSportFacility(updatedUser.getSportFacility());
+		}
 		
-		return productToUpdate;
+		userToUpdate.setIsDeleted(updatedUser.getIsDeleted());
+		
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
+			
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(users.values());
+			System.out.println(json);
+			writer.write(json);
+		
+			writer.close();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return userToUpdate;
 	}
 	
 	
-	public User register(User user) {
-		if (find(user.getUsername(), user.getPassword()) != null)
-				return null;
-		
-		//Integer maxId = -1;
-		/*for (String id : users.keySet()) {
-			int idNum =Integer.parseInt(id);
-			if (idNum > maxId) {
-				maxId = idNum;
+	public User register(User user) {		
+		loadUsers(contextPath);		
+		if (users != null) {
+			if (users.containsKey(user.getUsername())) {
+				if (users.get(user.getUsername()).getIsDeleted() == false)
+					return null;
 			}
-		}*/
-		//maxId++;
-		//user.setId(maxId.toString());
-		Customer custTest = new Customer(
+		}
+		
+		user.setIsDeleted(false);
+		
+		User custTest = new User(
 				user.getUsername(), user.getPassword(), 
 				user.getName(), user.getSurename(), 
-				user.getGender(), user.getDateOfBirth(), 
-				null, null, 
-				0.0, new CustomerType()); 
+				user.getGender(), user.getDateOfBirth(), user.getRole(),
+				user.getTrainingHistory(), user.getMembership(), user.getSportFacility(), 
+				user.getVisitedFacilities(), 1.0, new CustomerType()); 
 		users.put(user.getUsername(), custTest);
-		custTest = (Customer) users.get(user.getUsername());
+		custTest = (User) users.get(user.getUsername());
+		//users.put(user.getUsername(), user);
 		
-		//serijalizacija
-		BufferedWriter out = null;									
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			File file = new File(contextPath + "/users.txt");
-			
-			if (!(file.exists()))
-				file.createNewFile();
-			
-			out = new BufferedWriter(new FileWriter(file, true));
-			
-			String st ="";
-			st="";
-			//st += user.getId();
-			//st += "; ";
-			st += user.getUsername();
-			st += "; ";
-			st += user.getPassword();
-			st += "; ";
-			st += user.getName();
-			st += "; ";
-			st += user.getSurename();
-			st += "; ";
-			st += user.getGender().toString();
-			st += "; ";
-			st += user.getDateOfBirth();		
-			
-			out.write(st);
-			out.flush();
-			out.newLine();
-			
+		//serijalizacija								
+		try {					
+			Writer writer = new BufferedWriter(new FileWriter(contextPath + "/users.json"));
+			System.out.println(contextPath + "/users.json");
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			String json = gson.toJson(users.values());
+			System.out.println(json);
+			writer.write(json);
+		
+			writer.close();
+		
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if ( out != null ) {
-				try {
-					out.close();
-				}
-				catch (Exception e) { }
-			}
 		}
 		
 		return user;
 	}
 	
-	private void loadUsers(String contextPath) {		//DODATI SERIJALIZACIJU
-		BufferedReader in = null;
-		try {					//E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\users.txt
-			//System.out.println("AAAAAAAAA" + contextPath + "****************");
-			File file = new File(contextPath + "/users.txt");
-			System.out.println(file.getAbsolutePath());
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					//String userId = st.nextToken().trim();
-					String userName = st.nextToken().trim();
-					String password = st.nextToken().trim();
-					String name = st.nextToken().trim();
-					String surname = st.nextToken().trim();
-					Gender gender = Gender.valueOf(st.nextToken().trim());
-					String dateOfBirth = st.nextToken();
-					users.put(userName, new User(userName, password, name, surname, gender, dateOfBirth));
-				}	
+	private void loadUsers(String contextPath) {	
+		try {					
+			Reader reader = new BufferedReader(new FileReader(contextPath + "/users.json"));
+			
+			java.lang.reflect.Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
+			List<User> userList = new Gson().fromJson(reader, (java.lang.reflect.Type) userListType);
+			
+			for (User tempUser : userList) {
+				users.put(tempUser.getUsername(), tempUser);
 			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
+		} 
+	}
+	
+	public User removeManagerFromFacility(String facilityId) {
+		User temp = new User();
+		for (User value : users.values()) {
+			if (value.getRole().equals(Role.Manager) && value.getSportFacility() != null) {
+				if (value.getSportFacility().getId().equals(facilityId)) {
+					value.setSportFacility(null);
+					temp = value;
+					update(value.getUsername(), value);
+					break;
 				}
-				catch (Exception e) { }
 			}
 		}
+		return temp;
+	}
+	
+	//SEARCH VISEKRITERIJUMSKO
+	public Collection<User> GetByMultiSearch(
+			String name, String surname, String username) {
+		
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getIsDeleted() == false &&
+					(user.getName().toLowerCase().contains(name.toLowerCase())) &&
+					user.getSurename().toLowerCase().contains(surname.toLowerCase()) &&
+					user.getUsername().toLowerCase().contains(username.toLowerCase())) {
+				returnList.add(user);
+			}
+		}
+		
+		return returnList;
+	}
+	
+	public Collection<User> GetValidManagers() {
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getRole().equals(Role.Manager) && user.getSportFacility() == null
+					&& user.getIsDeleted() == false) {
+				returnList.add(user);
+			}
+		}
+		return returnList;
+	}
+	
+	public Collection<User> GetTrainers() {
+		List<User> returnList = new ArrayList<User>();
+		for (User user : users.values()) {
+			if (user.getRole().equals(Role.Trainer)) returnList.add(user);
+		}
+		
+		return returnList;
+	}
+	
+	public Membership getCustomerMembership(String username) {
+		User user = users.get(username);	
+		return user.getMembership();
+	}
+	
+	public Collection<Membership> getCustomerMemberships() {
+		List<Membership> returnList = new ArrayList<Membership>();
+		
+		for (User value : users.values()) {
+			if (value.getIsDeleted() == false && value.getMembership() != null && 
+				value.getMembership().getIsDeleted() == false)
+				returnList.add(value.getMembership());
+		}
+		
+		return returnList;
+	}
+	
+	public Collection<TrainingHistory> getAllTrainingHistory() {
+		List<TrainingHistory> returnList = new ArrayList<TrainingHistory>();
+		
+		for (User value : users.values()) {
+			if (value.getTrainingHistory() != null) {
+				for (TrainingHistory temp : value.getTrainingHistory()) {
+					returnList.add(temp);
+				}
+			}	
+		}
+		
+		return returnList;
 	}
 }
+
+
+
+
+
+
+
+
+
+
