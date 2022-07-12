@@ -165,10 +165,10 @@ Vue.component("managerInfo", {
 		    <h3 class="teal darken-2" style="margin-top:10%; margin-bottom:5%">Trainer list</h3>
 		    <table>
 		    	<tr class="tableRowBorder">	
-		    		<th>Ime</th>
-		    		<th>Prezime</th>
-		    		<th>Pol</th>
-		    		<th>Datum rodjenja</th>
+		    		<th>Name</th>
+		    		<th>Surname</th>
+		    		<th>Gender</th>
+		    		<th>Date of birth</th>
 		    	</tr>
 		    	<tr v-for="(p, index) in trainers"
 		    	v-if="p.isDeleted == false" 
@@ -313,6 +313,7 @@ Vue.component("managerInfo", {
 									<th>Additional payment</th>
 								</tr>
 								<tr v-for="(p, index) in filteredTrainingHistories"
+								:style="{background: p.training.isCanceled == true ? '#4a148c' : '#212121'}"
 								v-if="p.isDeleted == false && p.training.isDeleted == false" 
 								class="tableRowBorder">
 									<td>
@@ -351,6 +352,10 @@ Vue.component("managerInfo", {
 										<p clas="tableRow">
 											{{p.training.additionalPayment}}
 										</p>
+									</td>
+									<td class="red-text">
+										<span v-if="p.training.isCanceled">
+										Canceled</span>
 									</td>
 								</tr>
 							</table>

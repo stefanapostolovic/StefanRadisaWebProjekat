@@ -500,7 +500,7 @@ Vue.component("createFacility", {
 					console.log(response.data);
 					this.newFacility = response.data;
 					this.user.sportFacility = this.newFacility;
-					return axios.put('rest/updateUser/' + this.user.username, this.user);
+					return axios.put('rest/updateUserKeepSession/' + this.user.username, this.user);
 				})
 				.then(response => {
 					console.log(response.data)

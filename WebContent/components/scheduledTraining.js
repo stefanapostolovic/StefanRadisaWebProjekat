@@ -71,9 +71,11 @@ Vue.component("selectedTraining", {
 			this.history.time = (hours) + ":" + (minutes)
 			this.history.applicationDateTime=today
 						console.log(this.history)
+						
+			this.history.training = this.training;	
+			this.history.training.trainingTime = (hours) + ":" + (minutes)
 			
-			
-			if(this.training.trainingType =="Personalni"){
+			if(this.training.trainingType =="personal"){
 				this.personalni=true;
 			}
 			if(this.user.membership == null)	

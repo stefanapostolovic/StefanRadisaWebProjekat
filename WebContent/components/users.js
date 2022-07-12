@@ -87,13 +87,13 @@ Vue.component("users", {
     				</td>
     			</tr>
 	    		<tr class="tableRowBorder">
-	    			<th>Ime</th>
-	    			<th>Prezime</th>
-					<th>Korisnicko ime</th>	
-					<th>Pol</th>
-					<th>Poeni</th>
-					<th>Uloga</th>
-					<th>Tip kupca</th>
+	    			<th>Name</th>
+	    			<th>Surname</th>
+					<th>Username</th>	
+					<th>Gender</th>
+					<th>Points</th>
+					<th>Role</th>
+					<th>Customer type</th>
 					<th></th>
 				</tr>
 	    			

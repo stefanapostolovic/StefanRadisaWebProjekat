@@ -28,7 +28,7 @@ Vue.component("registracija", {
 		<table style="margin-top:6%">
 			
 		<tr>
-			<td>Korisnicko ime:</td>
+			<td>Username:</td>
 			<td>
 				<span v-if="isUsername" class="red-text">
 	    				&nbsp;&nbsp;Please enter the username
@@ -37,7 +37,7 @@ Vue.component("registracija", {
 			</td>
 		</tr>
 		<tr>
-			<td>Lozinka:</td>
+			<td>Password:</td>
 				<td>
 					<span v-if="isPassword" class="red-text">
 	    				&nbsp;&nbsp;Please enter the password
@@ -47,7 +47,7 @@ Vue.component("registracija", {
 	
 		</tr>
 		<tr>
-			<td>Ime:</td>
+			<td>Name:</td>
 			<td>
 				<span v-if="isName" class="red-text">
 	    				&nbsp;&nbsp;Please enter the name
@@ -56,7 +56,7 @@ Vue.component("registracija", {
 			</td>	
 		</tr>
 		<tr>
-			<td>Prezime:</td>
+			<td>Surname:</td>
 			<td>
 				<span v-if="isSurname" class="red-text">
 	    				&nbsp;&nbsp;Please enter the surname
@@ -65,7 +65,7 @@ Vue.component("registracija", {
 			</td>
 		</tr>
 		<tr>
-			<td>Pol:</td>
+			<td>Gender:</td>
 			<td>
 				<span v-if="isGender" class="red-text">
 	    				&nbsp;&nbsp;Please enter the gender
@@ -78,7 +78,7 @@ Vue.component("registracija", {
 			</td>
 		</tr>
 		<tr>
-			<td>Datum rodjenja:</td>
+			<td>Date of birth:</td>
 			<td>
 				<span v-if="isDate" class="red-text">
 	    				&nbsp;&nbsp;Please enter the date
@@ -89,8 +89,8 @@ Vue.component("registracija", {
 		
 		<tr>
 			<td >
-				<button class="btn" @click="edituser">Poslaji</button>
-				<input type="reset" class="btn" value="Ponisti">
+				<button class="btn" @click="edituser">Confirm</button>
+				<input type="reset" class="btn" value="Reset">
 			</td>
 			<td></td>
 		</tr>

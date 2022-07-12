@@ -392,8 +392,8 @@ Vue.component("trainerInfo", {
 						let copiedUpcomingTrainings = Object.assign([], this.upcomingTrainings);
 						
 						copiedUpcomingTrainings.sort((a, b) => {
-							let fa = a.applicationDateTime;
-							let fb = b.applicationDateTime;
+							let fa = a.training.additionalPayment;
+							let fb = b.training.additionalPayment;
 							
 							if (this.sortDirectionAdd === 'ASC') {
 								if (fa < fb) {
