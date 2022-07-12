@@ -73,7 +73,7 @@ Vue.component("selectedTraining", {
 						console.log(this.history)
 			
 			
-			if(this.training.trainingType =="personal"){
+			if(this.training.trainingType =="Personalni"){
 				this.personalni=true;
 			}
 			if(this.user.membership == null)	

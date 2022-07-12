@@ -77,6 +77,14 @@ public class CommentService {
 	}
 	
 	@GET
+	@Path("/ocena/{facilityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getAverageGrade(@PathParam("facilityId") String facilityId) {
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		return dao.averageGrade(facilityId);
+	}
+	
+	@GET
 	@Path("/odobreni/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Comment> getNewCommentsForObject(@PathParam("id") String id) {
