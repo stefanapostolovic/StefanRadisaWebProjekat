@@ -91,7 +91,7 @@ Vue.component("createTraining", {
 						</tr>
 						<tr>
 							<td>Duration (hours)</td>
-							<td><input type="number" v-model="duration"></td>
+							<td><input type="number" min="0" v-model="duration"></td>
 						</tr>
 						<tr>
 							<td>Trainer</td>
@@ -113,7 +113,7 @@ Vue.component("createTraining", {
 						<tr>
 							<td>Additional payment</td>
 							<td>
-								<input type="number" v-model="additionalPayment" value="0">
+								<input type="number" min="0" v-model="additionalPayment"  value="0">
 							</td>
 						</tr>
 						<tr>

@@ -157,6 +157,7 @@ Vue.component("managerInfo", {
 		    <p style="margin-top:2cm; margin-bottom:3cm;">
 			    
 			    	<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
+					v-if="loggedUser.sportFacility != null"
 		    		  @click="createTraining"
 		    		  style="margin-right: 0; margin-left:auto; display:block;">
 		    		  	<i class="material-icons">add</i>

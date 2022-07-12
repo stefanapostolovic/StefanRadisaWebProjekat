@@ -319,7 +319,7 @@ public class FacilityDAO {
 		try {
 			String pathOutsideProject = contextPath + "/" + fileName;
 			String pathInProject = fileName;
-			String absPath = "E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
+			String absPath = "C:\\Users\\rasko\\Desktop\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
 			String test = "image/" + fileName;
 			String relPath = "../WebContent/image/" + fileName;
 			

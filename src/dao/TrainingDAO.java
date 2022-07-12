@@ -312,7 +312,7 @@ public class TrainingDAO {
 
 	public void saveImage(InputStream uploadedInputStream, String fileName, Training training) {
 		try {
-			String absPath = "E:\\Faks\\Web\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
+			String absPath = "C:\\Users\\rasko\\Desktop\\StefanRadisaWebProjekat\\WebContent\\image\\" + fileName;
 			String test = "image/" + fileName;
 			
 			File file = new File
