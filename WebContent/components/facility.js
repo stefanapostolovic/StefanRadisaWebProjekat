@@ -306,14 +306,10 @@ Vue.component("facility", {
 						</p>
 					</td>
 					<td>
-<<<<<<< HEAD
 						{{p.additionalPayment}}
 					</td>
 					<td v-if="loggedUser.role === 'Customer'">
-						<button v-on:click="prijava(p)">Schedule</button>
-=======
-						<button v-on:click="sentToChild(p)">Prijava</button>
->>>>>>> comment
+						<button v-on:click="sentToChild(p)">Schedule</button>
 					</td>
 					<td>
 						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
