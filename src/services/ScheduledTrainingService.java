@@ -15,9 +15,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.SportFacility;
 import beans.TrainingHistory;
 import beans.User;
-import dao.MembershipDAO;
 import dao.ScheduledTrainingDAO;
 
 @Path("/newTraining")
@@ -104,6 +104,24 @@ public class ScheduledTrainingService {
 	public Collection<TrainingHistory> getUserHistory(@PathParam("username") String username) {
 		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
 		return dao.trainingForUserHistory(username);
+	}
+	
+	@GET
+	@Path("/getFacilities/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<SportFacility> getFacilitys(@PathParam("username") String user) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.poseceniObjekti(user);
+	}
+	
+	@GET
+	@Path("/getFacility/{facilityID}/{user}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public SportFacility getFacility(@PathParam("facilityID") String facilityID,@PathParam("user") String user) {
+		ScheduledTrainingDAO dao = (ScheduledTrainingDAO) ctx.getAttribute("scheduledTrainingDAO");
+		return dao.getFacility(facilityID,user);
 	}
 	
 	@PUT

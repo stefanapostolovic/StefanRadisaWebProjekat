@@ -31,6 +31,24 @@ public class CommentDAO {
 		System.out.println(comments.values());
 	}
 	
+	public double averageGrade(String id) {
+		double sum=0;
+		int counter = 0;
+		for(Comment comment: findForOneObject(id)) {
+			if(comment.getGrade()>0) {
+				if(comment.getState().toString().equals("Accepted")) {
+					counter +=1;
+					sum += comment.getGrade();
+				}
+			}
+		}
+		if(counter==0) {
+			return 0;
+		}
+		
+		return sum/counter;
+	}
+	
 	public Collection<Comment> findAll() {
 		loadComments(contextPath);
 		List<Comment> returnList = new ArrayList<Comment>();
@@ -52,11 +70,12 @@ public class CommentDAO {
 		loadComments(contextPath);
 		List<Comment> returnList = new ArrayList<Comment>();
 		for(Comment comment : this.findAll()) {
-			String p =comment.getSportFacility().getId();
-			if(p.equals(id)) {
-			
-				returnList.add(comment);
-			}
+			if(comment.isActive()) {
+				String p =comment.getSportFacility().getId();
+				if(p.equals(id)) {
+					returnList.add(comment);
+				}
+			}	
 		}
 		
 		return returnList;

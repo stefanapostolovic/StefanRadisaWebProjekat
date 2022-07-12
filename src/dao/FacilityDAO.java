@@ -151,6 +151,7 @@ public class FacilityDAO {
 		SportFacility facilityToUpdate = this.facilities.get(id);
 		facilityToUpdate.setImage(facility.getImage());
 		facilityToUpdate.setIsDeleted(facility.getIsDeleted());
+		facilityToUpdate.setAverageRating(facility.getAverageRating());
 		
 		System.out.println("DAO UPDATE TEST");
 		
