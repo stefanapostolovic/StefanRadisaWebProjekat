@@ -17,7 +17,7 @@ Vue.component("facility", {
 	      dateOfBirth:'',	
 	      
 
-	      comment:{"id":0,"active":true,"state":"New","sportFacility":{"id":null,"name":null,"objectType":null,"status":true,"location":{"id":null,"longitude":null,"latitude":null,"address":{"street":null,"number":null,"city":null,"zipCode":null}},"image":null,"averageRating":null,"startTime":null,"endTime":null},"text":"","grade":0,"user":{"username":null,"password":null,"name":null,"surename":null,"gender":null,"dateOfBirth":null,"role":null,"trainingHistory":null,"membership":null,"sportFacility":null,"visitedFacilities":null,"points":1.0,"customerType":{"name":null,"discount":0.0,"points":0.0}}},
+	      comment:{"id":0,"active":true,"isDeleted":false,"state":"New","sportFacility":{"id":null,"name":null,"objectType":null,"status":true,"location":{"id":null,"longitude":null,"latitude":null,"address":{"street":null,"number":null,"city":null,"zipCode":null}},"image":null,"averageRating":null,"startTime":null,"endTime":null},"text":"","grade":0,"user":{"username":null,"password":null,"name":null,"surename":null,"gender":null,"dateOfBirth":null,"role":null,"trainingHistory":null,"membership":null,"sportFacility":null,"visitedFacilities":null,"points":1.0,"customerType":{"name":null,"discount":0.0,"points":0.0}}},
 		  acceptedRejected:[],
 		  comments:[],
 		  newComment:[],
@@ -40,7 +40,8 @@ Vue.component("facility", {
 	      isManagerGender: false,
 	      isManagerDate: false,
 	      isManagerGender: false,
-		  
+		  posetio:true,		  
+
 		  returnFlag: -1
 		}
 	},
@@ -302,7 +303,7 @@ Vue.component("facility", {
 						</p>
 					</td>
 					<td>
-						<button v-on:click="prijava(p)">Prijava</button>
+						<button v-on:click="sentToChild(p)">Prijava</button>
 					</td>
 					<td>
 						<a class="btn-floating btn-large waves-effect waves-light teal darken-2"
@@ -387,17 +388,8 @@ Vue.component("facility", {
 							<td class="kolona">
 						<textarea v-model="comment.text" width="100%"></textarea>
 					</td>
-					<td style="background-color:#FFFFFF">
-					<input type="radio" id="age1" name="ocena"  value="1">
-  					<label for="age1">1</label><br>
-					<input type="radio" id="age1" name="ocena" value="2">
-  					<label for="age1">2</label><br>
-					<input type="radio" id="age1" name="ocena" value="3">
-  					<label for="age1">3</label><br>
-					<input type="radio" id="age1" name="ocena" value="4">
-  					<label for="age1">4</label><br>
-					<input type="radio" id="age1" name="ocena" value="5" checked>
-  					<label for="age1">5</label><br>
+					<td>
+					<input type="number" id="age1" name="ocena" min="1" max="5">
 					</td>
 				</tr>
 					<tr class="tableRowBorder">
@@ -448,7 +440,13 @@ Vue.component("facility", {
 			})
 			.then(response => {
 				this.trainings = response.data;
-								
+				return axios.get('rest/newTraining/getFacility/'+this.facility.id+'/'+this.loggedUser.username)
+			}).then(response => {
+				if(response.data=="" || response.data ==null)
+					this.posetio=true;
+				else
+					this.posetio=false;
+									
 				return 	axios.get('rest/comment/acceptedAndRejected/'+this.id);		
 			}).then(response=>{	
 				this.acceptedRejected = response.data;
@@ -458,6 +456,8 @@ Vue.component("facility", {
 			}).then(response=>{	
 				this.comments =response.data;
 				console.log(this.comments)
+			
+			}).then(response=>{	
 				
 				return axios.get('rest/comment/novi/'+this.id);
 			}).then(response=>{	
@@ -471,8 +471,8 @@ Vue.component("facility", {
 				let n1 = document.getElementsByName("coment1")[0]
 				n.hidden = true;
 				n1.hidden= false;
-				p.hidden=true;	
-				p1.hidden=true;		
+				p.hidden=this.posetio;	
+				p1.hidden=this.posetio;		
 				p2.hidden=true;
 				p3.hidden=true;
 	
@@ -486,16 +486,17 @@ Vue.component("facility", {
 							p2.hidden=false;
 							p3.hidden=false;
 						}
-						return;	
 					}
+				}
 				else{
 						n1.hidden=false;
-						p.hidden=false;
-						p1.hidden=false;
+						p.hidden=this.posetio;
+						p1.hidden=this.posetio;
 						this.comment.user=this.loggedUser;
-						return;
+						p2.hidden=true;
+						p3.hidden=true;	
 				}
-				}
+				
 				return axios.get('rest/getFacilityManager/' + this.id);
 			})
 			.then(response => {
@@ -554,17 +555,20 @@ Vue.component("facility", {
 			this.getNumberTraining(),
 			this.addHistory(),
 			]).then(axios.spread((response1, response2) => {
-				if(response1.data !=null || response.data!=""){
-					if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
-						this.clanarina=true;
+				if(response1.data !=null || response1.data!=""){
+					if(this.loggedUser.membership.numberAppointments != null || this.loggedUser.membership.numberAppointments!=""){
+						if(parseInt(response1.data)>=parseInt(this.loggedUser.membership.numberAppointments)){
+							this.clanarina=true;
 					
-						this.poruka1 = "Prekoracen dnevni broj poseta"
+							this.poruka1 = "Prekoracen dnevni broj poseta"
+							return;
+						}
 					}	
-				}else{
+				}
 					router.push(`/`)
 					this.loggedUser.membership.counter = parseInt(this.loggedUser.membership.counter) - 1;
 					return axios.put('rest/updateUser/' + this.loggedUser.username,this.loggedUser);
-					}
+					
 				}))
 		},getNumberTraining(){
 			return axios.put('rest/newTraining/numberInOneDay',this.loggedUser)
@@ -740,21 +744,24 @@ Vue.component("facility", {
 			router.push('/createTraining');	
 		},
 		addCommentFunkcija:function(){
-		event.preventDefault();
-		let n = document.getElementsByName("naslov")[0]
-		let n1= document.getElementsByName("komentar")[0]
-		n.hidden=true;
-		n1.hidden=true;		
-		let values = document.getElementsByName("ocena");
-		
-	for(let i = 0; i < values.length; i++) {
-   		if(values[i].checked == true) {
-       	this.comment.grade = values[i].value;
-   	}}
+			event.preventDefault();
+			let n = document.getElementsByName("naslov")[0]
+			let n1= document.getElementsByName("komentar")[0]
+			n.hidden=true;
+			n1.hidden=true;		
+			let values = document.getElementsByName("ocena")[0];
+			
+			//for(let i = 0; i < values.length; i++) {
+	   		//	if(values[i].checked == true) {
+	       	this.comment.grade = values.value;
+		console.log(this.comment)
+   			//}
+			//}
 
 		axios
 		.post('rest/comment/dodavanje',this.comment)
-		.then(response=>{}).catch(response=>{toast("Vec postoji komentar koji je dodat")})
+		.then(response=>{})
+		.catch(response=>{toast("Vec postoji komentar koji je dodat")})
 	},
 		
 		Odobri : function(p,index) {
@@ -762,17 +769,23 @@ Vue.component("facility", {
 			
 				axios
 	            .put('rest/comment/update/'+p.id, p)
-	            .then(response => (this.newComment.splice(index, 1))).catch(response => {
-					toast('')
-	
-						})
+	            .then(response => {this.newComment.splice(index, 1);
+					this.comments.push(response.data);
+					return axios.get('rest/comment/ocena/'+this.facility.id);	
+				}).then(response=>{
+					this.facility.averageRating = response.data;
+					return axios.put('rest/facilities/updateFacility',this.facility);
+				}).then(response=>{
+					this.facility= response.data;
+					
+				})
     	},
 		Odbi : function(p,index) {
 			p.state="Rejected"
 				axios
 	            .put('rest/comment/update/'+p.id, p)
 	            .then(response => {this.newComment.splice(index, 1);
-					comments.add(p);
+					this.comments.push(response.data);
 					}).catch(response => {
 					toast('')
 	

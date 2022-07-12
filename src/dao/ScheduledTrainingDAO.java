@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import beans.SportFacility;
 import beans.TrainingHistory;
 import beans.User;
 
@@ -38,6 +39,40 @@ public class ScheduledTrainingDAO {
 	
 	public HashMap<String, TrainingHistory> GetFacilityMap() {
 		return trainingsHistory;
+	}
+	public SportFacility getFacility(String facility,String use){
+		for(TrainingHistory th: findAllByUser(use)){
+			if(th.getTraining().getSportFacility().getId().equals(facility)) {
+				return th.getTraining().getSportFacility();
+			}
+		}
+		return null;
+	}
+	
+	public Collection<SportFacility> poseceniObjekti(String user){
+		List<SportFacility> facilities = new ArrayList<SportFacility>();
+		for(TrainingHistory th: old(user)){
+			if(!facilities.contains(th.getTraining().getSportFacility())) {	
+				facilities.add(th.getTraining().getSportFacility());
+			}
+		}
+		return facilities;
+	}
+	
+	public Collection<TrainingHistory> old(String username) {
+		List<TrainingHistory> historyList = new ArrayList<TrainingHistory>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate ld= LocalDate.now();
+		for(TrainingHistory th: this.findAllByUser(username)) 
+		{
+			if(!th.getIsDeleted()) {
+				if(ld.compareTo(LocalDate.parse(th.getApplicationDateTime(),formatter))>=0) {
+						historyList.add(th);
+					
+				}
+			}
+		}
+		return historyList;
 	}
 	
 	public TrainingHistory findFacility(String id) {
